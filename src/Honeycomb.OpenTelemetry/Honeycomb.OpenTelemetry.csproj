@@ -6,4 +6,8 @@
     <RootNamespace>Honeycomb.OpenTelemetry</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="OpenTelemetry" Version="1.0.1" />
+  </ItemGroup>
+
 </Project>
