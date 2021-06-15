@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3E7EDB35-637
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Honeycomb.OpenTelemetry", "src\Honeycomb.OpenTelemetry\Honeycomb.OpenTelemetry.csproj", "{061494E1-D5D7-479E-BE88-FE0E2F94D9F5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B622C013-E4C5-4632-A263-B652C38D2E27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Honeycomb.OpenTelemetry.Tests", "test\Honeycomb.OpenTelemetry.Tests\Honeycomb.OpenTelemetry.Tests.csproj", "{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,8 +36,21 @@ Global
 		{061494E1-D5D7-479E-BE88-FE0E2F94D9F5}.Release|x64.Build.0 = Release|Any CPU
 		{061494E1-D5D7-479E-BE88-FE0E2F94D9F5}.Release|x86.ActiveCfg = Release|Any CPU
 		{061494E1-D5D7-479E-BE88-FE0E2F94D9F5}.Release|x86.Build.0 = Release|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Debug|x64.Build.0 = Debug|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Debug|x86.Build.0 = Debug|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Release|x64.ActiveCfg = Release|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Release|x64.Build.0 = Release|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Release|x86.ActiveCfg = Release|Any CPU
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{061494E1-D5D7-479E-BE88-FE0E2F94D9F5} = {3E7EDB35-637A-402C-ABA6-EF8E4C55C051}
+		{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E} = {B622C013-E4C5-4632-A263-B652C38D2E27}
 	EndGlobalSection
 EndGlobal
