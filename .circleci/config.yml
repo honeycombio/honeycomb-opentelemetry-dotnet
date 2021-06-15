@@ -1,0 +1,110 @@
+version: 2.1
+
+orbs:
+  windows: circleci/windows@2.4.0
+
+commands:
+  setup:
+    steps:
+      - checkout
+      - run:
+          name: "Generate cache seed"
+          command: |
+            Get-ChildItem -Path $HOME\*.csproj -Recurse `
+            | Sort-Object Name `
+            | ForEach-Object { Get-Content $_ } `
+            | Out-File -FilePath .\cache-seed -Append
+      - restore_cache:
+          keys:
+            - dotnet-packages-v1-{{ checksum "cache-seed" }}
+      - run:
+          name: "Install project dependencies"
+          command: dotnet.exe restore
+      - save_cache:
+          paths:
+            - C:\Users\circleci\.nuget\packages
+          key: dotnet-packages-v1-{{ checksum "cache-seed" }}
+
+jobs:
+  test:
+    executor:
+      name: windows/default
+    steps:
+      - setup
+      - run:
+          name: "Run tests"
+          command: dotnet.exe test -v n
+  package:
+    executor:
+      name: windows/default
+    steps:
+      - setup
+      - run: mkdir -p build
+      - run:
+          name: "Build release package"
+          command: dotnet.exe pack --configuration release --output build
+      - persist_to_workspace:
+          root: \
+          paths:
+            - build\*.nupkg
+      - store_artifacts:
+          path: build
+  publish_github:
+    docker:
+      - image: cibuilds/github:0.13.0
+    steps:
+      - attach_workspace:
+          at: ./
+      - run:
+          name: "Publishing Release on GitHub"
+          command: ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} build/
+  publish_nuget:
+    executor:
+      name: windows/default
+    steps:
+      - attach_workspace:
+          at: .\
+      - run:
+          name: "Publishing to nuget.org"
+          command: dotnet.exe nuget push "build\*.nupkg" -k $env:NUGET_APIKEY -s https://api.nuget.org/v3/index.json
+
+workflows:
+  version: 2
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - test
+  build:
+    jobs:
+      - test:
+          filters: &always_filter
+            tags:
+              only: /.*/
+      - package:
+          requires:
+            - test
+          filters: *always_filter
+      - publish_github:
+          context: Honeycomb Secrets for Public Repos
+          requires:
+            - package
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - publish_nuget:
+          context: Honeycomb Secrets for Public Repos
+          requires:
+            - package
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
