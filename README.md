@@ -9,17 +9,12 @@ dotnet build
 dotnet test
 ```
 
-### Using local packages with othe projects
+### Using local packages with other projects
 
-To share this project with another local project you need build the distributable nuget package and store it in a shared local nuget source.
+To share this project with another local project you will need to build and store the distributable nuget package in a local nuget source directory. The following makefile target creates a local nuget source then builds & publishes the packages.
 
-[publish-local.sh](publish-local.sh) builds and publishes the packages and the script looks for the environment variable `NUGET_PACKAGES_LOCAL` and will default to `$HOME/.nuget/local` if not set.
+`make install`
 
-After executing the script, you then you need to run the following commands in the project you wish to use nuget package:
-
-```bash
-dotnet nuget add source $HOME/.nuget/local
-dotnet add package Honeycomb.OpenTelemetry
-```
+The default location is `${HOME}/.nuget/local` and can overridden to another location by setting the `NUGET_PACKAGES_LOCAL` environment variable.
 
 NOTE: In the future, the nuget package will be published to nuget.org, where dependency management will be easier and we won't need the local nuget source.
