@@ -2,19 +2,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using OpenTelemetry.Trace;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Honeycomb.OpenTelemetry.Tests
 {
     public class DeterministicSamplerTests
     {
-        private readonly ITestOutputHelper output;
-
-        public DeterministicSamplerTests(ITestOutputHelper output)
-        {
-            this.output = output;
-        }
-
         [Fact]
         public void NeverSampleRateAlwaysReturnsDropResult()
         {
