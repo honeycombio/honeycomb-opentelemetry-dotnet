@@ -1,13 +1,22 @@
 # honeycomb-opentelemetry-dotnet
 
-### Building, testing and creating the nuget package
+### Prerequisite
 
-You can execute the following commands to build and test the project:
+You will need to download and install following .NET SDK runtimes:
 
-```bash
-dotnet build
-dotnet test
-```
+- [.NET Core 2.1](https://dotnet.microsoft.com/download/dotnet/2.1)
+- [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet/3.1)
+- [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
+
+### Building & Testing
+
+The following makefile commands builds the projects.
+
+`make` or `make build`
+
+The following make file command executes tests.
+
+`make test`
 
 ### Using local packages with other projects
 
