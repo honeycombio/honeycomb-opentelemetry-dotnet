@@ -1,4 +1,4 @@
-# default locaion for local nuget package source
+# default location for local nuget package source
 NUGET_PACKAGES_LOCAL ?= ${HOME}/.nuget/local
 
 build:
