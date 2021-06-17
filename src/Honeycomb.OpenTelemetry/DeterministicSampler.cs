@@ -30,8 +30,10 @@ namespace Honeycomb
         private readonly uint SampleRate;
 
         /// <summary>
-        /// summary
+        /// Initializes a new instance of the <see cref="DeterministicSampler"/> class.
         /// </summary>
+        /// <param name="sampleRate">The desired sample rate, expressed as 1/{sampleRate}.
+        /// </param>
         public DeterministicSampler(uint sampleRate)
         {
             SampleRate = sampleRate;
