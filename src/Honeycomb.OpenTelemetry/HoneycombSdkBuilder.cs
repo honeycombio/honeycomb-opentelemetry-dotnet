@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using OpenTelemetry;
-using OpenTelemetry.Context.Propagation;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -13,7 +12,6 @@ namespace Honeycomb.OpenTelemetry
         private Uri endpoint = new Uri(DefaultEndpointAddress);
         private string apiKey;
         private string dataset;
-        private TextMapPropagator propagator;
         private Sampler sampler;
         private ResourceBuilder resourceBuilder = ResourceBuilder.CreateDefault().AddEnvironmentVariableDetector();
 
@@ -37,12 +35,6 @@ namespace Honeycomb.OpenTelemetry
         public HoneycombSdkBuilder WithDataset(string dataset)
         {
             this.dataset = dataset;
-            return this;
-        }
-
-        public HoneycombSdkBuilder WithPropagator(TextMapPropagator propagator)
-        {
-            this.propagator = propagator;
             return this;
         }
 
