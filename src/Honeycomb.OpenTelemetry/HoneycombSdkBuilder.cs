@@ -50,7 +50,7 @@ namespace Honeycomb.OpenTelemetry
             return this;
         }
 
-        public HoneycombSdkBuilder WithResourceAttribute(params KeyValuePair<string, object>[] attributes)
+        public HoneycombSdkBuilder WithResourceAttributes(params KeyValuePair<string, object>[] attributes)
         {
             resourceBuilder.AddAttributes(attributes);
             return this;
