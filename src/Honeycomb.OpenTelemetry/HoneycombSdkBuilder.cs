@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -13,7 +14,20 @@ namespace Honeycomb.OpenTelemetry
         private string apiKey;
         private string dataset;
         private Sampler sampler = new DeterministicSampler(1); // default to always sample
-        private ResourceBuilder resourceBuilder = ResourceBuilder.CreateDefault().AddEnvironmentVariableDetector();
+        internal readonly ResourceBuilder ResourceBuilder;
+
+        public HoneycombSdkBuilder()
+        {
+            ResourceBuilder = ResourceBuilder
+                .CreateDefault()
+                .AddAttributes(new List<KeyValuePair<string, object>>
+                {
+                    new KeyValuePair<string, object>("honeycomb.distro.language", "dotnet"),
+                    new KeyValuePair<string, object>("honeycomb.distro.version", typeof(HoneycombSdkBuilder).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion),
+                    new KeyValuePair<string, object>("honeycomb.distro.runtime_version", Environment.Version.ToString()),
+                })
+                .AddEnvironmentVariableDetector();
+        }
 
         public HoneycombSdkBuilder WithEndpoint(string endpoint)
         {
@@ -52,14 +66,19 @@ namespace Honeycomb.OpenTelemetry
 
         public HoneycombSdkBuilder WithServiceName(string serviceName)
         {
-            resourceBuilder.AddService(serviceName);
+            ResourceBuilder.AddService(serviceName);
             return this;
         }
 
         public HoneycombSdkBuilder WithResourceAttributes(params KeyValuePair<string, object>[] attributes)
         {
-            resourceBuilder.AddAttributes(attributes);
+            ResourceBuilder.AddAttributes(attributes);
             return this;
+        }
+
+        public HoneycombSdkBuilder WithResourceAttribute(string key, object value)
+        {
+            return WithResourceAttributes(new KeyValuePair<string, object>(key, value));
         }
 
         public HoneycombSdk Build()
@@ -69,9 +88,9 @@ namespace Honeycomb.OpenTelemetry
             if (string.IsNullOrWhiteSpace("dataset"))
                 throw new ArgumentException("Dataset cannot be empty");
 
-            var sdk = Sdk.CreateTracerProviderBuilder()
+            var traceProvider = Sdk.CreateTracerProviderBuilder()
                 .SetSampler(sampler)
-                .SetResourceBuilder(resourceBuilder)
+                .SetResourceBuilder(ResourceBuilder)
                 .AddOtlpExporter(otlpOptions =>
                 {
                     otlpOptions.Endpoint = endpoint;
@@ -81,7 +100,7 @@ namespace Honeycomb.OpenTelemetry
                 // https://github.com/open-telemetry/opentelemetry-dotnet/blob/6b7f2dd77cf9d37260a853fcc95f7b77e296065d/src/OpenTelemetry/Resources/IResourceDetector.cs
                 .Build();
 
-            return new HoneycombSdk(sdk);
+            return new HoneycombSdk(traceProvider);
         }
     }
 }
