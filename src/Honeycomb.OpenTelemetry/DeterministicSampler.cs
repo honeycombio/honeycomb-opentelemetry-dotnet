@@ -56,7 +56,7 @@ namespace Honeycomb
                 case AlwaysSample:
                     return AlwaysSampleResult;
                 default:
-                    using (var sha = SHA1Managed.Create())
+                    using (var sha = SHA1.Create())
                     {
                         // get trace ID as bytes
                         var bytes = Encoding.UTF8.GetBytes(samplingParameters.TraceId.ToHexString());

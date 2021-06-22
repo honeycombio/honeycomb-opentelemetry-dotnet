@@ -82,24 +82,24 @@ namespace Honeycomb.OpenTelemetry.Tests
         [InlineData("209e3ba9ecc648458b722ee622106a05", SamplingDecision.Drop)]
         [InlineData("560b7b48bfd99c429bfb0d497ea260c6", SamplingDecision.Drop)]
         [InlineData("2f3467b35730064597b4d93440cdc033", SamplingDecision.Drop)]
-        public void BeelineInterop(string traceID, SamplingDecision expectedDescision)
+        public void BeelineInterop(string traceID, SamplingDecision expectedDecision)
         {
             const uint sampleRate = 2;
             var sampler = new DeterministicSampler(sampleRate);
 
-            var actiivityTraceID = ActivityTraceId.CreateFromString(traceID);
+            var activityTraceID = ActivityTraceId.CreateFromString(traceID);
             var parameters = new SamplingParameters(
                 parentContext: new ActivityContext(
-                    actiivityTraceID,
+                    activityTraceID,
                     ActivitySpanId.CreateRandom(),
                     ActivityTraceFlags.None),
-                traceId: actiivityTraceID,
+                traceId: activityTraceID,
                 name: "Span",
                 kind: ActivityKind.Client
             );
 
             var result = sampler.ShouldSample(parameters);
-            Assert.Equal(result.Decision, expectedDescision);
+            Assert.Equal(result.Decision, expectedDecision);
             Assert.Collection(result.Attributes,
                 item => Assert.Equal(new KeyValuePair<string, object>("sampleRate", sampleRate), item)
             );
