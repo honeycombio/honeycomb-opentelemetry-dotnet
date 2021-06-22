@@ -12,7 +12,7 @@ namespace Honeycomb.OpenTelemetry
         private Uri endpoint = new Uri(DefaultEndpointAddress);
         private string apiKey;
         private string dataset;
-        private Sampler sampler;
+        private Sampler sampler = new DeterministicSampler(1); // default to always sample
         private ResourceBuilder resourceBuilder = ResourceBuilder.CreateDefault().AddEnvironmentVariableDetector();
 
         public HoneycombSdkBuilder WithEndpoint(string endpoint)
@@ -41,6 +41,12 @@ namespace Honeycomb.OpenTelemetry
         public HoneycombSdkBuilder WithSampler(Sampler sampler)
         {
             this.sampler = sampler;
+            return this;
+        }
+
+        public HoneycombSdkBuilder WithSampleRate(uint sampleRate)
+        {
+            sampler = new DeterministicSampler(sampleRate);
             return this;
         }
 
