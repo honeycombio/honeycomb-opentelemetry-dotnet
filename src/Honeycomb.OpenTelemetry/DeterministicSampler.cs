@@ -17,7 +17,7 @@ namespace Honeycomb
     /// - A sampler rate of 1 means the Sampler will always sample.
     /// <para />
     /// This implementation is based on the implementations (and necessarily needs to
-    /// be in line with) the other Beeline implementations.
+    /// be in line with) other Honeycomb SDK implementations.
     /// </summary>
     public class DeterministicSampler : Sampler
     {
