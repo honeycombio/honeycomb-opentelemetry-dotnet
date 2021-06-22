@@ -23,11 +23,11 @@ namespace Honeycomb
     {
         private const uint NeverSample = 0;
         private const uint AlwaysSample = 1;
-        private readonly SamplingResult NeverSampleResult;
-        private readonly SamplingResult AlwaysSampleResult;
-        private readonly List<KeyValuePair<string, object>> SampleResultAttributes;        
-        private readonly uint UpperBound;
-        private readonly uint SampleRate;
+        private readonly SamplingResult _neverSampleResult;
+        private readonly SamplingResult _alwaysSampleResult;
+        private readonly List<KeyValuePair<string, object>> _sampleResultAttributes;
+        private readonly uint _upperBound;
+        private readonly uint _sampleRate;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeterministicSampler"/> class.
@@ -36,25 +36,25 @@ namespace Honeycomb
         /// </param>
         public DeterministicSampler(uint sampleRate)
         {
-            SampleRate = sampleRate;
-            UpperBound = sampleRate == 0 ? 0 : uint.MaxValue / sampleRate;
-            SampleResultAttributes = new List<KeyValuePair<string, object>>
+            _sampleRate = sampleRate;
+            _upperBound = sampleRate == 0 ? 0 : uint.MaxValue / sampleRate;
+            _sampleResultAttributes = new List<KeyValuePair<string, object>>
             {
-                new KeyValuePair<string, object>("sampleRate", SampleRate)
+                new KeyValuePair<string, object>("sampleRate", _sampleRate)
             };
-            NeverSampleResult = new SamplingResult(SamplingDecision.Drop, SampleResultAttributes);
-            AlwaysSampleResult = new SamplingResult(SamplingDecision.RecordAndSample, SampleResultAttributes);
+            _neverSampleResult = new SamplingResult(SamplingDecision.Drop, _sampleResultAttributes);
+            _alwaysSampleResult = new SamplingResult(SamplingDecision.RecordAndSample, _sampleResultAttributes);
         }
 
         /// <inheritdoc cref="Sampler.ShouldSample"/>
         public override SamplingResult ShouldSample(in SamplingParameters samplingParameters)
         {
-            switch (SampleRate)
+            switch (_sampleRate)
             {
                 case NeverSample:
-                    return NeverSampleResult;
+                    return _neverSampleResult;
                 case AlwaysSample:
-                    return AlwaysSampleResult;
+                    return _alwaysSampleResult;
                 default:
                     using (var sha = SHA1.Create())
                     {
@@ -69,8 +69,8 @@ namespace Honeycomb
 
                         // calculate decision and return with attributes
                         return new SamplingResult(
-                            determinant <= UpperBound ? SamplingDecision.RecordAndSample : SamplingDecision.Drop, 
-                            SampleResultAttributes
+                            determinant <= _upperBound ? SamplingDecision.RecordAndSample : SamplingDecision.Drop, 
+                            _sampleResultAttributes
                         );
                     }
             }
