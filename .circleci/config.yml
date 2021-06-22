@@ -33,7 +33,9 @@ jobs:
       - setup
       - run:
           name: "Run tests"
-          command: dotnet.exe test -v n
+          command: dotnet.exe test -v n --results-directory:test_coverage --collect:"Code Coverage"
+      - store_artifacts:
+          path: C:\Users\circleci\project\test_coverage
   package:
     executor:
       name: windows/default
