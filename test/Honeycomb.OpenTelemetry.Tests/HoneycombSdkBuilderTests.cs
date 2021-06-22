@@ -13,7 +13,7 @@ namespace Honeycomb.OpenTelemetry
 
             var builder = new HoneycombSdkBuilder();
             var attributes = builder.ResourceBuilder.Build().Attributes;
-            Assert.Contains(attributes, item => item.Key == "service.name" && (string) item.Value == "unknown_service:dotnet");
+            Assert.Contains(attributes, item => item.Key == "service.name" && ((string) item.Value).StartsWith("unknown_service"));
             Assert.Contains(attributes, item => item.Key == "honeycomb.distro.language" && (string) item.Value == "dotnet");
             Assert.Contains(attributes, item => item.Key == "honeycomb.distro.version" && (string) item.Value == version);
             Assert.Contains(attributes, item => item.Key == "honeycomb.distro.runtime_version" && (string) item.Value == Environment.Version.ToString());
