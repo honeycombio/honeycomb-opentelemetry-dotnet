@@ -61,7 +61,7 @@ namespace Honeycomb.OpenTelemetry
             if (string.IsNullOrWhiteSpace(apiKey))
                 throw new ArgumentException("API key cannot be empty");
             if (string.IsNullOrWhiteSpace("dataset"))
-                throw new ArgumentException("Datast cannot be empty");
+                throw new ArgumentException("Dataset cannot be empty");
 
             var sdk = Sdk.CreateTracerProviderBuilder()
                 .SetSampler(sampler)
