@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
+    <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)Honeycomb.OpenTelemetry.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+</Project>
