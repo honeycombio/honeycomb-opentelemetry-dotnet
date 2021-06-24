@@ -17,7 +17,7 @@ namespace Honeycomb.OpenTelemetry
 
         public HoneycombSdkBuilder()
         {
-            var options = new EnvironmentOptions();
+            var options = new EnvironmentOptions(Environment.GetEnvironmentVariables());
             _apiKey = options.ApiKey;
             _dataset = options.Dataset;
             _endpoint = new Uri(options.ApiEndpoint);
@@ -31,8 +31,12 @@ namespace Honeycomb.OpenTelemetry
                     new KeyValuePair<string, object>("honeycomb.distro.version", typeof(HoneycombSdkBuilder).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion),
                     new KeyValuePair<string, object>("honeycomb.distro.runtime_version", Environment.Version.ToString()),
                 })
-                .AddEnvironmentVariableDetector()
-                .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion);
+                .AddEnvironmentVariableDetector();
+
+            if (!string.IsNullOrWhiteSpace(options.ServiceName))
+            {
+                ResourceBuilder.AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion);
+            }
         }
 
         public HoneycombSdkBuilder WithEndpoint(string endpoint)

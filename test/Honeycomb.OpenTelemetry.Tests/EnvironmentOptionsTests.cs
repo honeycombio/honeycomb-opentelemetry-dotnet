@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Honeycomb.OpenTelemetry
@@ -8,14 +8,16 @@ namespace Honeycomb.OpenTelemetry
         [Fact]
         public void Can_get_options_from_env_vars()
         {
-            Environment.SetEnvironmentVariable("HONEYCOMB_API_KEY", "my-api-key");
-            Environment.SetEnvironmentVariable("HONEYCOMB_DATASET", "my-dataset");
-            Environment.SetEnvironmentVariable("HONEYCOMB_API_ENDPOINT", "my-endpoint");
-            Environment.SetEnvironmentVariable("HONEYCOMB_SAMPLE_RATE", "10");
-            Environment.SetEnvironmentVariable("SERVICE_NAME", "my-service-name");
-            Environment.SetEnvironmentVariable("SERVICE_VERSION", "my-service-version");
-
-            var options = new EnvironmentOptions();
+            var values = new Dictionary<string, string>
+            {
+                {"HONEYCOMB_API_KEY", "my-api-key"},
+                {"HONEYCOMB_DATASET", "my-dataset"},
+                {"HONEYCOMB_API_ENDPOINT", "my-endpoint"},
+                {"HONEYCOMB_SAMPLE_RATE", "10"},
+                {"SERVICE_NAME", "my-service-name"},
+                {"SERVICE_VERSION", "my-service-version"},
+            };
+            var options = new EnvironmentOptions(values);
             Assert.Equal("my-api-key", options.ApiKey);
             Assert.Equal("my-dataset", options.Dataset);
             Assert.Equal("my-endpoint", options.ApiEndpoint);
@@ -27,27 +29,25 @@ namespace Honeycomb.OpenTelemetry
         [Fact]
         public void Api_endpoint_returns_default_when_not_set()
         {
-            Environment.SetEnvironmentVariable("HONEYCOMB_API_ENDPOINT", "");
-
-            var options = new EnvironmentOptions();
+            var options = new EnvironmentOptions(new Dictionary<string, string>());
             Assert.Equal("https://api.honeycomb.io:443", options.ApiEndpoint);
         }
 
         [Fact]
         public void Sample_rate_returns_default_when_not_set()
         {
-            Environment.SetEnvironmentVariable("HONEYCOMB_SAMPLE_RATE", "");
-
-            var options = new EnvironmentOptions();
+            var options = new EnvironmentOptions(new Dictionary<string, string>());
             Assert.Equal((uint) 1, options.SampleRate);
         }
 
         [Fact]
         public void Sample_rate_returns_default_for_invalid_value()
         {
-            Environment.SetEnvironmentVariable("HONEYCOMB_SAMPLE_RATE", "invalid");
-
-            var options = new EnvironmentOptions();
+            var values = new Dictionary<string, string>
+            {
+                {"HONEYCOMB_SAMPLE_RATE", "invalid"}
+            };
+            var options = new EnvironmentOptions(values);
             Assert.Equal((uint) 1, options.SampleRate);
         }
     }

@@ -1,4 +1,4 @@
-using System;
+using System.Collections;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -12,6 +12,12 @@ namespace Honeycomb.OpenTelemetry
         private const string ServiceVersionKey = "SERVICE_VERSION";
         private const uint DefaultSampleRate = 1;
         private const string DefaultApiEndpoint = "https://api.honeycomb.io:443";
+        private readonly IDictionary _environmentService;
+
+        internal EnvironmentOptions(IDictionary service)
+        {
+            _environmentService = service;
+        }
 
         internal string ApiKey { get => GetEnvironmentVariable(ApiKeyKey); }
         internal string Dataset  { get => GetEnvironmentVariable(DatasetKey); }
@@ -22,10 +28,13 @@ namespace Honeycomb.OpenTelemetry
 
         private string GetEnvironmentVariable(string key, string defaultValue = "")
         {
-            var value = Environment.GetEnvironmentVariable(key);
-            return string.IsNullOrWhiteSpace(value)
-                ? defaultValue
-                : value;
+            var value = _environmentService[key];
+            if (value is string && !string.IsNullOrWhiteSpace((string) value))
+            {
+                return (string) value;
+            }
+
+            return defaultValue;
         }
     }
 }
