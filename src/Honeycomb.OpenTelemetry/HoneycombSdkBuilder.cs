@@ -108,8 +108,11 @@ namespace Honeycomb.OpenTelemetry
                     otlpOptions.Endpoint = _endpoint;
                     otlpOptions.Headers = string.Format($"x-honeycomb-team={_apiKey},x-honeycomb-dataset={_dataset}");
                 })
-                // TODO: Add custom HNY env var Decector:
-                // https://github.com/open-telemetry/opentelemetry-dotnet/blob/6b7f2dd77cf9d37260a853fcc95f7b77e296065d/src/OpenTelemetry/Resources/IResourceDetector.cs
+                // Example of adding instrumentation - see https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/issues/14
+                // .AddAspNetInstrumentation()
+                // .AddGrpcClientInstrumentation()
+                // .AddHttpClientInstrumentation()
+                // .AddSqlClientInstrumentation()
                 .Build();
 
             return new HoneycombSdk(traceProvider);
