@@ -9,15 +9,20 @@ namespace Honeycomb.OpenTelemetry
 {
     public class HoneycombSdkBuilder
     {
-        public const string DefaultEndpointAddress = "https://api.honeycomb.io:443";
-        private Uri _endpoint = new Uri(DefaultEndpointAddress);
+        private Uri _endpoint;
         private string _apiKey;
         private string _dataset;
-        private Sampler _sampler = new DeterministicSampler(1); // default to always sample
+        private Sampler _sampler;
         internal readonly ResourceBuilder ResourceBuilder;
 
         public HoneycombSdkBuilder()
         {
+            var options = new EnvironmentOptions();
+            _apiKey = options.ApiKey;
+            _dataset = options.Dataset;
+            _endpoint = new Uri(options.ApiEndpoint);
+            _sampler = new DeterministicSampler(options.SampleRate);
+
             ResourceBuilder = ResourceBuilder
                 .CreateDefault()
                 .AddAttributes(new List<KeyValuePair<string, object>>
@@ -26,7 +31,8 @@ namespace Honeycomb.OpenTelemetry
                     new KeyValuePair<string, object>("honeycomb.distro.version", typeof(HoneycombSdkBuilder).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion),
                     new KeyValuePair<string, object>("honeycomb.distro.runtime_version", Environment.Version.ToString()),
                 })
-                .AddEnvironmentVariableDetector();
+                .AddEnvironmentVariableDetector()
+                .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion);
         }
 
         public HoneycombSdkBuilder WithEndpoint(string endpoint)
@@ -96,8 +102,6 @@ namespace Honeycomb.OpenTelemetry
                     otlpOptions.Endpoint = _endpoint;
                     otlpOptions.Headers = string.Format($"x-honeycomb-team={_apiKey},x-honeycomb-dataset={_dataset}");
                 })
-                // TODO: Add custom HNY env var Decector:
-                // https://github.com/open-telemetry/opentelemetry-dotnet/blob/6b7f2dd77cf9d37260a853fcc95f7b77e296065d/src/OpenTelemetry/Resources/IResourceDetector.cs
                 .Build();
 
             return new HoneycombSdk(traceProvider);
