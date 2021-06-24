@@ -117,10 +117,10 @@ namespace Honeycomb.OpenTelemetry
                     otlpOptions.Headers = string.Format($"x-honeycomb-team={_apiKey},x-honeycomb-dataset={_dataset}");
                 })
                 // Example of adding instrumentation - see https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/issues/14
-                // .AddAspNetInstrumentation()
+                .AddAspNetCoreInstrumentation()
                 // .AddGrpcClientInstrumentation()
-                // .AddHttpClientInstrumentation()
-                // .AddSqlClientInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddSqlClientInstrumentation()
                 // .AddRedisInstrumentation(_redisConnection)
                 .Build();
 
