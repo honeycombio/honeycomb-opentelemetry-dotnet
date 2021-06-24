@@ -17,6 +17,8 @@ namespace Honeycomb.OpenTelemetry
         private Sampler _sampler = new DeterministicSampler(1); // default to always sample
         internal readonly ResourceBuilder ResourceBuilder;
 
+        // private IConnection _redisConnection;
+
         public HoneycombSdkBuilder()
         {
             ResourceBuilder = ResourceBuilder
@@ -85,6 +87,12 @@ namespace Honeycomb.OpenTelemetry
             return WithResourceAttributes(new KeyValuePair<string, object>(key, value));
         }
 
+        // public HoneycombSdkBuilder WithRedisConnection(IRedisConnection conn)
+        // {
+        //     _redisConnection = conn;
+        //     return this;
+        // }
+
         public HoneycombSdkBuilder WithSources(string[] names)
         {
             _sourceNames = names;
@@ -113,6 +121,7 @@ namespace Honeycomb.OpenTelemetry
                 // .AddGrpcClientInstrumentation()
                 // .AddHttpClientInstrumentation()
                 // .AddSqlClientInstrumentation()
+                // .AddRedisInstrumentation(_redisConnection)
                 .Build();
 
             return new HoneycombSdk(traceProvider);
