@@ -85,7 +85,7 @@ namespace Honeycomb.OpenTelemetry
             return WithResourceAttributes(new KeyValuePair<string, object>(key, value));
         }
 
-        public HoneycombSdkBuilder WithSources(string[] names)
+        public HoneycombSdkBuilder WithSources(params string[] names)
         {
             _sourceNames = names;
             return this;
