@@ -9,8 +9,7 @@ namespace Honeycomb.OpenTelemetry
 {
     public class HoneycombSdkBuilder
     {
-        public const string DefaultEndpointAddress = "https://api.honeycomb.io:443";
-        private Uri _endpoint = new Uri(DefaultEndpointAddress);
+        private Uri _endpoint;
         private string _apiKey;
         private string _dataset;
         private string[] _sourceNames = {"honeycomb.opentelemetry"};
@@ -19,6 +18,12 @@ namespace Honeycomb.OpenTelemetry
 
         public HoneycombSdkBuilder()
         {
+            var options = new EnvironmentOptions(Environment.GetEnvironmentVariables());
+            _apiKey = options.ApiKey;
+            _dataset = options.Dataset;
+            _endpoint = new Uri(options.ApiEndpoint);
+            _sampler = new DeterministicSampler(options.SampleRate);
+
             ResourceBuilder = ResourceBuilder
                 .CreateDefault()
                 .AddAttributes(new List<KeyValuePair<string, object>>
@@ -31,6 +36,11 @@ namespace Honeycomb.OpenTelemetry
                         Environment.Version.ToString()),
                 })
                 .AddEnvironmentVariableDetector();
+
+            if (!string.IsNullOrWhiteSpace(options.ServiceName))
+            {
+                ResourceBuilder.AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion);
+            }
         }
 
         public HoneycombSdkBuilder WithEndpoint(string endpoint)
@@ -108,8 +118,6 @@ namespace Honeycomb.OpenTelemetry
                     otlpOptions.Endpoint = _endpoint;
                     otlpOptions.Headers = string.Format($"x-honeycomb-team={_apiKey},x-honeycomb-dataset={_dataset}");
                 })
-                // TODO: Add custom HNY env var Decector:
-                // https://github.com/open-telemetry/opentelemetry-dotnet/blob/6b7f2dd77cf9d37260a853fcc95f7b77e296065d/src/OpenTelemetry/Resources/IResourceDetector.cs
                 .Build();
 
             return new HoneycombSdk(traceProvider);
