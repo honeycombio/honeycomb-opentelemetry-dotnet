@@ -33,16 +33,27 @@ jobs:
       - setup
       - run:
           name: "Run tests"
-          command: dotnet.exe test -v n
+          command: dotnet.exe test --no-restore
   package:
     executor:
       name: windows/default
     steps:
       - setup
-      - run: mkdir -p build
+      - run:
+          name: "Create build directory"
+          command: mkdir -p build
+          shell: bash.exe
+      - run:
+          name: "Import GPG cert"
+          command: echo $GPG_BASE64 | base64 --decode | gpg.exe --batch --no-tty --import --yes
+          shell: bash.exe
+      - run:
+          name: "Decrypt SNK file"
+          command: gpg.exe -d --pinentry-mode loopback --passphrase $GPG_PASSPHRASE -o Honeycomb.OpenTelemetry.snk Honeycomb.OpenTelemetry.snk.gpg
+          shell: bash.exe
       - run:
           name: "Build release package"
-          command: dotnet.exe pack --configuration release --output build
+          command: dotnet.exe pack -c release --output build --no-restore
       - persist_to_workspace:
           root: \
           paths:
@@ -87,6 +98,7 @@ workflows:
             tags:
               only: /.*/
       - package:
+          context: Honeycomb Secrets for Public Repos
           requires:
             - test
           filters: *always_filter
