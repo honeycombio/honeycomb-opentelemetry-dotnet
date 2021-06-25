@@ -16,8 +16,6 @@ namespace Honeycomb.OpenTelemetry
         private Sampler _sampler = new DeterministicSampler(1); // default to always sample
         internal readonly ResourceBuilder ResourceBuilder;
 
-        // private IConnection _redisConnection;
-
         public HoneycombSdkBuilder()
         {
             var options = new EnvironmentOptions(Environment.GetEnvironmentVariables());
@@ -125,8 +123,6 @@ namespace Honeycomb.OpenTelemetry
 
 #if NETSTANDARD2_0
             traceProviderBuilder.AddAspNetCoreInstrumentation();
-#elif NETSTANDARD2_1
-            traceProviderBuilder.AddGrpcClientInstrumentation();
 #endif
 
             return new HoneycombSdk(traceProviderBuilder.Build());
