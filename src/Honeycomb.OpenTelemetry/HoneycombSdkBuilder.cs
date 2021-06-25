@@ -108,7 +108,7 @@ namespace Honeycomb.OpenTelemetry
 
             TracerProviderBuilder tracerProviderBuilder = Sdk.CreateTracerProviderBuilder();
             Array.ForEach(_sourceNames, source => tracerProviderBuilder.AddSource(source));
-            var traceProvider = tracerProviderBuilder
+            var traceProviderBuilder = tracerProviderBuilder
                 .SetSampler(_sampler)
                 .SetResourceBuilder(ResourceBuilder)
                 .AddOtlpExporter(otlpOptions =>
@@ -116,15 +116,17 @@ namespace Honeycomb.OpenTelemetry
                     otlpOptions.Endpoint = _endpoint;
                     otlpOptions.Headers = string.Format($"x-honeycomb-team={_apiKey},x-honeycomb-dataset={_dataset}");
                 })
-                // Example of adding instrumentation - see https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/issues/14
-                .AddAspNetCoreInstrumentation()
-                // .AddGrpcClientInstrumentation()
                 .AddHttpClientInstrumentation()
-                .AddSqlClientInstrumentation()
-                // .AddRedisInstrumentation(_redisConnection)
-                .Build();
+                .AddSqlClientInstrumentation();
 
-            return new HoneycombSdk(traceProvider);
+#if NETSTANDARD2_0
+            traceProviderBuilder.AddAspNetCoreInstrumentation();
+            traceProviderBuilder.AddRedisInstrumentation(null); // TODO: still requires connection to instrument with
+#elif NETSTANDARD2_1
+            traceProviderBuilder.AddGrpcClientInstrumentation();
+#endif
+
+            return new HoneycombSdk(traceProviderBuilder.Build());
         }
     }
 }
