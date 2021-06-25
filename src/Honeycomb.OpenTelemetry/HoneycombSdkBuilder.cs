@@ -9,8 +9,7 @@ namespace Honeycomb.OpenTelemetry
 {
     public class HoneycombSdkBuilder
     {
-        public const string DefaultEndpointAddress = "https://api.honeycomb.io:443";
-        private Uri _endpoint = new Uri(DefaultEndpointAddress);
+        private Uri _endpoint;
         private string _apiKey;
         private string _dataset;
         private string[] _sourceNames = {"honeycomb.opentelemetry"};
@@ -21,6 +20,12 @@ namespace Honeycomb.OpenTelemetry
 
         public HoneycombSdkBuilder()
         {
+            var options = new EnvironmentOptions(Environment.GetEnvironmentVariables());
+            _apiKey = options.ApiKey;
+            _dataset = options.Dataset;
+            _endpoint = new Uri(options.ApiEndpoint);
+            _sampler = new DeterministicSampler(options.SampleRate);
+
             ResourceBuilder = ResourceBuilder
                 .CreateDefault()
                 .AddAttributes(new List<KeyValuePair<string, object>>
@@ -33,6 +38,11 @@ namespace Honeycomb.OpenTelemetry
                         Environment.Version.ToString()),
                 })
                 .AddEnvironmentVariableDetector();
+
+            if (!string.IsNullOrWhiteSpace(options.ServiceName))
+            {
+                ResourceBuilder.AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion);
+            }
         }
 
         public HoneycombSdkBuilder WithEndpoint(string endpoint)
@@ -87,13 +97,7 @@ namespace Honeycomb.OpenTelemetry
             return WithResourceAttributes(new KeyValuePair<string, object>(key, value));
         }
 
-        // public HoneycombSdkBuilder WithRedisConnection(IRedisConnection conn)
-        // {
-        //     _redisConnection = conn;
-        //     return this;
-        // }
-
-        public HoneycombSdkBuilder WithSources(string[] names)
+        public HoneycombSdkBuilder WithSources(params string[] names)
         {
             _sourceNames = names;
             return this;
@@ -106,7 +110,7 @@ namespace Honeycomb.OpenTelemetry
             if (string.IsNullOrWhiteSpace("dataset"))
                 throw new ArgumentException("Dataset cannot be empty");
 
-            TracerProviderBuilder tracerProviderBuilder = Sdk.CreateTracerProviderBuilder();
+            var tracerProviderBuilder = Sdk.CreateTracerProviderBuilder();
             Array.ForEach(_sourceNames, source => tracerProviderBuilder.AddSource(source));
             var traceProviderBuilder = tracerProviderBuilder
                 .SetSampler(_sampler)
@@ -121,7 +125,6 @@ namespace Honeycomb.OpenTelemetry
 
 #if NETSTANDARD2_0
             traceProviderBuilder.AddAspNetCoreInstrumentation();
-            // traceProviderBuilder.AddRedisInstrumentation(null); // TODO: still requires connection to instrument with
 #elif NETSTANDARD2_1
             traceProviderBuilder.AddGrpcClientInstrumentation();
 #endif
