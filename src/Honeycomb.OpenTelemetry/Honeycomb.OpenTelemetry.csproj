@@ -28,8 +28,17 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <InternalsVisibleTo Include="Honeycomb.OpenTelemetry.Tests" />
-  </ItemGroup>
+  <Choose>
+    <When Condition=" '$(Configuration)'=='Debug' ">
+      <ItemGroup>
+        <InternalsVisibleTo Include="Honeycomb.OpenTelemetry.Tests" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <InternalsVisibleTo Include="Honeycomb.OpenTelemetry.Tests, PublicKey=00240000048000009400000006020000002400005253413100040000010001000931f584d49e5f3a719cc0129f37eaffb49155fdc30852cfcaeb35e90cc7af9414a544338886f2f0bd99a66ffa8905b6007f5d7abd98531d350b90294b2ed678a191da986d711dabcc5869003174ab024b52f8f7818cbd2e0301858a31ccf77cf44619aaa876696dbb1dfd18e573def87e3966067272af4c762db31b898e0fb4" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 
 </Project>
