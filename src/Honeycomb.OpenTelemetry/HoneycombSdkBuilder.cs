@@ -98,7 +98,7 @@ namespace Honeycomb.OpenTelemetry
             if (string.IsNullOrWhiteSpace("dataset"))
                 throw new ArgumentException("Dataset cannot be empty");
 
-            TracerProviderBuilder tracerProviderBuilder = Sdk.CreateTracerProviderBuilder();
+            var tracerProviderBuilder = Sdk.CreateTracerProviderBuilder();
             Array.ForEach(_sourceNames, source => tracerProviderBuilder.AddSource(source));
             var traceProvider = tracerProviderBuilder
                 .SetSampler(_sampler)
