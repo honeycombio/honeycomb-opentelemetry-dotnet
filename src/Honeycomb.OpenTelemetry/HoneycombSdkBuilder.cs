@@ -13,6 +13,7 @@ namespace Honeycomb.OpenTelemetry
         private Uri _endpoint = new Uri(DefaultEndpointAddress);
         private string _apiKey;
         private string _dataset;
+        private string[] _sourceNames = {"honeycomb.opentelemetry"};
         private Sampler _sampler = new DeterministicSampler(1); // default to always sample
         internal readonly ResourceBuilder ResourceBuilder;
 
@@ -23,8 +24,11 @@ namespace Honeycomb.OpenTelemetry
                 .AddAttributes(new List<KeyValuePair<string, object>>
                 {
                     new KeyValuePair<string, object>("honeycomb.distro.language", "dotnet"),
-                    new KeyValuePair<string, object>("honeycomb.distro.version", typeof(HoneycombSdkBuilder).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion),
-                    new KeyValuePair<string, object>("honeycomb.distro.runtime_version", Environment.Version.ToString()),
+                    new KeyValuePair<string, object>("honeycomb.distro.version",
+                        typeof(HoneycombSdkBuilder).Assembly
+                            .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion),
+                    new KeyValuePair<string, object>("honeycomb.distro.runtime_version",
+                        Environment.Version.ToString()),
                 })
                 .AddEnvironmentVariableDetector();
         }
@@ -81,6 +85,12 @@ namespace Honeycomb.OpenTelemetry
             return WithResourceAttributes(new KeyValuePair<string, object>(key, value));
         }
 
+        public HoneycombSdkBuilder WithSources(params string[] names)
+        {
+            _sourceNames = names;
+            return this;
+        }
+
         public HoneycombSdk Build()
         {
             if (string.IsNullOrWhiteSpace(_apiKey))
@@ -88,7 +98,9 @@ namespace Honeycomb.OpenTelemetry
             if (string.IsNullOrWhiteSpace("dataset"))
                 throw new ArgumentException("Dataset cannot be empty");
 
-            var traceProvider = Sdk.CreateTracerProviderBuilder()
+            var tracerProviderBuilder = Sdk.CreateTracerProviderBuilder();
+            Array.ForEach(_sourceNames, source => tracerProviderBuilder.AddSource(source));
+            var traceProvider = tracerProviderBuilder
                 .SetSampler(_sampler)
                 .SetResourceBuilder(ResourceBuilder)
                 .AddOtlpExporter(otlpOptions =>
