@@ -121,7 +121,7 @@ namespace Honeycomb.OpenTelemetry
 
 #if NETSTANDARD2_0
             traceProviderBuilder.AddAspNetCoreInstrumentation();
-            traceProviderBuilder.AddRedisInstrumentation(null); // TODO: still requires connection to instrument with
+            // traceProviderBuilder.AddRedisInstrumentation(null); // TODO: still requires connection to instrument with
 #elif NETSTANDARD2_1
             traceProviderBuilder.AddGrpcClientInstrumentation();
 #endif
