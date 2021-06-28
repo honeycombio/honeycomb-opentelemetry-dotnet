@@ -7,18 +7,14 @@ namespace Honeycomb.OpenTelemetry
 {
     public static class HoneycombHostingExtensions
     {
-        public static IServiceCollection AddHoneycombOpenTelemetryTracing(this IServiceCollection services)
+        public static IServiceCollection UseHoneycomb(this IServiceCollection services)
         {
-            return services.AddHoneycombOpenTelemetryTracing(optoins => { });
+            return services.UseHoneycomb(optoins => { });
         }
 
-        public static IServiceCollection AddHoneycombOpenTelemetryTracing(this IServiceCollection services, Action<HoneycombSdkBuilder> configureBuilder)
+        public static IServiceCollection UseHoneycomb(this IServiceCollection services, Action<EnvironmentOptions> configureBuilder)
         {
-            var builder = new HoneycombSdkBuilder();
-            configureBuilder?.Invoke(builder);
-
-            builder.Build();
-            return services;
+            return services.AddOpenTelemetryTracing(builder => builder.UseHoneycomb(configureBuilder));
         }
     }
 }
