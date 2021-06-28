@@ -122,7 +122,9 @@ namespace Honeycomb.OpenTelemetry
                 .AddSqlClientInstrumentation();
 
 #if NETSTANDARD2_0_OR_GREATER
-            traceProviderBuilder.AddAspNetCoreInstrumentation();
+            traceProviderBuilder.AddAspNetCoreInstrumentation(options => {
+                options.RecordException = true;
+            });
 #endif
 
             return new HoneycombSdk(traceProviderBuilder.Build());
