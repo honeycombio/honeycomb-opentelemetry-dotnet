@@ -18,7 +18,12 @@ namespace Honeycomb.OpenTelemetry
         public static IServiceCollection UseHoneycomb(this IServiceCollection services, HoneycombOptions options)
         {
             return services
-                .AddOpenTelemetryTracing(builder => builder.UseHoneycomb(options))
+                .AddOpenTelemetryTracing(builder => builder
+                    .UseHoneycomb(options)
+                    .AddAspNetCoreInstrumentation(opts => {
+                        opts.RecordException = true;
+                    })
+                )
                 .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName));
         }
     }
