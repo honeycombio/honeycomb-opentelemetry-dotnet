@@ -8,11 +8,6 @@ namespace Honeycomb.OpenTelemetry
 {
     public static class TracerProviderBuilderExtensions
     {
-        public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder)
-        {
-            return builder.UseHoneycomb(new HoneycombOptions());
-        }
-       
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, Action<HoneycombOptions> configureOptions)
         {
             var options = new HoneycombOptions();

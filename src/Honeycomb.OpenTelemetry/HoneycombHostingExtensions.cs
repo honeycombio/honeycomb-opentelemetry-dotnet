@@ -8,11 +8,6 @@ namespace Honeycomb.OpenTelemetry
 {
     public static class HoneycombHostingExtensions
     {
-        public static IServiceCollection UseHoneycomb(this IServiceCollection services)
-        {
-            return services.UseHoneycomb(optoins => { });
-        }
-        
         public static IServiceCollection UseHoneycomb(this IServiceCollection services, Action<HoneycombOptions> configureOptions)
         {
             var options = new HoneycombOptions();
