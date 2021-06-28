@@ -25,7 +25,7 @@ namespace Honeycomb.OpenTelemetry
                 {
                     new KeyValuePair<string, object>("honeycomb.distro.language", "dotnet"),
                     new KeyValuePair<string, object>("honeycomb.distro.version",
-                        typeof(TracerProviderBuilder).Assembly
+                        typeof(TracerProviderBuilderExtensions).Assembly
                             .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion),
                     new KeyValuePair<string, object>("honeycomb.distro.runtime_version",
                         Environment.Version.ToString()),
