@@ -23,7 +23,7 @@ namespace Honeycomb.OpenTelemetry
         public void CanSetServiceNameAttribute()
         {
             var builder = new HoneycombSdkBuilder()
-                .WithServiceName("my-service");
+                .SetServiceName("my-service");
 
             var attributes = builder.ResourceBuilder.Build().Attributes;
             Assert.Contains(attributes, item => item.Key == "service.name" && (string) item.Value == "my-service");

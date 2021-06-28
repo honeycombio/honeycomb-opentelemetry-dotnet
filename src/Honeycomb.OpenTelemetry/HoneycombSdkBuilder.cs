@@ -43,56 +43,56 @@ namespace Honeycomb.OpenTelemetry
             }
         }
 
-        public HoneycombSdkBuilder WithEndpoint(string endpoint)
+        public HoneycombSdkBuilder SetEndpoint(string endpoint)
         {
-            return WithEndpoint(new Uri(endpoint));
+            return SetEndpoint(new Uri(endpoint));
         }
 
-        public HoneycombSdkBuilder WithEndpoint(Uri endpoint)
+        public HoneycombSdkBuilder SetEndpoint(Uri endpoint)
         {
             _endpoint = endpoint;
             return this;
         }
 
-        public HoneycombSdkBuilder WithAPIKey(string apiKey)
+        public HoneycombSdkBuilder SetAPIKey(string apiKey)
         {
             _apiKey = apiKey;
             return this;
         }
 
-        public HoneycombSdkBuilder WithDataset(string dataset)
+        public HoneycombSdkBuilder SetDataset(string dataset)
         {
             _dataset = dataset;
             return this;
         }
 
-        public HoneycombSdkBuilder WithSampler(Sampler sampler)
+        public HoneycombSdkBuilder SetSampler(Sampler sampler)
         {
             _sampler = sampler;
             return this;
         }
 
-        public HoneycombSdkBuilder WithSampleRate(uint sampleRate)
+        public HoneycombSdkBuilder SetSampleRate(uint sampleRate)
         {
             _sampler = new DeterministicSampler(sampleRate);
             return this;
         }
 
-        public HoneycombSdkBuilder WithServiceName(string serviceName)
+        public HoneycombSdkBuilder SetServiceName(string serviceName)
         {
             ResourceBuilder.AddService(serviceName);
             return this;
         }
 
-        public HoneycombSdkBuilder WithResourceAttributes(params KeyValuePair<string, object>[] attributes)
+        public HoneycombSdkBuilder AddResourceAttributes(params KeyValuePair<string, object>[] attributes)
         {
             ResourceBuilder.AddAttributes(attributes);
             return this;
         }
 
-        public HoneycombSdkBuilder WithResourceAttribute(string key, object value)
+        public HoneycombSdkBuilder AddResourceAttribute(string key, object value)
         {
-            return WithResourceAttributes(new KeyValuePair<string, object>(key, value));
+            return AddResourceAttributes(new KeyValuePair<string, object>(key, value));
         }
 
         public HoneycombSdkBuilder WithSources(params string[] names)
