@@ -10,15 +10,18 @@ namespace Honeycomb.OpenTelemetry
     {
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder)
         {
-            return builder.UseHoneycomb(opt => {});
+            return builder.UseHoneycomb(new HoneycombOptions());
         }
-
+       
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, Action<HoneycombOptions> configureOptions)
         {
-            //TODO: fix options handling from env vars and json config file
             var options = new HoneycombOptions();
             configureOptions?.Invoke(options);
+            return builder.UseHoneycomb(options);
+        }
 
+        public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
+        {
             var resourceBuilder = ResourceBuilder
                 .CreateDefault()
                 .AddAttributes(new List<KeyValuePair<string, object>>
@@ -43,7 +46,7 @@ namespace Honeycomb.OpenTelemetry
                 .AddSqlClientInstrumentation()
                 .AddOtlpExporter(otlpOptions =>
                 {
-                    otlpOptions.Endpoint = new Uri(options.ApiEndpoint);
+                    otlpOptions.Endpoint = new Uri(options.Endpoint);
                     otlpOptions.Headers = string.Format($"x-honeycomb-team={options.ApiKey},x-honeycomb-dataset={options.Dataset}");
                 })
                 .AddSource(options.ServiceName)
@@ -57,5 +60,6 @@ namespace Honeycomb.OpenTelemetry
 
             return builder;
         }
+
     }
 }
