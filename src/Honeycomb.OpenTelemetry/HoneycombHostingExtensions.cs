@@ -12,7 +12,7 @@ namespace Honeycomb.OpenTelemetry
             return services.UseHoneycomb(optoins => { });
         }
 
-        public static IServiceCollection UseHoneycomb(this IServiceCollection services, Action<EnvironmentOptions> configureBuilder)
+        public static IServiceCollection UseHoneycomb(this IServiceCollection services, Action<HoneycombOptions> configureBuilder)
         {
             return services.AddOpenTelemetryTracing(builder => builder.UseHoneycomb(configureBuilder));
         }

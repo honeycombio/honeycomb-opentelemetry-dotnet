@@ -2,6 +2,16 @@ using System.Collections;
 
 namespace Honeycomb.OpenTelemetry
 {
+    public class HoneycombOptions
+    {
+        public string ApiKey { get; set; }
+        public string Dataset { get; set; }
+        public string ApiEndpoint { get; set; }
+        public string ServiceName { get; set; }
+        public string ServiceVersion { get; set; }
+        public uint SampleRate { get; set; }
+    }
+
     internal class EnvironmentOptions
     {
         private const string ApiKeyKey = "HONEYCOMB_API_KEY";

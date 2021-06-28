@@ -13,10 +13,10 @@ namespace Honeycomb.OpenTelemetry
             return builder.UseHoneycomb(opt => {});
         }
 
-        public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, Action<EnvironmentOptions> configureOptions)
+        public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, Action<HoneycombOptions> configureOptions)
         {
-            //TODO: fix options handling from env vars and config file
-            var options = new EnvironmentOptions(Environment.GetEnvironmentVariables());
+            //TODO: fix options handling from env vars and json config file
+            var options = new HoneycombOptions();
             configureOptions?.Invoke(options);
 
             var resourceBuilder = ResourceBuilder
