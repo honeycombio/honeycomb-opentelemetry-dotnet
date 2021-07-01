@@ -3,13 +3,21 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net452;net46;net461</TargetFrameworks>
     <Description>Honeycomb OpenTelemetry SDK</Description>
-    <RootNamespace>Honeycomb.OpenTelemetry</RootNamespace>
     <Version>0.1.0</Version>
+    
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- For SourceLink. See: https://github.com/dotnet/sourcelink#using-source-link-in-net-projects -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="OpenTelemetry" Version="1.0.1" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.0.1" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
   </ItemGroup>
 
   <Choose>

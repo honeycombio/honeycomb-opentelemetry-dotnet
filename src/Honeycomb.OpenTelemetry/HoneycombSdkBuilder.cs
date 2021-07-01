@@ -7,6 +7,9 @@ using OpenTelemetry.Trace;
 
 namespace Honeycomb.OpenTelemetry
 {
+    /// <summary>
+    /// The Honeycomb SDK builder.
+    /// </summary>
     public class HoneycombSdkBuilder
     {
         private Uri _endpoint;
@@ -16,6 +19,9 @@ namespace Honeycomb.OpenTelemetry
         private Sampler _sampler = new DeterministicSampler(1); // default to always sample
         internal readonly ResourceBuilder ResourceBuilder;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HoneycombSdkBuilder"/> class with default values from your environment.
+        /// </summary>
         public HoneycombSdkBuilder()
         {
             var options = new EnvironmentOptions(Environment.GetEnvironmentVariables());
@@ -43,64 +49,97 @@ namespace Honeycomb.OpenTelemetry
             }
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified endpoint.
+        /// </summary>
         public HoneycombSdkBuilder WithEndpoint(string endpoint)
         {
             return WithEndpoint(new Uri(endpoint));
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified endpoint.
+        /// </summary>
         public HoneycombSdkBuilder WithEndpoint(Uri endpoint)
         {
             _endpoint = endpoint;
             return this;
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified API key.
+        /// </summary>
         public HoneycombSdkBuilder WithAPIKey(string apiKey)
         {
             _apiKey = apiKey;
             return this;
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified dataset.
+        /// </summary>
         public HoneycombSdkBuilder WithDataset(string dataset)
         {
             _dataset = dataset;
             return this;
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified sampler.
+        /// </summary>
         public HoneycombSdkBuilder WithSampler(Sampler sampler)
         {
             _sampler = sampler;
             return this;
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with  a specified sample rate.
+        /// </summary>
         public HoneycombSdkBuilder WithSampleRate(uint sampleRate)
         {
             _sampler = new DeterministicSampler(sampleRate);
             return this;
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified service name.
+        /// </summary>
         public HoneycombSdkBuilder WithServiceName(string serviceName)
         {
             ResourceBuilder.AddService(serviceName);
             return this;
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified set of resource attributes.
+        /// </summary>
         public HoneycombSdkBuilder WithResourceAttributes(params KeyValuePair<string, object>[] attributes)
         {
             ResourceBuilder.AddAttributes(attributes);
             return this;
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified resource attribute.
+        /// </summary>
         public HoneycombSdkBuilder WithResourceAttribute(string key, object value)
         {
             return WithResourceAttributes(new KeyValuePair<string, object>(key, value));
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="HoneycombSdkBuilder"/> class with a specified set of sources.
+        /// </summary>
         public HoneycombSdkBuilder WithSources(params string[] names)
         {
             _sourceNames = names;
             return this;
         }
 
+        /// <summary>
+        /// Builds a new instance of the <see cref="HoneycombSdk"/> class from the this <see cref="HoneycombSdkBuilder"/>. 
+        /// </summary>
         public HoneycombSdk Build()
         {
             if (string.IsNullOrWhiteSpace(_apiKey))
