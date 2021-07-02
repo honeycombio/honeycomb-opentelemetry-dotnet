@@ -3,23 +3,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Trace;
-using System;
 
 namespace Honeycomb.OpenTelemetry
 {
-    public static class HoneycombHostingExtensions
+    public static class ServiceCollectionExtensions
     {
         public static IServiceCollection UseHoneycomb(this IServiceCollection services, IConfiguration configuration)
         {
-            var options = configuration.GetSection(HoneycombOptions.ConfigurationKey).Get<HoneycombOptions>();
-            return services.UseHoneycomb(options);
-        }
-
-        public static IServiceCollection UseHoneycomb(this IServiceCollection services, Action<HoneycombOptions> configureOptions)
-        {
-            var options = new HoneycombOptions();
-            configureOptions?.Invoke(options);
-            return services.UseHoneycomb(options);
+            return services.UseHoneycomb(HoneycombOptions.FromConfiguration(configuration));
         }
 
         public static IServiceCollection UseHoneycomb(this IServiceCollection services, HoneycombOptions options)
