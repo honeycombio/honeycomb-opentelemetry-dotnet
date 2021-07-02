@@ -1,5 +1,8 @@
 ﻿using OpenTelemetry.Trace;
 using Honeycomb.OpenTelemetry;
+using System.Text.Json;
+
+using Microsoft.Extensions.Configuration;
 
 namespace console
 {
@@ -7,19 +10,21 @@ namespace console
     {
         static void Main(string[] args)
         {
-            const string AppName = "my-app";
+            // configure HoneycombOptions
+            var options = new HoneycombOptions
+            {
+                ServiceName = "my-app",
+                ApiKey = "{apikey}",
+                Dataset = "{datast}"
+            };
 
-            // configure OpenTelemetry SDK
+            // configure OpenTelemetry SDK to send data to Honeycomb
             var provider = OpenTelemetry.Sdk.CreateTracerProviderBuilder()
-                .UseHoneycomb(options => {
-                    options.ServiceName = AppName;
-                    options.ApiKey = "{api-key}";
-                    options.Dataset = "{dataset}";
-                })
+                .UseHoneycomb(options)
                 .Build();
             
             // create span to describe some application logic
-            var tracer = provider.GetTracer(AppName);
+            var tracer = provider.GetTracer(options.ServiceName);
             using (var span = tracer.StartActiveSpan("doSomething"))
             {
                 span.SetAttribute("user_id", 123);
