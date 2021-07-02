@@ -4,6 +4,7 @@ namespace Honeycomb.OpenTelemetry
 {
     public class HoneycombOptions
     {
+        public const string ConfigurationKey = "Honeycomb";
         public const string DefaultEndpoint = "https://api.honeycomb.io:443";
         public const uint DefaultSampleRate = 1;
         private static readonly string DefaultServiceName = Assembly.GetEntryAssembly().GetName().Name;

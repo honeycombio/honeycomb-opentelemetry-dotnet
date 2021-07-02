@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
@@ -8,6 +9,12 @@ namespace Honeycomb.OpenTelemetry
 {
     public static class TracerProviderBuilderExtensions
     {
+        public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, IConfiguration configuration)
+        {
+            var options = configuration.GetSection(HoneycombOptions.ConfigurationKey).Get<HoneycombOptions>();
+            return builder.UseHoneycomb(options);
+        }
+
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, Action<HoneycombOptions> configureOptions)
         {
             var options = new HoneycombOptions();
