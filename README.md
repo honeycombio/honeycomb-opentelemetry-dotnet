@@ -1,14 +1,69 @@
-# honeycomb-opentelemetry-dotnet
+# Honeycomb OpenTelemetry Distro for .NET
 
-### Prerequisites
+This is Honeycomb's distribution of OpenTelemetry for .NET.
+It makes getting started with OpenTelemetry and Honeycomb easier!
+
+## Why would I want to use this?
+
+- Streamlined configuration for sending data to Honeycomb!
+- Easy interop with existing instrumentation with OpenTelemetry!
+- Deterministic sampling!
+- Multi-span attributes!
+
+## Getting Started
+
+### Installing the Honeycomb.OpenTelemetry package
+
+You can add the package to your application by using the following command:
+
+`dotnet add package Honeycomb.OpenTelemetry`
+
+### Configuration
+
+The two ways to configure the Honeycomb OpenTelemetry SDK distro to send data to Honeycomb are via command line arguments and `IConfiguration` instances (eg via appsettings.json).
+
+The available configuration options are:
+
+|Command line argument|Appsetting key|Description|
+|-|-|-|
+|`--honeycomb-apikey`|Honeycomb.ApiKey|`required` The API key used to send data|
+|`--honeycomb-dataset`|Honeycomb.Dataset|`required` The dataset to store telemetry data in|
+|`--honeycomb-samplerate`|Honeycomb.SampleRate|`optional` Defaults to 1 (sample everything)|
+|`--honeycomb-endpoint`|Honeycomb.Endpoint|`optioal` Override the endpoint data is sent to|
+|`--service-name`|Honeycomb.ServiceName|`optional` Defaults to project's assembly name|
+|`--service-version`|Honeycomb.ServieVersion|`optional` Defaults to project's assembly version|
+
+*NOTE* While ServiceName is optional, it can be useful to set it to something that best describes the process that is being traced. eg `auth-service` or `
+
+Using command line arguments:
+```bash
+dotnet run --servicename=my-app --apikey={apikey} --dataset={dataset}
+```
+
+Using appsettings.json:
+```json
+{
+  "Honeycomb": {
+    "ServiceName": "my-app",
+    "ApiKey": "{apikey}",
+    "Dataset": "{dataset"}
+  }
+}
+```
+
+```bash
+dotnet run
+```
+
+## Building & Testing
+
+### Prerequisites to Build
 
 You will need to download and install following .NET SDK runtimes:
 
 - [.NET Core 2.1](https://dotnet.microsoft.com/download/dotnet/2.1)
 - [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet/3.1)
 - [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
-
-### Building & Testing
 
 The following makefile commands build the projects:
 
