@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry.Trace;
 
 namespace aspnetcore.Controllers
 {
@@ -17,10 +18,12 @@ namespace aspnetcore.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly Tracer _tracer;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, Tracer tracer)
         {
             _logger = logger;
+            _tracer = tracer;
         }
 
         [HttpGet]
