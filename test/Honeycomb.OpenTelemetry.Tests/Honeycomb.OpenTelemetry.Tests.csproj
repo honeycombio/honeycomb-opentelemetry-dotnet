@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\src\Honeycomb.OpenTelemetry\Honeycomb.OpenTelemetry.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="appsettings.test.json" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
 </Project>
