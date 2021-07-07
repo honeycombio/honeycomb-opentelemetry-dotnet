@@ -1,18 +1,14 @@
+using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-#if NETSTANDARD2_0_OR_GREATER
-using Microsoft.Extensions.Configuration;
-#endif
-
 namespace Honeycomb.OpenTelemetry
 {
     public static class TracerProviderBuilderExtensions
     {
-#if NETSTANDARD2_0_OR_GREATER
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, string[] args)
         {
             return builder.UseHoneycomb(HoneycombOptions.FromArgs(args));
@@ -22,7 +18,6 @@ namespace Honeycomb.OpenTelemetry
         {
             return builder.UseHoneycomb(HoneycombOptions.FromConfiguration(configuration));
         }
-#endif
 
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
