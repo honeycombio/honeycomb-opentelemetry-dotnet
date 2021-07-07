@@ -27,8 +27,14 @@ namespace aspnetcore.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<IEnumerable<WeatherForecast>> Get()
         {
+            using (var span = _tracer.StartActiveSpan("sleep"))
+            {
+                span.SetAttribute("delay_ms", 100);
+                await Task.Delay(TimeSpan.FromMilliseconds(100));
+            }
+
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
