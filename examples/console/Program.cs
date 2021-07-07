@@ -1,8 +1,5 @@
 ﻿using OpenTelemetry.Trace;
 using Honeycomb.OpenTelemetry;
-using System.Text.Json;
-
-using Microsoft.Extensions.Configuration;
 
 namespace console
 {
@@ -19,19 +16,18 @@ namespace console
             };
 
             // configure OpenTelemetry SDK to send data to Honeycomb
-            var provider = OpenTelemetry.Sdk.CreateTracerProviderBuilder()
+            // NOTE: the tracer provider should be a long-lived resource, and disposed
+            // at the end of your app lifecycle to ensure all telemetry is exported
+            using var provider = OpenTelemetry.Sdk.CreateTracerProviderBuilder()
                 .UseHoneycomb(options)
                 .Build();
             
-            // create span to describe some application logic
+            // get an instance of a tracer that can be used to create spans
             var tracer = provider.GetTracer(options.ServiceName);
-            using (var span = tracer.StartActiveSpan("doSomething"))
-            {
-                span.SetAttribute("user_id", 123);
-            }   
 
-            // dispose of provider to ensure spans are fluhsed and resoruces are cleaned up
-            provider.Dispose();
+            // create span to describe some application logic
+            using var span = tracer.StartActiveSpan("doSomething");
+            span.SetAttribute("user_id", 123);
         }
     }
 }
