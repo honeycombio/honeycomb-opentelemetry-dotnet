@@ -37,7 +37,7 @@ The available configuration options are:
 
 Using command line arguments:
 ```bash
-dotnet run --servicename=my-app --apikey={apikey} --dataset={dataset}
+dotnet run --servicename=my-app --honeycomb-apikey={apikey} --honeycomb-dataset={dataset}
 ```
 
 Using appsettings.json:
