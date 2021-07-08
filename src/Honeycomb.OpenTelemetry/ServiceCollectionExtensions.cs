@@ -1,5 +1,3 @@
-#if NETSTANDARD2_0_OR_GREATER
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Trace;
@@ -26,5 +24,3 @@ namespace Honeycomb.OpenTelemetry
         }
     }
 }
-
-#endif
