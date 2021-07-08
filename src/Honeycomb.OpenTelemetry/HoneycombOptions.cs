@@ -87,7 +87,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Creates an instance of <see cref="HoneycombOptions"/> using <see cref="IConfiguration"/>.
         /// </summary>
-        public static HoneycombOptions FromConfiguration(IConfiguration configuration, params string[] args)
+        public static HoneycombOptions FromConfiguration(IConfiguration configuration)
         {
             const string configurationKey = "Honeycomb";
             return new ConfigurationBuilder()
