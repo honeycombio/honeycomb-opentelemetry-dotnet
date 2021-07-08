@@ -12,7 +12,7 @@ namespace console
             {
                 ServiceName = "my-app",
                 ApiKey = "{apikey}",
-                Dataset = "{datast}"
+                Dataset = "{dataset}"
             };
 
             // configure OpenTelemetry SDK to send data to Honeycomb

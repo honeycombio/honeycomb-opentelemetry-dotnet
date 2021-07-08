@@ -25,7 +25,7 @@ var options = HoneycombOptionsHelper.GetHoneycombOptions(args);
 
 Run app with command line arguments:
 
-`dotnet run --service-name=my-app --honeycomb-apiky={apikey} --honeycomb-dataset={dataset}`
+`dotnet run --service-name=my-app --honeycomb-apikey={apikey} --honeycomb-dataset={dataset}`
 
 ### Configuration files
 
