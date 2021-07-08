@@ -46,7 +46,7 @@ Using appsettings.json:
   "Honeycomb": {
     "ServiceName": "my-app",
     "ApiKey": "{apikey}",
-    "Dataset": "{dataset"}
+    "Dataset": "{dataset}"
   }
 }
 ```
