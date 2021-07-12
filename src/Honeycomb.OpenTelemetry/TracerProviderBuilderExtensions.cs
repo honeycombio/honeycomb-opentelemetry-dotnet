@@ -1,12 +1,9 @@
+using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
-#if NETSTANDARD2_0_OR_GREATER
-using Microsoft.Extensions.Configuration;
-#endif
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -15,7 +12,6 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public static class TracerProviderBuilderExtensions
     {
-#if NETSTANDARD2_0_OR_GREATER
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honycomb using options created from command line arguments.
         /// </summary>
@@ -31,7 +27,6 @@ namespace Honeycomb.OpenTelemetry
         {
             return builder.UseHoneycomb(HoneycombOptions.FromConfiguration(configuration));
         }
-#endif
 
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honycomb using an instance of <see cref="HoneycombOptions"/>.

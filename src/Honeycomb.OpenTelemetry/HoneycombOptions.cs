@@ -1,10 +1,7 @@
+using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Trace;
 using System.Reflection;
 using System.Collections.Generic;
-
-#if NETSTANDARD2_0_OR_GREATER
-using Microsoft.Extensions.Configuration;
-#endif
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -62,7 +59,6 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public string ServiceVersion { get; set; } = s_defaultServiceVersion;
 
-#if NETSTANDARD2_0_OR_GREATER
         private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
             {"--honeycomb-apikey", "apikey"},
@@ -96,6 +92,5 @@ namespace Honeycomb.OpenTelemetry
                 .GetSection(configurationKey)
                 .Get<HoneycombOptions>();
         }
-#endif
     }
 }
