@@ -7,18 +7,30 @@ using System.Reflection;
 
 namespace Honeycomb.OpenTelemetry
 {
+    /// <summary>
+    /// Extension methods to configure <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
+    /// </summary>
     public static class TracerProviderBuilderExtensions
     {
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honycomb using options created from command line arguments.
+        /// </summary>
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, string[] args)
         {
             return builder.UseHoneycomb(HoneycombOptions.FromArgs(args));
         }
 
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honycomb using options created from an instance of <see cref="IConfiguration"/>.
+        /// </summary>
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, IConfiguration configuration)
         {
             return builder.UseHoneycomb(HoneycombOptions.FromConfiguration(configuration));
         }
 
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honycomb using an instance of <see cref="HoneycombOptions"/>.
+        /// </summary>
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
             if (string.IsNullOrWhiteSpace(options.ApiKey))
