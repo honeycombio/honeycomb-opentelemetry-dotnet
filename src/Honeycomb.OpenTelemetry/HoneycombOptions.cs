@@ -23,8 +23,8 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public const uint DefaultSampleRate = 1;
         
-        private static readonly string DefaultServiceName = Assembly.GetEntryAssembly().GetName().Name;
-        private static readonly string DefaultServiceVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+        private static readonly string s_defaultServiceName = Assembly.GetEntryAssembly().GetName().Name;
+        private static readonly string s_defaultServiceVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
         /// <summary>
         /// API key used to send telemetry data to Honeycomb.
@@ -55,12 +55,12 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Serice name used to identify application. Defaults to application assembly name.
         /// </summary>
-        public string ServiceName { get; set; } = DefaultServiceName;
+        public string ServiceName { get; set; } = s_defaultServiceName;
 
         /// <summary>
         /// Service version. Defaults to application assembly information version.
         /// </summary>
-        public string ServiceVersion { get; set; } = DefaultServiceVersion;
+        public string ServiceVersion { get; set; } = s_defaultServiceVersion;
 
 #if NETSTANDARD2_0_OR_GREATER
         private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
