@@ -59,10 +59,8 @@ dotnet run
 
 ### Prerequisites to Build
 
-You will need to download and install following .NET SDK runtimes:
+You will need to download and install the latest .NET SDK:
 
-- [.NET Core 2.1](https://dotnet.microsoft.com/download/dotnet/2.1)
-- [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet/3.1)
 - [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 The following makefile commands build the projects:
