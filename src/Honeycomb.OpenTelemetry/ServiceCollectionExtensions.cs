@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OpenTelemetry;
 using OpenTelemetry.Trace;
+using System.Collections.Generic;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -25,8 +27,17 @@ namespace Honeycomb.OpenTelemetry
             return services
                 .AddOpenTelemetryTracing(builder => builder
                     .UseHoneycomb(options)
-                    .AddAspNetCoreInstrumentation(opts => {
+                    .AddAspNetCoreInstrumentation(opts =>
+                    {
                         opts.RecordException = true;
+                        opts.Enrich = (activity, eventName, _) =>
+                        {
+                            if (eventName == "OnStartActivity")
+                                foreach (KeyValuePair<string, string> entry in Baggage.Current)
+                                {
+                                    activity.SetTag(entry.Key, entry.Value);
+                                }
+                        };
                     })
                 )
                 .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName));
