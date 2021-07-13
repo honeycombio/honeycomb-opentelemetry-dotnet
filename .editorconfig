@@ -210,5 +210,9 @@ dotnet_naming_style.begins_with_i.required_suffix =
 dotnet_naming_style.begins_with_i.word_separator =
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
+# Xml project files
+[*.csproj]
+indent_size = 2
+
 [Makefile]
 indent_style = tab

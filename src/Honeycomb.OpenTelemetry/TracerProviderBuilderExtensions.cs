@@ -64,6 +64,10 @@ namespace Honeycomb.OpenTelemetry
                 .AddHttpClientInstrumentation()
                 .AddSqlClientInstrumentation();
 
+#if NETSTANDARD2_1
+            builder.AddGrpcClientInstrumentation();
+#endif
+
             return builder;
         }
     }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <Description>Honeycomb OpenTelemetry SDK</Description>
     <Version>0.1.0-beta</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -23,7 +23,11 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc6" />
     <PackageReference Include="OpenTelemetry.Instrumentation.SqlClient" Version="1.0.0-rc6" />
   </ItemGroup>
-
+  
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
+    <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.0.0-rc6" />
+  </ItemGroup>
+  
   <Choose>
     <When Condition=" '$(Configuration)'=='Debug' ">
       <ItemGroup>
