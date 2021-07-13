@@ -61,6 +61,7 @@ namespace Honeycomb.OpenTelemetry
                         .AddEnvironmentVariableDetector()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                 )
+                .AddProcessor(new BaggageSpanProcessor())
                 .AddHttpClientInstrumentation()
                 .AddSqlClientInstrumentation();
 
