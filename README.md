@@ -1,7 +1,12 @@
 # Honeycomb OpenTelemetry Distro for .NET
 
+[![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-dotnet.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-dotnet)
+
 This is Honeycomb's distribution of OpenTelemetry for .NET.
 It makes getting started with OpenTelemetry and Honeycomb easier!
+
+**NOTE** This project took over a pre-existing Nuget package `Honeycomb.OpenTelemetry` after version `0.9.0-pre`. 
+Version `0.9.0-pre` is the only version that will contain the initial implementation [Honeycomb exporter](https://github.com/honeycombio/opentelemetry-dotnet).
 
 ## Why would I want to use this?
 
