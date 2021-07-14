@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Description>Honeycomb OpenTelemetry SDK</Description>
-    <Version>0.1.0-beta</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <!-- For SourceLink. See: https://github.com/dotnet/sourcelink#using-source-link-in-net-projects -->
@@ -11,6 +9,21 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- NuGet packaging properties -->
+    <VersionPrefix>0.10.0</VersionPrefix>
+    <VersionSuffix>apha</VersionSuffix>
+    <PackageId>Honeycomb.OpenTelemetry</PackageId>
+    <Authors>Honeycomb</Authors>
+    <Description>Honeycomb's OpenTelemetry SDK</Description>
+    <PackageProjectUrl>https://docs.honeycomb.io/getting-data-in/dotnet/</PackageProjectUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReleaseNotes>https://github.com/honeycombio/honeycomb-opentelemetry-sdk/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <Copyright>Copyright (c) Honeycomb</Copyright>
+    <PackageTags>opentelemetry honeycomb observability tracing</PackageTags>
+    <PackageIcon>honeycomb.png</PackageIcon>
+    <RepositoryUrl>https://github.com/honeycombio/honeycomb-opentelemetry-sdk</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +39,10 @@
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
     <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.0.0-rc6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../honeycomb.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
   
   <Choose>
