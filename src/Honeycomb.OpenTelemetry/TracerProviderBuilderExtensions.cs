@@ -65,6 +65,11 @@ namespace Honeycomb.OpenTelemetry
                 .AddHttpClientInstrumentation()
                 .AddSqlClientInstrumentation();
 
+            if (options.RedisConnection != null)
+            {
+                builder.AddRedisInstrumentation(options.RedisConnection);
+            }
+
 #if NETSTANDARD2_1
             builder.AddGrpcClientInstrumentation();
 #endif

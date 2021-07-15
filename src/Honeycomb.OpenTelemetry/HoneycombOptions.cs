@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Trace;
+using StackExchange.Redis;
 using System.Reflection;
 using System.Collections.Generic;
 
@@ -58,6 +59,11 @@ namespace Honeycomb.OpenTelemetry
         /// Service version. Defaults to application assembly information version.
         /// </summary>
         public string ServiceVersion { get; set; } = s_defaultServiceVersion;
+
+        /// <summary>
+        /// Redis connection to enable Redis instrumentation.
+        /// </summary>
+        public IConnectionMultiplexer RedisConnection { get; set; }
 
         private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
