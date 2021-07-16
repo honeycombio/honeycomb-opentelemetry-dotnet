@@ -18,11 +18,11 @@
     <Description>Honeycomb's OpenTelemetry SDK</Description>
     <PackageProjectUrl>https://docs.honeycomb.io/getting-data-in/dotnet/</PackageProjectUrl>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageReleaseNotes>https://github.com/honeycombio/honeycomb-opentelemetry-sdk/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/blob/main/CHANGELOG.md</PackageReleaseNotes>
     <Copyright>Copyright (c) Honeycomb</Copyright>
     <PackageTags>opentelemetry honeycomb observability tracing</PackageTags>
     <PackageIcon>honeycomb.png</PackageIcon>
-    <RepositoryUrl>https://github.com/honeycombio/honeycomb-opentelemetry-sdk</RepositoryUrl>
+    <RepositoryUrl>https://github.com/honeycombio/honeycomb-opentelemetry-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
