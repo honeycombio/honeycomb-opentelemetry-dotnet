@@ -34,7 +34,7 @@ The available configuration options are:
 |`--honeycomb-apikey`|Honeycomb.ApiKey|`required` The API key used to send data|
 |`--honeycomb-dataset`|Honeycomb.Dataset|`required` The dataset to store telemetry data in|
 |`--honeycomb-samplerate`|Honeycomb.SampleRate|`optional` Defaults to 1 (sample everything)|
-|`--honeycomb-endpoint`|Honeycomb.Endpoint|`optioal` Override the endpoint data is sent to|
+|`--honeycomb-endpoint`|Honeycomb.Endpoint|`optional` Override the endpoint data is sent to|
 |`--service-name`|Honeycomb.ServiceName|`optional` Defaults to project's assembly name|
 |`--service-version`|Honeycomb.ServieVersion|`optional` Defaults to project's assembly version|
 
@@ -42,7 +42,7 @@ The available configuration options are:
 
 Using command line arguments:
 ```bash
-dotnet run --servicename=my-app --honeycomb-apikey={apikey} --honeycomb-dataset={dataset}
+dotnet run --service-name=my-app --honeycomb-apikey={apikey} --honeycomb-dataset={dataset}
 ```
 
 Using appsettings.json:
