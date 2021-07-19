@@ -13,7 +13,7 @@ namespace Honeycomb.OpenTelemetry
     public static class TracerProviderBuilderExtensions
     {
         /// <summary>
-        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honycomb using options created from command line arguments.
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using options created from command line arguments.
         /// </summary>
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, string[] args)
         {
@@ -21,7 +21,7 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
-        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honycomb using options created from an instance of <see cref="IConfiguration"/>.
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using options created from an instance of <see cref="IConfiguration"/>.
         /// </summary>
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, IConfiguration configuration)
         {
@@ -29,7 +29,7 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
-        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honycomb using an instance of <see cref="HoneycombOptions"/>.
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
         public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
