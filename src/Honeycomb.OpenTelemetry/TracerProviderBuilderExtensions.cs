@@ -63,13 +63,16 @@ namespace Honeycomb.OpenTelemetry
                 )
                 .AddProcessor(new BaggageSpanProcessor())
                 .AddHttpClientInstrumentation()
-                .AddSqlClientInstrumentation()
-                .AddAspNetInstrumentation();
+                .AddSqlClientInstrumentation();
 
             if (options.RedisConnection != null)
             {
                 builder.AddRedisInstrumentation(options.RedisConnection);
             }
+            
+#if NET461
+            builder.AddAspNetInstrumentation();
+#endif
 
 #if NETSTANDARD2_1
             builder.AddGrpcClientInstrumentation();
