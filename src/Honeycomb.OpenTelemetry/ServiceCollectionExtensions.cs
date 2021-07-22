@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
+using StackExchange.Redis;
 using System.Collections.Generic;
 
 namespace Honeycomb.OpenTelemetry
@@ -12,7 +13,7 @@ namespace Honeycomb.OpenTelemetry
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honycomb using options created from an instance of <see cref="IConfiguration"/>.
+        /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using options created from an instance of <see cref="IConfiguration"/>.
         /// </summary>
         public static IServiceCollection UseHoneycomb(this IServiceCollection services, IConfiguration configuration)
         {
@@ -20,25 +21,33 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
-        /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honycomb using an instance of <see cref="HoneycombOptions"/>.
+        /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
         public static IServiceCollection UseHoneycomb(this IServiceCollection services, HoneycombOptions options)
         {
             return services
-                .AddOpenTelemetryTracing(builder => builder
-                    .UseHoneycomb(options)
-                    .AddAspNetCoreInstrumentation(opts =>
+                .AddOpenTelemetryTracing(hostingBuilder => hostingBuilder.Configure(((serviceProvider, builder) =>
                     {
-                        opts.RecordException = true;
-                        opts.Enrich = (activity, eventName, _) =>
-                        {
-                            if (eventName == "OnStartActivity")
-                                foreach (KeyValuePair<string, string> entry in Baggage.Current)
+                        builder
+                            .UseHoneycomb(options)
+                            .AddAspNetCoreInstrumentation(opts =>
+                            {
+                                opts.RecordException = true;
+                                opts.Enrich = (activity, eventName, _) =>
                                 {
-                                    activity.SetTag(entry.Key, entry.Value);
-                                }
-                        };
-                    })
+                                    if (eventName == "OnStartActivity")
+                                        foreach (KeyValuePair<string, string> entry in Baggage.Current)
+                                        {
+                                            activity.SetTag(entry.Key, entry.Value);
+                                        }
+                                };
+                            });
+                        if (options.RedisConnection == null &&
+                            serviceProvider.GetService(typeof(IConnectionMultiplexer)) != null)
+                        {
+                            builder.AddRedisInstrumentation();
+                        }
+                    }))
                 )
                 .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName));
         }
