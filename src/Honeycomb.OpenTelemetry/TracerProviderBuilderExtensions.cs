@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
@@ -69,6 +70,18 @@ namespace Honeycomb.OpenTelemetry
             {
                 builder.AddRedisInstrumentation(options.RedisConnection);
             }
+
+#if NET461
+            builder.AddAspNetInstrumentation(opts =>
+                opts.Enrich = (activity, eventName, _) =>
+                {
+                    if (eventName == "OnStartActivity")
+                        foreach (KeyValuePair<string, string> entry in Baggage.Current)
+                        {
+                            activity.SetTag(entry.Key, entry.Value);
+                        }
+                });
+#endif
 
 #if NETSTANDARD2_1
             builder.AddGrpcClientInstrumentation();
