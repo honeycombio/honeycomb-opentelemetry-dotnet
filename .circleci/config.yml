@@ -53,7 +53,7 @@ jobs:
           shell: bash.exe
       - run:
           name: "Build release package"
-          command: dotnet.exe pack -c release --output build --no-restore
+          command: dotnet.exe pack -c release --output build --no-restore -p:signed=true
       - persist_to_workspace:
           root: \
           paths:
