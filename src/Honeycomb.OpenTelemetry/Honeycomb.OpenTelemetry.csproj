@@ -55,7 +55,7 @@
   </ItemGroup>
   
   <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
+    <When Condition=" $(SIGNED) != 'true' ">
       <ItemGroup>
         <InternalsVisibleTo Include="Honeycomb.OpenTelemetry.Tests" />
       </ItemGroup>

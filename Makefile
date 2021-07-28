@@ -15,6 +15,6 @@ local_nuget_source_registered: ${NUGET_PACKAGES_LOCAL}
 
 publish_local: local_nuget_source_registered
 	@echo "Publishing nuget package(s) to: ${NUGET_PACKAGES_LOCAL}\n"
-	@dotnet pack -c release -o ${NUGET_PACKAGES_LOCAL} --include-symbols
+	@dotnet pack -c release -o ${NUGET_PACKAGES_LOCAL} -p:signed=false
 
 .PHONY: build test local_nuget_source_registered publish_local
