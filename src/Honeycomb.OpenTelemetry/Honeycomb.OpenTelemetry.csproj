@@ -55,7 +55,7 @@
   </ItemGroup>
   
   <Choose>
-    <When Condition=" !$(DefineConstants.Contains(SIGNED)) ">
+    <When Condition=" $(SIGNED) != 'true' ">
       <ItemGroup>
         <InternalsVisibleTo Include="Honeycomb.OpenTelemetry.Tests" />
       </ItemGroup>
