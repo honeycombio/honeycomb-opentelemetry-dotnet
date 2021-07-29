@@ -11,7 +11,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <!-- NuGet packaging properties -->
-    <VersionPrefix>0.10.0</VersionPrefix>
+    <VersionPrefix>0.11.0</VersionPrefix>
     <VersionSuffix>alpha</VersionSuffix>
     <PackageId>Honeycomb.OpenTelemetry</PackageId>
     <Authors>Honeycomb</Authors>
@@ -56,7 +56,7 @@
   </ItemGroup>
   
   <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
+    <When Condition=" $(SIGNED) != 'true' ">
       <ItemGroup>
         <InternalsVisibleTo Include="Honeycomb.OpenTelemetry.Tests" />
       </ItemGroup>

@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.11.0-alpha] - 2021-07-27
+
+### Added
+
+- Redis instrumentation  (#66, #74) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.10.0-alpha] - 2021-07-15
 
 ### Added
