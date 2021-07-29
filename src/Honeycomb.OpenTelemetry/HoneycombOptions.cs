@@ -11,6 +11,39 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
+        private static readonly string s_defaultServiceName = "{unknown_service_name}";
+        private static readonly string s_defaultServiceVersion = "{unknown_service_version}";
+
+        static HoneycombOptions()
+        {
+            // This works for everything other than ASP.NET (non-core) web apps
+            // because they are loaded from an unmanaged COM source so
+            // assembly.GetEntryAssembly() returns null
+            var assembly = Assembly.GetEntryAssembly();
+
+#if NET461
+            // inspired from https://stackoverflow.com/a/6754205
+            // try to load the current HTTPContext and work out the assembly name & version
+            if (assembly == null && System.Web.HttpContext.Current?.ApplicationInstance != null)
+            {
+                var type = System.Web.HttpContext.Current.ApplicationInstance.GetType();
+                while (type != null && type.Namespace == "ASP")
+                {
+                    type = type.BaseType;
+                }
+
+                assembly = type?.Assembly;
+            }
+#endif
+            if (assembly != null)
+            {
+                s_defaultServiceName = assembly.GetName().Name;
+                s_defaultServiceVersion =
+                    assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ??
+                    assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
+            }
+        }
+
         /// <summary>
         /// Default API endpoint.
         /// </summary>
@@ -20,9 +53,6 @@ namespace Honeycomb.OpenTelemetry
         /// Default sample rate - sample everything.
         /// </summary>
         public const uint DefaultSampleRate = 1;
-        
-        private static readonly string s_defaultServiceName = Assembly.GetEntryAssembly().GetName().Name;
-        private static readonly string s_defaultServiceVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
         /// <summary>
         /// API key used to send telemetry data to Honeycomb.

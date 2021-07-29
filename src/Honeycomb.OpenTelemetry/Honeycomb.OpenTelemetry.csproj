@@ -38,6 +38,7 @@
   </ItemGroup>
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNet" Version="1.0.0-rc7" />
   </ItemGroup>
   
