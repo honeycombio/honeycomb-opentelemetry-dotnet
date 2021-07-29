@@ -9,7 +9,7 @@
 ## Maintenance
 
 - Only sign builds when publishing through CI (#81) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
-- Clarify releasing step [skip ci] (#79) | [@vreynolds](https://github.com/vreynolds)
+- Clarify releasing steps (#79) | [@vreynolds](https://github.com/vreynolds)
 
 ## [0.11.0-alpha] - 2021-07-27
 
