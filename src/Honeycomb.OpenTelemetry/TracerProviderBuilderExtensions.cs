@@ -53,9 +53,7 @@ namespace Honeycomb.OpenTelemetry
                         .AddAttributes(new List<KeyValuePair<string, object>>
                         {
                             new KeyValuePair<string, object>("honeycomb.distro.language", "dotnet"),
-                            new KeyValuePair<string, object>("honeycomb.distro.version",
-                                typeof(TracerProviderBuilderExtensions).Assembly
-                                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion),
+                            new KeyValuePair<string, object>("honeycomb.distro.version", GetFileVersion()),
                             new KeyValuePair<string, object>("honeycomb.distro.runtime_version",
                                 Environment.Version.ToString()),
                         })
@@ -88,6 +86,22 @@ namespace Honeycomb.OpenTelemetry
 #endif
 
             return builder;
+        }
+
+        private static string GetFileVersion()
+        {
+            var version = typeof(TracerProviderBuilderExtensions)
+                .Assembly
+                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                .InformationalVersion;
+
+            // AssemblyInformationalVersionAttribute may include the latest commit hash in
+            // the form `{version_prefix}{version_suffix}+{commit_hash}`.
+            // We should trim the hash if present to just leave the version prefix and suffix
+            var i = version.IndexOf("+");
+            return i > 0 
+                ? version.Substring(0, i)
+                : version;
         }
     }
 }
