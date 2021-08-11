@@ -1,5 +1,6 @@
 # Honeycomb OpenTelemetry Distro for .NET
 
+[![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/multi-git-changer-213797085)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
 [![CircleCI](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-dotnet.svg?style=shield)](https://circleci.com/gh/honeycombio/honeycomb-opentelemetry-dotnet)
 
 This is Honeycomb's distribution of OpenTelemetry for .NET.
