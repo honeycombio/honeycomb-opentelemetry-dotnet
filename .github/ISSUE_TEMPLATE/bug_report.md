@@ -17,6 +17,8 @@ Please see our [OSS process document](https://github.com/honeycombio/home/blob/m
 
 **Versions**
 
+- Dotnet:
+- Honeycomb OpenTelemetry Distribution:
 
 **Steps to reproduce**
 
