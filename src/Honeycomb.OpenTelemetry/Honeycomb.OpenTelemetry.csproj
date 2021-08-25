@@ -34,16 +34,22 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc7" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
-  
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNet" Version="1.0.0-rc7" />
-  </ItemGroup>
-  
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net461'">
-    <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc7" />
-    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc7" />
-  </ItemGroup>
+
+  <Choose>
+    <When Condition=" '$(TargetFramework)' == 'net461' ">
+      <ItemGroup>
+        <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNet" Version="1.0.0-rc7" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc7" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc7" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose> 
+
 
   <Choose>
     <When Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
