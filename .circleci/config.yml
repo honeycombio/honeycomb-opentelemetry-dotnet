@@ -94,14 +94,20 @@ workflows:
   build:
     jobs:
       - test:
-          filters: &always_filter
+          filters:
             tags:
               only: /.*/
       - package:
           context: Honeycomb Secrets for Public Repos
           requires:
             - test
-          filters: *always_filter
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore:
+                - /pull\/.*/
+                - /dependabot\/.*/
       - publish_github:
           context: Honeycomb Secrets for Public Repos
           requires:
