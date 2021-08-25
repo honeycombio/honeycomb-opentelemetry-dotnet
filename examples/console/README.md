@@ -2,7 +2,7 @@
 
 This example shows how to use the Honeycomb.OpenTelemetry distro with a .NET console application.
 
-To run the example, you need to create an instance of HoneycombOptions and pass it into the `UseHoneycomb` function of the OpenTelemetry TraceProviderBuilder. There are a variety of ways to create the options, as shown below.
+To run the example, you need to create an instance of HoneycombOptions and pass it into the `AddHoneycomb` function of the OpenTelemetry TraceProviderBuilder. There are a variety of ways to create the options, as shown below.
 
 ### Manually
 
@@ -29,7 +29,7 @@ Run app with command line arguments:
 
 ### Configuration files
 
-If you application uses JSON or XML configuration files, you crate an instance of HoneycombOptions to pass to the `UseHoneycomb` function.
+If you application uses JSON or XML configuration files, you crate an instance of HoneycombOptions to pass to the `AddHoneycomb` function.
 
 ```json
 {
@@ -53,7 +53,7 @@ If you application uses JSON or XML configuration files, you crate an instance o
 var config = new ConfigurationBuilder().AddJsonFile("{setting-file-name}").Build();
 var options = HoneycombOptionsHelper.GetHoneycombOptions(configuration);
 var tracerProvider = new TracerProviderBuilder()
-    .UseHoneycomb(options)
+    .AddHoneycomb(options)
     .Build()
 ```
 

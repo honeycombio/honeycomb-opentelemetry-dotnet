@@ -19,7 +19,7 @@ namespace console
             // NOTE: the tracer provider should be a long-lived resource, and disposed
             // at the end of your app lifecycle to ensure all telemetry is exported
             using var provider = OpenTelemetry.Sdk.CreateTracerProviderBuilder()
-                .UseHoneycomb(options)
+                .AddHoneycomb(options)
                 .Build();
             
             // get an instance of a tracer that can be used to create spans
