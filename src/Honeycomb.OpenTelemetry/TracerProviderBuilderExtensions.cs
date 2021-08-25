@@ -16,23 +16,23 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using options created from command line arguments.
         /// </summary>
-        public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, string[] args)
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, string[] args)
         {
-            return builder.UseHoneycomb(HoneycombOptions.FromArgs(args));
+            return builder.AddHoneycomb(HoneycombOptions.FromArgs(args));
         }
 
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using options created from an instance of <see cref="IConfiguration"/>.
         /// </summary>
-        public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, IConfiguration configuration)
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, IConfiguration configuration)
         {
-            return builder.UseHoneycomb(HoneycombOptions.FromConfiguration(configuration));
+            return builder.AddHoneycomb(HoneycombOptions.FromConfiguration(configuration));
         }
 
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
-        public static TracerProviderBuilder UseHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
             if (string.IsNullOrWhiteSpace(options.ApiKey))
                 throw new ArgumentException("API key cannot be empty");

@@ -8,4 +8,4 @@ As part of the configuration process, an instance of the Tracer is registed in t
 
 ### Example
 
-See [Startup.cs](Startup.cs) for an example of how the `UseHoneycomb` method is called and [WeatherForecastController](Controllers/WeatherForecastController.cs) for an example.
+See [Startup.cs](Startup.cs) for an example of how the `AddHoneycomb` method is called and [WeatherForecastController](Controllers/WeatherForecastController.cs) for an example.

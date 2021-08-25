@@ -15,22 +15,22 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using options created from an instance of <see cref="IConfiguration"/>.
         /// </summary>
-        public static IServiceCollection UseHoneycomb(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddHoneycomb(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.UseHoneycomb(HoneycombOptions.FromConfiguration(configuration));
+            return services.AddHoneycomb(HoneycombOptions.FromConfiguration(configuration));
         }
 
         /// <summary>
         /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
-        public static IServiceCollection UseHoneycomb(this IServiceCollection services, HoneycombOptions options)
+        public static IServiceCollection AddHoneycomb(this IServiceCollection services, HoneycombOptions options)
         {
 #if NETSTANDARD2_0_OR_GREATER
             services
                 .AddOpenTelemetryTracing(hostingBuilder => hostingBuilder.Configure(((serviceProvider, builder) =>
                     {
                         builder
-                            .UseHoneycomb(options)
+                            .AddHoneycomb(options)
                             .AddAspNetCoreInstrumentation(opts =>
                             {
                                 opts.RecordException = true;
