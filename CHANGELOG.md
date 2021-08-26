@@ -1,5 +1,24 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.13.0-beta] - 2021-08-26
+
+## Added
+
+- Support for netcoreapp2.1 (#99) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- AddHoneycomb IServiceCollection extension method (#98) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+## Maintenance
+
+- Allow dependabot and forked PRs to run in CI (#97) | [@vreynolds](https://github.com/vreynolds)
+- Add issue and PR templates (#91) | [@vreynolds](https://github.com/vreynolds)
+- Add OSS lifecycle badge (#90) | [@vreynolds](https://github.com/vreynolds)
+- Add community health files (#89) | [@vreynolds](https://github.com/vreynolds)
+- Trim commit hash from honeycomb.distro.version attribute (#87) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+## Dependencies
+
+- Bump Microsoft.NET.Test.Sdk from 16.7.1 to 16.11.0 (#92)
+
 ## [0.12.0-beta] - 2021-07-29
 
 ## Added
