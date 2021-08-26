@@ -5,7 +5,7 @@
 ## Added
 
 - Support for netcoreapp2.1 (#99) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
-- AddHoneycomb IServiceCollection extension method (#98) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Rename `UseHoneycomb` to `AddHoneycomb` IServiceCollection extension method to be more idiomatic (#98) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 
 ## Maintenance
 
