@@ -34,7 +34,7 @@ namespace netcoreapp2._1
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.UseHoneycomb(Configuration);
+            services.AddHoneycomb(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
