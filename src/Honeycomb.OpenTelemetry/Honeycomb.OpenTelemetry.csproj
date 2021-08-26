@@ -53,6 +53,9 @@
 
   <Choose>
     <When Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+      <PropertyGroup>
+        <DefineConstants>$(DefineConstants);NETCOREAPP2_1</DefineConstants>
+      </PropertyGroup>
       <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.1.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />

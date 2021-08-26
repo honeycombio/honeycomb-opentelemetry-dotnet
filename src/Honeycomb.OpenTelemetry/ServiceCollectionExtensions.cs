@@ -25,7 +25,7 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static IServiceCollection UseHoneycomb(this IServiceCollection services, HoneycombOptions options)
         {
-#if NETSTANDARD2_0_OR_GREATER
+#if (NETSTANDARD2_0_OR_GREATER || NETCOREAPP2_1)
             services
                 .AddOpenTelemetryTracing(hostingBuilder => hostingBuilder.Configure(((serviceProvider, builder) =>
                     {
