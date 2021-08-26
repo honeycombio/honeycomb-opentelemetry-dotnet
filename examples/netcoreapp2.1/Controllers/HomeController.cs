@@ -5,13 +5,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using netcoreapp2._1.Models;
+using OpenTelemetry.Trace;
 
 namespace netcoreapp2._1.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly Tracer _tracer;
+
+        public HomeController(Tracer tracer)
+        {
+            _tracer = tracer;
+        }
+
         public IActionResult Index()
         {
+            using (var span = _tracer.StartActiveSpan("index"))
+            {
+                span.SetAttribute("foo", "bar");
+            }
             return View();
         }
 
