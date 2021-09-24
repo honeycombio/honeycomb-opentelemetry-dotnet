@@ -22,7 +22,7 @@ Version `0.9.0-pre` is the only version that will contain the initial implementa
 
 You can add the package to your application by using the following command:
 
-`dotnet add package Honeycomb.OpenTelemetry`
+`dotnet add package Honeycomb.OpenTelemetry --prerelease`
 
 ### Configuration
 
