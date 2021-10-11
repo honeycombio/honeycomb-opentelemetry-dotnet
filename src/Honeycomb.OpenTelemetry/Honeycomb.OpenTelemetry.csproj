@@ -39,7 +39,7 @@
     <When Condition=" '$(TargetFramework)' == 'net461' ">
       <ItemGroup>
         <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
-        <PackageReference Include="OpenTelemetry.Instrumentation.AspNet" Version="1.0.0-rc7" />
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNet" Version="1.0.0-rc8" />
       </ItemGroup>
     </When>
     <Otherwise>
