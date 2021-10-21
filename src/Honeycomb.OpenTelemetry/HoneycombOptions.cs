@@ -1,5 +1,9 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Trace;
+using OpenTelemetry.Instrumentation.Http;
+using OpenTelemetry.Instrumentation.SqlClient;
+using OpenTelemetry.Instrumentation.StackExchangeRedis;
 using StackExchange.Redis;
 using System.Reflection;
 using System.Collections.Generic;
@@ -44,6 +48,11 @@ namespace Honeycomb.OpenTelemetry
             }
         }
 
+        /// <summary>
+        /// Name of the Honeycomb section of IConfiguration
+        /// </summary>
+        public const string Honeycomb = "Honeycomb";
+        
         /// <summary>
         /// Default API endpoint.
         /// </summary>
@@ -91,9 +100,40 @@ namespace Honeycomb.OpenTelemetry
         public string ServiceVersion { get; set; } = s_defaultServiceVersion;
 
         /// <summary>
-        /// Redis connection to enable Redis instrumentation.
+        /// Controls whether to instrument HttpClient calls.
         /// </summary>
-        public IConnectionMultiplexer RedisConnection { get; set; }
+        public bool InstrumentHttpClient { get; set; } = true;
+
+        /// <summary>
+        /// Controls whether to instrument SqlClient calls.
+        /// </summary>
+        public bool InstrumentSqlClient { get; set; } = true;
+
+        /// <summary>
+        /// Controls whether to instrument GrpcClient calls when running on .NET Standard 2.1 or greater.
+        /// Requires <see cref="InstrumentHttpClient" /> to be <see langword="true"/> due to the underlying implementation.
+        /// </summary>
+        public bool InstrumentGprcClient { get; set; } = true;
+
+        /// <summary>
+        /// Controls whether the Redis Client is instrumented (if a StackExchange.Redis IConnextionMultiplier can be resolved using the application IServiceProvider).
+        /// </summary>
+        public bool InstrumentStackExchangeRedisIfPresent { get; set; } = true;
+
+        /// <summary>
+        /// Options for HttpClient instrumentation.
+        /// </summary>
+        public Action<HttpClientInstrumentationOptions> ConfigureHttpClientInstrumentationOptions { get; set; } = null;
+
+        /// <summary>
+        /// Options for SqlClient instrumentation.
+        /// </summary>
+        public Action<SqlClientInstrumentationOptions> ConfigureSqlClientInstrumentationOptions { get; set; } = null;
+
+        /// <summary>
+        /// Options for StackExchance.Redis instrumentation.
+        /// </summary>
+        public Action<StackExchangeRedisCallsInstrumentationOptions> ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; } = null;
 
         private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
@@ -113,19 +153,6 @@ namespace Honeycomb.OpenTelemetry
             return new ConfigurationBuilder()
                 .AddCommandLine(args, CommandLineSwitchMap)
                 .Build()
-                .Get<HoneycombOptions>();
-        }
-
-        /// <summary>
-        /// Creates an instance of <see cref="HoneycombOptions"/> using <see cref="IConfiguration"/>.
-        /// </summary>
-        public static HoneycombOptions FromConfiguration(IConfiguration configuration)
-        {
-            const string configurationKey = "Honeycomb";
-            return new ConfigurationBuilder()
-                .AddConfiguration(configuration)
-                .Build()
-                .GetSection(configurationKey)
                 .Get<HoneycombOptions>();
         }
     }
