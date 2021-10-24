@@ -29,7 +29,7 @@ namespace aspnetcore
             services.AddControllers();
 
             // configure OpenTelemetry SDK to send data to Honeycomb
-            services.AddHoneycomb(options => Configuration.GetSection(HoneycombOptions.Honeycomb).Bind(options));
+            services.AddHoneycomb(options => Configuration.GetSection(HoneycombOptions.ConfigSectionName).Bind(options));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

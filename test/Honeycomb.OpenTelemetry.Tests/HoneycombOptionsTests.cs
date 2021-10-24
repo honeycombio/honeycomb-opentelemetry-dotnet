@@ -58,7 +58,7 @@ namespace Honeycomb.OpenTelemetry
                 new ConfigurationBuilder()
                     .AddJsonFile("appsettings.test.json")
                     .Build()
-                    .GetSection(HoneycombOptions.Honeycomb)
+                    .GetSection(HoneycombOptions.ConfigSectionName)
                     .Get<HoneycombOptions>()
             ;
 

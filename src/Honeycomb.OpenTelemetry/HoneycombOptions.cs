@@ -51,7 +51,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
         /// </summary>
-        public const string Honeycomb = "Honeycomb";
+        public const string ConfigSectionName = "Honeycomb";
         
         /// <summary>
         /// Default API endpoint.
