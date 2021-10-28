@@ -100,6 +100,12 @@ namespace Honeycomb.OpenTelemetry
         public string ServiceVersion { get; set; } = s_defaultServiceVersion;
 
         /// <summary>
+        /// Redis IConnectionMultiplexor; set this if you aren't using a DI Container.
+        /// If you're using a DI Container, then setting this isn't necessary as it will be resolved from the <see cref="IServiceProvider"/>.
+        /// </summary>
+        public IConnectionMultiplexer RedisConnection { get; set; }
+        
+        /// <summary>
         /// Controls whether to instrument HttpClient calls.
         /// </summary>
         public bool InstrumentHttpClient { get; set; } = true;
@@ -116,24 +122,26 @@ namespace Honeycomb.OpenTelemetry
         public bool InstrumentGprcClient { get; set; } = true;
 
         /// <summary>
-        /// Controls whether the Redis Client is instrumented (if a StackExchange.Redis IConnextionMultiplier can be resolved using the application IServiceProvider).
+        /// Controls whether the Stack Exchange Redis Client is instrumented.
+        /// Requires that either <see cref="RedisConnection"/> is set, if you're not using a DI Container, or
+        /// if you are using a DI Container, then it requires that an <see cref="IConnectionMultiplexer"/> has been registered with the <see cref="IServiceProvider"/>.
         /// </summary>
-        public bool InstrumentStackExchangeRedisIfPresent { get; set; } = true;
+        public bool InstrumentStackExchangeRedisClient { get; set; } = true;
 
         /// <summary>
-        /// Options for HttpClient instrumentation.
+        /// optional Options for HttpClient instrumentation.
         /// </summary>
-        public Action<HttpClientInstrumentationOptions> ConfigureHttpClientInstrumentationOptions { get; set; } = null;
+        public Action<HttpClientInstrumentationOptions> ConfigureHttpClientInstrumentationOptions { get; set; }
 
         /// <summary>
-        /// Options for SqlClient instrumentation.
+        /// optional Options for SqlClient instrumentation.
         /// </summary>
-        public Action<SqlClientInstrumentationOptions> ConfigureSqlClientInstrumentationOptions { get; set; } = null;
+        public Action<SqlClientInstrumentationOptions> ConfigureSqlClientInstrumentationOptions { get; set; }
 
         /// <summary>
-        /// Options for StackExchance.Redis instrumentation.
+        /// optionl Options for StackExchance.Redis instrumentation.
         /// </summary>
-        public Action<StackExchangeRedisCallsInstrumentationOptions> ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; } = null;
+        public Action<StackExchangeRedisCallsInstrumentationOptions> ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
 
         private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {

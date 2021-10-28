@@ -38,7 +38,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
-        internal static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
             if (string.IsNullOrWhiteSpace(options.ApiKey))
                 throw new ArgumentException("API key cannot be empty");
@@ -82,9 +82,10 @@ namespace Honeycomb.OpenTelemetry
                 builder.AddSqlClientInstrumentation(options.ConfigureSqlClientInstrumentationOptions);
             }
 
-            if (options.InstrumentStackExchangeRedisIfPresent)
+            if (options.InstrumentStackExchangeRedisClient)
             {
-                builder.AddRedisInstrumentation(configure: options.ConfigureStackExchangeRedisClientInstrumentationOptions);
+                builder.AddRedisInstrumentation(options.RedisConnection, // if null, resolved using the application IServiceProvider.
+                    options.ConfigureStackExchangeRedisClientInstrumentationOptions);
             }
 
 #if NET461
