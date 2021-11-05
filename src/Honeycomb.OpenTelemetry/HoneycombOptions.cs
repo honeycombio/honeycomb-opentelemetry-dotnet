@@ -129,17 +129,19 @@ namespace Honeycomb.OpenTelemetry
         public bool InstrumentStackExchangeRedisClient { get; set; } = true;
 
         /// <summary>
-        /// optional Options for HttpClient instrumentation.
+        /// (Optional) Options delegate to configure HttpClient instrumentation.
+
         /// </summary>
         public Action<HttpClientInstrumentationOptions> ConfigureHttpClientInstrumentationOptions { get; set; }
 
         /// <summary>
-        /// optional Options for SqlClient instrumentation.
+        /// (Optional) Options delegate to configure SqlClient instrumentation.
         /// </summary>
         public Action<SqlClientInstrumentationOptions> ConfigureSqlClientInstrumentationOptions { get; set; }
 
         /// <summary>
-        /// optionl Options for StackExchance.Redis instrumentation.
+        /// (Optional) Options delegate to configure StackExchance.Redis instrumentation.
+
         /// </summary>
         public Action<StackExchangeRedisCallsInstrumentationOptions> ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
 
