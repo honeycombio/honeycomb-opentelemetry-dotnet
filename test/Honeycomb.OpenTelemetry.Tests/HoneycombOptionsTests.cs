@@ -54,11 +54,13 @@ namespace Honeycomb.OpenTelemetry
         [Fact]
         public void CanParseOptionsFromConfiguration()
         {
-            var options = HoneycombOptions.FromConfiguration(
+            var options = 
                 new ConfigurationBuilder()
                     .AddJsonFile("appsettings.test.json")
                     .Build()
-            );
+                    .GetSection(HoneycombOptions.ConfigSectionName)
+                    .Get<HoneycombOptions>()
+            ;
 
             Assert.Equal("my-apikey", options.ApiKey);
             Assert.Equal("my-dataset", options.Dataset);

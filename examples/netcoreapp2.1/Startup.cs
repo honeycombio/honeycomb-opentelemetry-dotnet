@@ -34,7 +34,12 @@ namespace netcoreapp2._1
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddHoneycomb(Configuration);
+            services.AddHoneycomb(options =>
+            {
+                options.ServiceName = "my-aspnetcore2.1-app";
+                options.ApiKey = "{apikey}";
+                options.Dataset = "{dataset}";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,3 +1,4 @@
+using System.Buffers;
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry;
 using OpenTelemetry.Resources;
@@ -22,11 +23,17 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
-        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using options created from an instance of <see cref="IConfiguration"/>.
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
+
         /// </summary>
-        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, IConfiguration configuration)
+        /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>
+        /// <param name="configureHoneycombOptions">Action delegate that configures a <see cref="HoneycombOptions"/>.</param>
+        /// <returns>The instance of <see cref="TracerProviderBuilder"/> to chain the calls.</returns>
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, Action<HoneycombOptions> configureHoneycombOptions = null)
         {
-            return builder.AddHoneycomb(HoneycombOptions.FromConfiguration(configuration));
+            var honeycombOptions = new HoneycombOptions{};
+            configureHoneycombOptions?.Invoke(honeycombOptions);
+            return builder.AddHoneycomb(honeycombOptions);
         }
 
         /// <summary>
@@ -60,13 +67,26 @@ namespace Honeycomb.OpenTelemetry
                         .AddEnvironmentVariableDetector()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                 )
-                .AddProcessor(new BaggageSpanProcessor())
-                .AddHttpClientInstrumentation()
-                .AddSqlClientInstrumentation();
-
-            if (options.RedisConnection != null)
+                .AddProcessor(new BaggageSpanProcessor());
+            
+            if (options.InstrumentHttpClient)
             {
-                builder.AddRedisInstrumentation(options.RedisConnection);
+                #if NET461
+                    builder.AddHttpClientInstrumentation();
+                #else
+                    builder.AddHttpClientInstrumentation(options.ConfigureHttpClientInstrumentationOptions);
+                #endif
+            }
+            
+            if (options.InstrumentSqlClient)
+            {
+                builder.AddSqlClientInstrumentation(options.ConfigureSqlClientInstrumentationOptions);
+            }
+
+            if (options.InstrumentStackExchangeRedisClient)
+            {
+                builder.AddRedisInstrumentation(options.RedisConnection, // if null, resolved using the application IServiceProvider.
+                    options.ConfigureStackExchangeRedisClientInstrumentationOptions);
             }
 
 #if NET461
@@ -82,7 +102,11 @@ namespace Honeycomb.OpenTelemetry
 #endif
 
 #if NETSTANDARD2_1
-            builder.AddGrpcClientInstrumentation();
+            if (options.InstrumentGprcClient && options.InstrumentHttpClient) // HttpClient needs to be instrumented for GrpcClient instrumentation to work.
+            {
+                // See https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Instrumentation.GrpcNetClient/README.md#suppressdownstreaminstrumentation
+                builder.AddGrpcClientInstrumentation(options => options.SuppressDownstreamInstrumentation = true);
+            }
 #endif
 
             return builder;

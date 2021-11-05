@@ -57,9 +57,10 @@ Using appsettings.json:
 }
 ```
 
-```bash
-dotnet run
-```
+### Examples
+
+See the [examples](examples) directory for some sample applications showing how to configure the library.    
+
 
 ## Building & Testing
 
@@ -88,5 +89,3 @@ After the command has run, you can add the package to another project using the 
 `dotnet add package Honeycomb.OpenTelemetry`
 
 The default location is `${HOME}/.nuget/local` and can overridden to another location by setting the `NUGET_PACKAGES_LOCAL` environment variable.
-
-NOTE: In the future, the nuget package will be published to nuget.org, where dependency management will be easier and we won't need the local nuget source.
