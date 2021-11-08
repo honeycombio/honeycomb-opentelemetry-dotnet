@@ -130,7 +130,6 @@ namespace Honeycomb.OpenTelemetry
 
         /// <summary>
         /// (Optional) Options delegate to configure HttpClient instrumentation.
-
         /// </summary>
         public Action<HttpClientInstrumentationOptions> ConfigureHttpClientInstrumentationOptions { get; set; }
 
@@ -141,7 +140,6 @@ namespace Honeycomb.OpenTelemetry
 
         /// <summary>
         /// (Optional) Options delegate to configure StackExchance.Redis instrumentation.
-
         /// </summary>
         public Action<StackExchangeRedisCallsInstrumentationOptions> ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
 
