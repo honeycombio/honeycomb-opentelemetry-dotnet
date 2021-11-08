@@ -24,7 +24,6 @@ namespace Honeycomb.OpenTelemetry
 
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
-
         /// </summary>
         /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>
         /// <param name="configureHoneycombOptions">Action delegate that configures a <see cref="HoneycombOptions"/>.</param>
