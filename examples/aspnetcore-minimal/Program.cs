@@ -4,9 +4,8 @@ using Honeycomb.OpenTelemetry;
 // Boilerplate to configure the app and get a tracer
 var builder = WebApplication.CreateBuilder(args);
 var options = HoneycombOptions.FromConfiguration(builder.Configuration);
-builder.Services.AddHoneycomb(options);
+builder.Services.AddHoneycomb(builder.Configuration);
 var app = builder.Build();
-var tracer = TracerProvider.Default.GetTracer(options.ServiceName);
 
 var weatherSummaries = new[]
 {
@@ -15,7 +14,7 @@ var weatherSummaries = new[]
     "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", async () =>
+app.MapGet("/weatherforecast", async (Tracer tracer) =>
 {
     using var span = tracer.StartActiveSpan("sleep");
     span.SetAttribute("delay_ms", 100);
