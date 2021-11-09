@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using OpenTelemetry.Trace;
 using Honeycomb.OpenTelemetry;
 
@@ -21,12 +22,14 @@ app.MapGet("/weatherforecast", async (Tracer tracer) =>
 
     await Task.Delay(100);
 
-    var rng = new Random();
+    var randomTemp = RandomNumberGenerator.GetInt32(-20, 55);
+    var randomSumary = weatherSummaries[RandomNumberGenerator.GetInt32(weatherSummaries.Length)];
+
     return Enumerable.Range(1, 5).Select(index => new WeatherForecast
     (
         Date: DateTimeOffset.Now.AddDays(index),
-        TemperatureC: rng.Next(-20, 55),
-        Summary: weatherSummaries[rng.Next(weatherSummaries.Length)]
+        TemperatureC: randomTemp,
+        Summary: randomSumary
     ));
 });
 
