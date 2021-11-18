@@ -1,5 +1,27 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.14.0-beta] - 2021-11-18
+
+## Added
+
+- Allow disabling auto-instrumentations (#129) | [@ericsampson](https://github.com/ericsampson)
+
+## Maintenance
+
+- Remove whitespace failing build (#137) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Empower apply-labels action to apply labels (#131) | [@robbkidd](https://github.com/robbkidd)
+- Add prerelease flag to install command (#120) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Add NOTICE (#114) | [@cartermp](https://github.com/cartermp)
+- Only add stale to info needed or revision needed (#115) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Adds stalebot effective Sept 1 2021 (#113) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Fix netcoreapp2.1 example (#102) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Clarify renaming in changelog (#101) | [@cartermp](https://github.com/cartermp)
+
+## Dependencies
+
+- Bump Microsoft.AspNetCore.Razor.Design from 2.1.2 to 2.2.0 (#104)
+- Bump coverlet.collector from 1.3.0 to 3.1.0 (#77)
+
 ## [0.13.0-beta] - 2021-08-26
 
 ## Added
