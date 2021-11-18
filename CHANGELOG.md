@@ -1,6 +1,6 @@
 # honeycomb-opentelemetry-dotnet changelog
 
-## [0.14.0-beta] - 2021-11-17
+## [0.14.0-beta] - 2021-11-18
 
 ## Added
 
