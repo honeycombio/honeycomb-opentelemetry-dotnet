@@ -1,8 +1,5 @@
 using OpenTelemetry.Trace;
-using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Honeycomb
 {
@@ -21,13 +18,14 @@ namespace Honeycomb
     /// </summary>
     public class DeterministicSampler : Sampler
     {
-        private const uint NeverSample = 0;
-        private const uint AlwaysSample = 1;
-        private readonly SamplingResult _neverSampleResult;
-        private readonly SamplingResult _alwaysSampleResult;
+        internal const uint NeverSample = 0;
+        internal const uint AlwaysSample = 1;
+        internal const string SampleRateField = "SampleRate";
+        private const double AlwaysSampleRatio = 1.0;
+        private const double NeverSameRatio = 0.0;
+
+        private Sampler _innerSampler;
         private readonly List<KeyValuePair<string, object>> _sampleResultAttributes;
-        private readonly uint _upperBound;
-        private readonly uint _sampleRate;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeterministicSampler"/> class.
@@ -36,44 +34,34 @@ namespace Honeycomb
         /// </param>
         public DeterministicSampler(uint sampleRate)
         {
-            _sampleRate = sampleRate;
-            _upperBound = sampleRate == 0 ? 0 : uint.MaxValue / sampleRate;
+            double ratio;
+            switch(sampleRate)
+            {
+                case NeverSample:
+                    ratio = NeverSameRatio;
+                    break;
+                case AlwaysSample:
+                    ratio = AlwaysSampleRatio;
+                    break;
+                default:
+                    ratio = AlwaysSampleRatio / sampleRate;
+                    break;
+            }
+            _innerSampler = new ParentBasedSampler(new TraceIdRatioBasedSampler(ratio));
             _sampleResultAttributes = new List<KeyValuePair<string, object>>
             {
-                new KeyValuePair<string, object>("sampleRate", _sampleRate)
+                new KeyValuePair<string, object>(SampleRateField, sampleRate)
             };
-            _neverSampleResult = new SamplingResult(SamplingDecision.Drop, _sampleResultAttributes);
-            _alwaysSampleResult = new SamplingResult(SamplingDecision.RecordAndSample, _sampleResultAttributes);
         }
 
         /// <inheritdoc cref="Sampler.ShouldSample"/>
         public override SamplingResult ShouldSample(in SamplingParameters samplingParameters)
         {
-            switch (_sampleRate)
-            {
-                case NeverSample:
-                    return _neverSampleResult;
-                case AlwaysSample:
-                    return _alwaysSampleResult;
-                default:
-                    using (var sha = SHA1.Create())
-                    {
-                        // get trace ID as bytes
-                        var bytes = Encoding.UTF8.GetBytes(samplingParameters.TraceId.ToHexString());
-
-                        // compute SH1 hash
-                        var hash = sha.ComputeHash(bytes);
-
-                        // Take first four bytes as uint to determine trace sample rate
-                        var determinant = Convert.ToUInt32(BitConverter.ToString(hash, 0, 4).Replace("-", string.Empty), 16);
-
-                        // calculate decision and return with attributes
-                        return new SamplingResult(
-                            determinant <= _upperBound ? SamplingDecision.RecordAndSample : SamplingDecision.Drop, 
-                            _sampleResultAttributes
-                        );
-                    }
-            }
+            var result = _innerSampler.ShouldSample(samplingParameters);
+            return new SamplingResult(
+                result.Decision,
+                _sampleResultAttributes
+            );
         }
     }
 }
