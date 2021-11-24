@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
-using StackExchange.Redis;
 using System.Collections.Generic;
 
 namespace Honeycomb.OpenTelemetry
@@ -57,7 +56,8 @@ namespace Honeycomb.OpenTelemetry
                             });
                     }))
                 )
-                .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName));
+                .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName))
+                .AddOpenTelemetryMetrics(builder => builder.AddHoneycomb(options));
 #endif
             return services;
         }

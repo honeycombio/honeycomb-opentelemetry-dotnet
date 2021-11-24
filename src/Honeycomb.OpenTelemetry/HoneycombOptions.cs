@@ -17,6 +17,13 @@ namespace Honeycomb.OpenTelemetry
     {
         private static readonly string s_defaultServiceName = "{unknown_service_name}";
         private static readonly string s_defaultServiceVersion = "{unknown_service_version}";
+       
+        private string _tracesApiKey;
+        private string _metricsApiKey;
+        private string _tracesDataset;
+        private string _metricsDataset;
+        private string _tracesEndpoint;
+        private string _metricsEndpoint;
 
         static HoneycombOptions()
         {
@@ -71,16 +78,75 @@ namespace Honeycomb.OpenTelemetry
         public string ApiKey { get; set; }
 
         /// <summary>
+        /// API key used to send trace telemtry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
+        /// </summary>
+        public string TracesApiKey
+        {
+            get { return _tracesApiKey ?? ApiKey; }
+            set { _tracesApiKey = value; }
+        }
+
+        /// <summary>
+        /// API key used to send metrics telemtry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
+        /// </summary>
+        public string MetricsApiKey
+        {
+            get { return _metricsApiKey ?? ApiKey; }
+            set { _metricsApiKey = value; }
+        }
+
+        /// <summary>
         /// Honeycomb dataset to store telemetry data.
         /// <para/>
         /// <b>Required</b>
         /// </summary>
         public string Dataset { get; set; }
 
+
+        /// <summary>
+        /// Honeycomb dataset to store trace telemetry data. Defaults to <see cref="Dataset"/>.
+        /// </summary>
+        public string TracesDataset
+        {
+            get { return _tracesDataset ?? Dataset; }
+            set { _tracesDataset = value; }
+        }
+
+        /// <summary>
+        /// Honeycomb dataset to store metrics telemetry data. Defaults to <see cref="null"/>.
+        /// <para/>
+        /// Required to enable metrics.
+        /// </summary>        
+        public string MetricsDataset
+        {
+            get { return _metricsDataset; }
+            set { _metricsDataset = value; }
+        }
+
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="DefaultEndpoint"/>.
         /// </summary>
         public string Endpoint { get; set; } = DefaultEndpoint;
+
+
+
+        /// <summary>
+        /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
+        /// </summary>        
+        public string TracesEndpoint
+        {
+            get { return _tracesEndpoint ?? Endpoint; }
+            set { _tracesEndpoint = value; }
+        }
+        
+        /// <summary>
+        /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
+        /// </summary>
+        public string MetricsEndpoint
+        {
+            get { return _metricsEndpoint ?? Endpoint; }
+            set { _metricsEndpoint = value; }
+        }
 
         /// <summary>
         /// Sample rate for sending telemetry data. Defaults to <see cref="DefaultSampleRate"/>.
