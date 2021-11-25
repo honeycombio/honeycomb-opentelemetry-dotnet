@@ -1,7 +1,7 @@
 using OpenTelemetry.Trace;
 using System.Collections.Generic;
 
-namespace Honeycomb
+namespace Honeycomb.OpenTelemetry
 {
     /// <summary>
     /// This Sampler implementation allows for distributed sampling based on a trace ID.
