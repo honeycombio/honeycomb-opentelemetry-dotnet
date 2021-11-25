@@ -20,12 +20,9 @@ namespace Honeycomb.OpenTelemetry.Tests
                     name: "Span",
                     kind: ActivityKind.Client
                 );
-                var result = sampler.ShouldSample(parameters);
 
+                var result = sampler.ShouldSample(parameters);
                 Assert.Equal(SamplingDecision.Drop, result.Decision);
-                Assert.Collection(result.Attributes,
-                    item => Assert.Equal(new KeyValuePair<string, object>(DeterministicSampler.SampleRateField, DeterministicSampler.NeverSample), item)
-                );
             }
         }
 
@@ -42,12 +39,9 @@ namespace Honeycomb.OpenTelemetry.Tests
                     name: "Span",
                     kind: ActivityKind.Client
                 );
-                var result = sampler.ShouldSample(parameters);
 
+                var result = sampler.ShouldSample(parameters);
                 Assert.Equal(SamplingDecision.RecordAndSample, result.Decision);
-                Assert.Collection(result.Attributes,
-                    item => Assert.Equal(new KeyValuePair<string, object>(DeterministicSampler.SampleRateField, DeterministicSampler.AlwaysSample), item)
-                );
             }
         }
 
@@ -67,16 +61,33 @@ namespace Honeycomb.OpenTelemetry.Tests
                     kind: ActivityKind.Client
                 );
                 var result = sampler.ShouldSample(parameters);
-                Assert.Collection(result.Attributes,
-                    item => Assert.Equal(new KeyValuePair<string, object>(DeterministicSampler.SampleRateField, sampleRate), item)
-                );
-                
                 if (result.Decision == SamplingDecision.RecordAndSample) {
                     count++;
                 }
             }
 
             Assert.True(count > 25 && count < 75);
+        }
+
+        [Fact]
+        public void DeterministicSamplerAddsSampleRateAttribute()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var sampler = new DeterministicSampler((uint) i);
+                var activityTraceID = ActivityTraceId.CreateRandom();
+                var parameters = new SamplingParameters(
+                    parentContext: default,
+                    traceId: activityTraceID,
+                    name: "Span",
+                    kind: ActivityKind.Client
+                );
+
+                var result = sampler.ShouldSample(parameters);
+                Assert.Collection(result.Attributes,
+                    item => Assert.Equal(new KeyValuePair<string, object>(DeterministicSampler.SampleRateField, (uint) i), item)
+                );
+            }
         }
     }
 }
