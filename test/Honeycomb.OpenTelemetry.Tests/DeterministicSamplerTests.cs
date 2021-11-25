@@ -76,7 +76,7 @@ namespace Honeycomb.OpenTelemetry.Tests
                 }
             }
 
-            Assert.True(count > 25 && count < 100);
+            Assert.True(count > 25 && count < 75);
         }
     }
 }
