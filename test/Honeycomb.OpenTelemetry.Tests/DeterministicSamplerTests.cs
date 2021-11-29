@@ -27,7 +27,7 @@ namespace Honeycomb.OpenTelemetry.Tests
         }
 
         [Fact]
-        public void AlwaysSampleRateAlwaysReturnsDropResult()
+        public void AlwaysSampleRateAlwaysReturnsRecordAndSample()
         {
             var sampler = new DeterministicSampler(DeterministicSampler.AlwaysSample);
             for (int i = 0; i < 100; i++)
