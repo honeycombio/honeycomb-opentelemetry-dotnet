@@ -82,10 +82,9 @@ namespace Honeycomb.OpenTelemetry
                 builder.AddSqlClientInstrumentation(options.ConfigureSqlClientInstrumentationOptions);
             }
 
-            if (options.InstrumentStackExchangeRedisClient)
+            if (options.InstrumentStackExchangeRedisClient && options.RedisConnection != null)
             {
-                builder.AddRedisInstrumentation(options.RedisConnection, // if null, resolved using the application IServiceProvider.
-                    options.ConfigureStackExchangeRedisClientInstrumentationOptions);
+                builder.AddRedisInstrumentation(options.RedisConnection, options.ConfigureStackExchangeRedisClientInstrumentationOptions);
             }
 
 #if NET461
