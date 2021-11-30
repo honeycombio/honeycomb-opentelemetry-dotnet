@@ -126,7 +126,7 @@ namespace Honeycomb.OpenTelemetry
         /// Requires that either <see cref="RedisConnection"/> is set, if you're not using a DI Container, or
         /// if you are using a DI Container, then it requires that an <see cref="IConnectionMultiplexer"/> has been registered with the <see cref="IServiceProvider"/>.
         /// </summary>
-        public bool InstrumentStackExchangeRedisClient { get; set; } = true;
+        public bool InstrumentStackExchangeRedisClient { get; set; }
 
         /// <summary>
         /// (Optional) Options delegate to configure HttpClient instrumentation.
