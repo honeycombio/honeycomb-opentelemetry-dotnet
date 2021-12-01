@@ -13,6 +13,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb using options created from command line arguments.
         /// </summary>
+        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param>
         public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, string[] args, Action<Meter> createMetrics = null)
         {
             return builder.AddHoneycomb(HoneycombOptions.FromArgs(args), createMetrics);
@@ -21,6 +22,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb.
         /// </summary>
+        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param>
         public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, Action<HoneycombOptions> configureHoneycombOptions = null, Action<Meter> createMetrics = null)
         {
             var honeycombOptions = new HoneycombOptions();
@@ -31,12 +33,13 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
+        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param>
         public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, HoneycombOptions options, Action<Meter> createMetrics = null)
         {
             // only enable metrics if a metrics dataset is set
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))
             {
-                Meter meter = new Meter(options.ServiceName);
+                Meter meter = new Meter(options.ServiceName); // Meter is disposable -- when do we dispose of it?
 
                 builder
                     .AddMeter(meter.Name)

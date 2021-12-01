@@ -156,7 +156,7 @@ namespace Honeycomb.OpenTelemetry
         public uint SampleRate { get; set; } = DefaultSampleRate;
 
         /// <summary>
-        /// Serice name used to identify application. Defaults to application assembly name.
+        /// Service name used to identify application. Defaults to application assembly name.
         /// </summary>
         public string ServiceName { get; set; } = s_defaultServiceName;
 
@@ -166,7 +166,7 @@ namespace Honeycomb.OpenTelemetry
         public string ServiceVersion { get; set; } = s_defaultServiceVersion;
 
         /// <summary>
-        /// Redis IConnectionMultiplexor; set this if you aren't using a DI Container.
+        /// Redis IConnectionMultiplexer; set this if you aren't using a DI Container.
         /// If you're using a DI Container, then setting this isn't necessary as it will be resolved from the <see cref="IServiceProvider"/>.
         /// </summary>
         public IConnectionMultiplexer RedisConnection { get; set; }
@@ -205,7 +205,7 @@ namespace Honeycomb.OpenTelemetry
         public Action<SqlClientInstrumentationOptions> ConfigureSqlClientInstrumentationOptions { get; set; }
 
         /// <summary>
-        /// (Optional) Options delegate to configure StackExchance.Redis instrumentation.
+        /// (Optional) Options delegate to configure StackExchange.Redis instrumentation.
         /// </summary>
         public Action<StackExchangeRedisCallsInstrumentationOptions> ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
 

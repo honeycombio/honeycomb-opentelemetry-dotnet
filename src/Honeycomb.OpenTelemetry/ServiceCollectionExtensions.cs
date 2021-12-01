@@ -14,8 +14,9 @@ namespace Honeycomb.OpenTelemetry
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using options created using an <see cref="Action{HoneycombOptions}"/> delegate. 
+        /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using options created using an <see cref="Action{HoneycombOptions}"/> delegate.
         /// </summary>
+        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param> 
         public static IServiceCollection AddHoneycomb(this IServiceCollection services, Action<HoneycombOptions> configureHoneycombOptions = null, Action<Meter> createMetrics = null)
         {
             var honeycombOptions = new HoneycombOptions();
@@ -27,6 +28,7 @@ namespace Honeycomb.OpenTelemetry
         /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using options created from an instance of <see cref="IConfiguration"/>
         /// with the <see cref="HoneycombOptions"/> contained in the configuration Section having the named stored in "HoneycombOptions.ConfigSectionName".
         /// </summary>
+        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param>
         public static IServiceCollection AddHoneycomb(this IServiceCollection services, IConfiguration configuration, Action<Meter> createMetrics = null)
         {
             return services.AddHoneycomb(configuration.GetSection(HoneycombOptions.ConfigSectionName).Get<HoneycombOptions>(), createMetrics);
@@ -35,6 +37,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
+        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param>
         public static IServiceCollection AddHoneycomb(this IServiceCollection services, HoneycombOptions options, Action<Meter> createMetrics = null)
         {
 #if (NETSTANDARD2_0_OR_GREATER)
