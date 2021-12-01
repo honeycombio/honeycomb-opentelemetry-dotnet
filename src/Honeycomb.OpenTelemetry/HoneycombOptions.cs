@@ -113,7 +113,7 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
-        /// Honeycomb dataset to store metrics telemetry data. Defaults to <see cref="null"/>.
+        /// Honeycomb dataset to store metrics telemetry data. Defaults to "null".
         /// <para/>
         /// Required to enable metrics.
         /// </summary>        
