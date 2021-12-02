@@ -1,13 +1,13 @@
-using System;
 using Microsoft.Extensions.Configuration;
-using OpenTelemetry.Trace;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Instrumentation.SqlClient;
 using OpenTelemetry.Instrumentation.StackExchangeRedis;
+using OpenTelemetry.Trace;
 using StackExchange.Redis;
-using System.Reflection;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.Reflection;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -218,16 +218,23 @@ namespace Honeycomb.OpenTelemetry
 
         private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
-            {"--honeycomb-apikey", "apikey"},
-            {"--honeycomb-dataset", "dataset"},
-            {"--honeycomb-endpoint", "endpoint"},
-            {"--honeycomb-samplerate", "samplerate"},
-            {"--service-name", "servicename"},
-            {"--service-version", "serviceversion"},
-            {"--instrument-http", "instrumenthttpclient"},
-            {"--instrument-sql", "instrumentsqlclient"},
-            {"--instrument-grpc", "instrumentgrpcclient"},
-            {"--instrument-redis", "instrumentstackexchangeredisclient"}
+            { "--honeycomb-apikey", "apikey" },
+            { "--honeycomb-traces-apikey", "tracesapikey" },
+            { "--honeycomb-metrics-apikey", "metricsapikey" },
+            { "--honeycomb-dataset", "dataset" },
+            { "--honeycomb-traces-dataset", "tracesdataset" },
+            { "--honeycomb-metrics-dataset", "metricsdataset" },
+            { "--honeycomb-endpoint", "endpoint" },
+            { "--honeycomb-traces-endpoint", "tracesendpoint" },
+            { "--honeycomb-metrics-endpoint", "metricsendpoint" },
+            { "--honeycomb-samplerate", "samplerate" },
+            { "--service-name", "servicename" },
+            { "--service-version", "serviceversion" },
+            { "--instrument-http", "instrumenthttpclient" },
+            { "--instrument-sql", "instrumentsqlclient" },
+            { "--instrument-grpc", "instrumentgrpcclient" },
+            { "--instrument-redis", "instrumentstackexchangeredisclient" },
+            { "--meter-names", "meternames" }
         };
 
         /// <summary>
@@ -235,10 +242,22 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static HoneycombOptions FromArgs(params string[] args)
         {
-            return new ConfigurationBuilder()
+            IConfigurationRoot config = new ConfigurationBuilder()
                 .AddCommandLine(args, CommandLineSwitchMap)
-                .Build()
+                .Build();
+            HoneycombOptions honeycombOptions = config
                 .Get<HoneycombOptions>();
+
+            string meterNames = config.GetValue<string>("meternames");
+            if (string.IsNullOrWhiteSpace(meterNames))
+            {
+                return honeycombOptions;
+            }
+
+            string[] names = meterNames.Split(',');
+            honeycombOptions.MeterNames = new List<string>(names);
+
+            return honeycombOptions;
         }
     }
 }
