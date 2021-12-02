@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
+using StackExchange.Redis;
 using System.Collections.Generic;
 
 namespace Honeycomb.OpenTelemetry
