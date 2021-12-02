@@ -1,5 +1,25 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.15.0-beta] - 2021-12-01
+
+### Enhancements
+
+- Update DeterminisitcSampler to use OTel core Parent/TraceIDRatio samplers (#145) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Fixes
+
+- Fixed Redis auto-detection (#150) | [@JamieDanielson](https://github.com/JamieDanielson)
+
+### Maintenance
+
+- Update dependabot.yml (#147) | [@vreynolds](https://github.com/vreynolds)
+- Update dependencies, remove netcoreapp2.1 (#144) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Update docs when releasing (#142) | [@vreynolds](https://github.com/vreynolds)
+
+## Dependencies
+
+- Bump Microsoft.NET.Test.Sdk from 16.11.0 to 17.0.0 (#148)
+
 ## [0.14.0-beta] - 2021-11-18
 
 ## Added

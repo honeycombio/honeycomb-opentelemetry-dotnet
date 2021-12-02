@@ -40,6 +40,11 @@ namespace Honeycomb.OpenTelemetry
             services
                 .AddOpenTelemetryTracing(hostingBuilder => hostingBuilder.Configure(((serviceProvider, builder) =>
                     {
+                        if (options.RedisConnection == null && serviceProvider.GetService<IConnectionMultiplexer>() != null)
+                        {
+                            options.RedisConnection = serviceProvider.GetService<IConnectionMultiplexer>();
+                        }
+
                         builder
                             .AddHoneycomb(options)
                             .AddAspNetCoreInstrumentation(opts =>
