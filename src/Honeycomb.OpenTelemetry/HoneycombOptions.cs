@@ -7,6 +7,7 @@ using OpenTelemetry.Instrumentation.StackExchangeRedis;
 using StackExchange.Redis;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -17,7 +18,7 @@ namespace Honeycomb.OpenTelemetry
     {
         private static readonly string s_defaultServiceName = "{unknown_service_name}";
         private static readonly string s_defaultServiceVersion = "{unknown_service_version}";
-       
+
         private string _tracesApiKey;
         private string _metricsApiKey;
         private string _tracesDataset;
@@ -59,7 +60,7 @@ namespace Honeycomb.OpenTelemetry
         /// Name of the Honeycomb section of IConfiguration
         /// </summary>
         public const string ConfigSectionName = "Honeycomb";
-        
+
         /// <summary>
         /// Default API endpoint.
         /// </summary>
@@ -129,7 +130,6 @@ namespace Honeycomb.OpenTelemetry
         public string Endpoint { get; set; } = DefaultEndpoint;
 
 
-
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
         /// </summary>        
@@ -138,7 +138,7 @@ namespace Honeycomb.OpenTelemetry
             get { return _tracesEndpoint ?? Endpoint; }
             set { _tracesEndpoint = value; }
         }
-        
+
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
         /// </summary>
@@ -170,7 +170,7 @@ namespace Honeycomb.OpenTelemetry
         /// If you're using a DI Container, then setting this isn't necessary as it will be resolved from the <see cref="IServiceProvider"/>.
         /// </summary>
         public IConnectionMultiplexer RedisConnection { get; set; }
-        
+
         /// <summary>
         /// Controls whether to instrument HttpClient calls.
         /// </summary>
@@ -207,16 +207,23 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// (Optional) Options delegate to configure StackExchange.Redis instrumentation.
         /// </summary>
-        public Action<StackExchangeRedisCallsInstrumentationOptions> ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
+        public Action<StackExchangeRedisCallsInstrumentationOptions>
+            ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
+
+        /// <summary>
+        /// (Optional) Additional <see cref="Meter"/> names for generating metrics.
+        /// <see cref="ServiceName"/> is configured as a meter name by default.
+        /// </summary>
+        public List<string> MeterNames { get; set; } = new List<string>();
 
         private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
-            {"--honeycomb-apikey", "apikey"},
-            {"--honeycomb-dataset", "dataset"},
-            {"--honeycomb-endpoint", "endpoint"},
-            {"--honeycomb-samplerate", "samplerate"},
-            {"--service-name", "servicename"},
-            {"--service-version", "serviceversion"}
+            { "--honeycomb-apikey", "apikey" },
+            { "--honeycomb-dataset", "dataset" },
+            { "--honeycomb-endpoint", "endpoint" },
+            { "--honeycomb-samplerate", "samplerate" },
+            { "--service-name", "servicename" },
+            { "--service-version", "serviceversion" }
         };
 
         /// <summary>

@@ -1,7 +1,7 @@
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using System;
-using System.Diagnostics.Metrics;
+using System.Collections.Generic;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -13,36 +13,30 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb using options created from command line arguments.
         /// </summary>
-        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param>
-        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, string[] args, Action<Meter> createMetrics = null)
+        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, string[] args)
         {
-            return builder.AddHoneycomb(HoneycombOptions.FromArgs(args), createMetrics);
+            return builder.AddHoneycomb(HoneycombOptions.FromArgs(args));
         }
 
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb.
         /// </summary>
-        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param>
-        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, Action<HoneycombOptions> configureHoneycombOptions = null, Action<Meter> createMetrics = null)
+        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, Action<HoneycombOptions> configureHoneycombOptions = null)
         {
             var honeycombOptions = new HoneycombOptions();
             configureHoneycombOptions?.Invoke(honeycombOptions);
-            return builder.AddHoneycomb(honeycombOptions, createMetrics);
+            return builder.AddHoneycomb(honeycombOptions);
         }
 
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
-        /// <param name="createMetrics">Action used to create metrics from the configured <see cref="Meter"/></param>
-        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, HoneycombOptions options, Action<Meter> createMetrics = null)
+        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, HoneycombOptions options)
         {
             // only enable metrics if a metrics dataset is set
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))
             {
-                Meter meter = new Meter(options.ServiceName); // Meter is disposable -- when do we dispose of it?
-
                 builder
-                    .AddMeter(meter.Name)
                     .SetResourceBuilder(
                         ResourceBuilder
                             .CreateDefault()
@@ -56,7 +50,11 @@ namespace Honeycomb.OpenTelemetry
                         otlpOptions.Headers = $"x-honeycomb-team={options.MetricsApiKey},x-honeycomb-dataset={options.MetricsDataset}";
                     });
 
-                createMetrics?.Invoke(meter);
+                List<string> meterNames = new List<string>(options.MeterNames) { options.ServiceName };
+                foreach (string meterName in meterNames)
+                {
+                    builder.AddMeter(meterName);
+                }
             }
             return builder;
         }
