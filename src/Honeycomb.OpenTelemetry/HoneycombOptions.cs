@@ -119,7 +119,7 @@ namespace Honeycomb.OpenTelemetry
         /// Controls whether to instrument GrpcClient calls when running on .NET Standard 2.1 or greater.
         /// Requires <see cref="InstrumentHttpClient" /> to be <see langword="true"/> due to the underlying implementation.
         /// </summary>
-        public bool InstrumentGprcClient { get; set; } = true;
+        public bool InstrumentGrpcClient { get; set; } = true;
 
         /// <summary>
         /// Controls whether the Stack Exchange Redis Client is instrumented.
@@ -150,7 +150,11 @@ namespace Honeycomb.OpenTelemetry
             {"--honeycomb-endpoint", "endpoint"},
             {"--honeycomb-samplerate", "samplerate"},
             {"--service-name", "servicename"},
-            {"--service-version", "serviceversion"}
+            {"--service-version", "serviceversion"},
+            {"--instrument-http", "instrumenthttpclient"},
+            {"--instrument-sql", "instrumentsqlclient"},
+            {"--instrument-grpc", "instrumentgrpcclient"},
+            {"--instrument-redis", "instrumentstackexchangeredisclient"}
         };
 
         /// <summary>
