@@ -7,6 +7,31 @@ namespace Honeycomb.OpenTelemetry.Tests
     public class HoneycombOptionsHelperTests
     {
         [Fact]
+        public void DefaultsOptionalArgs()
+        {
+            var options = HoneycombOptions.FromArgs(
+                "--honeycomb-apikey", "my-apikey",
+                "--honeycomb-dataset", "my-dataset"
+            );
+
+            Assert.Equal("my-apikey", options.ApiKey);
+            Assert.Equal("my-apikey", options.TracesApiKey);
+            Assert.Equal("my-apikey", options.MetricsApiKey);
+            Assert.Equal("my-dataset", options.Dataset);
+            Assert.Equal("my-dataset", options.TracesDataset);
+            Assert.Null(options.MetricsDataset);
+            Assert.Equal((uint)1, options.SampleRate);
+            Assert.Equal(HoneycombOptions.DefaultEndpoint, options.Endpoint);
+            Assert.Equal(HoneycombOptions.DefaultEndpoint, options.TracesEndpoint);
+            Assert.Equal(HoneycombOptions.DefaultEndpoint, options.MetricsEndpoint);
+            Assert.Empty(options.MeterNames);
+            Assert.True(options.InstrumentHttpClient);
+            Assert.True(options.InstrumentSqlClient);
+            Assert.True(options.InstrumentGrpcClient);
+            Assert.True(options.InstrumentStackExchangeRedisClient);
+        }
+
+        [Fact]
         public void CanParseOptionsFromSpacedCommandLineArgs()
         {
             var options = HoneycombOptions.FromArgs(
