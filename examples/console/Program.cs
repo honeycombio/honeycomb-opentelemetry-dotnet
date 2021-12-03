@@ -44,7 +44,7 @@ namespace console
             // meter name used here must be configured in the OpenTelemetry SDK
             // service name is configured by default
             // you may configure additional meter names using the Honeycomb options
-            Meter meter = new Meter(options.ServiceName);
+            using var meter = new Meter(options.ServiceName);
             Counter<int> counter = meter.CreateCounter<int>("sheep");
             counter.Add(1);
         }
