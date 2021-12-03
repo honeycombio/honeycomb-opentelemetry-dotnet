@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Honeycomb.OpenTelemetry;
+using System.Diagnostics.Metrics;
 
 namespace aspnetcore
 {
@@ -30,6 +31,13 @@ namespace aspnetcore
 
             // configure OpenTelemetry SDK to send data to Honeycomb
             services.AddHoneycomb(Configuration);
+
+            // (optional metrics setup)
+            // meter name used here must be configured in the OpenTelemetry SDK
+            // service name is configured by default
+            // you may configure additional meter names using the Honeycomb options
+            Meter meter = new Meter("my-web-app");
+            services.AddSingleton(meter);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Trace;
+using System.Diagnostics.Metrics;
 
 namespace aspnetcore.Controllers
 {
@@ -19,11 +20,13 @@ namespace aspnetcore.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly Tracer _tracer;
+        private readonly Counter<int> _counter;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, Tracer tracer)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, Tracer tracer, Meter meter)
         {
             _logger = logger;
             _tracer = tracer;
+            _counter = meter.CreateCounter<int>("sheep");
         }
 
         [HttpGet]
@@ -35,6 +38,8 @@ namespace aspnetcore.Controllers
                 await Task.Delay(TimeSpan.FromMilliseconds(100));
             }
 
+            _counter.Add(1);
+            
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
