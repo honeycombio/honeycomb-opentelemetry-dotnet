@@ -1,7 +1,6 @@
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using System;
-using System.Collections.Generic;
 
 namespace Honeycomb.OpenTelemetry
 {
