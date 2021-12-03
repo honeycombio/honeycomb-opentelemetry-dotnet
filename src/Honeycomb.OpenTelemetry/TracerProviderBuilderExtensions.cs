@@ -35,18 +35,18 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
-            if (string.IsNullOrWhiteSpace(options.ApiKey))
-                throw new ArgumentException("API key cannot be empty");
-            if (string.IsNullOrWhiteSpace(options.Dataset))
-                throw new ArgumentException("Dataset cannot be empty");
+            if (string.IsNullOrWhiteSpace(options.TracesApiKey))
+                throw new ArgumentException("Traces API key cannot be empty");
+            if (string.IsNullOrWhiteSpace(options.TracesDataset))
+                throw new ArgumentException("Traces dataset cannot be empty");
 
             builder
                 .AddSource(options.ServiceName)
                 .SetSampler(new DeterministicSampler(options.SampleRate))
                 .AddOtlpExporter(otlpOptions =>
                 {
-                    otlpOptions.Endpoint = new Uri(options.Endpoint);
-                    otlpOptions.Headers = string.Format("x-honeycomb-team={0},x-honeycomb-dataset={1}", options.ApiKey, options.Dataset);
+                    otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
+                    otlpOptions.Headers = $"x-honeycomb-team={options.TracesApiKey},x-honeycomb-dataset={options.TracesDataset}";
                 })
                 .SetResourceBuilder(
                     ResourceBuilder
