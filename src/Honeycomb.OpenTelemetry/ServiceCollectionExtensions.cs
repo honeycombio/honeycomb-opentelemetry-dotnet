@@ -14,7 +14,7 @@ namespace Honeycomb.OpenTelemetry
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using options created using an <see cref="Action{HoneycombOptions}"/> delegate. 
+        /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using options created using an <see cref="Action{HoneycombOptions}"/> delegate.
         /// </summary>
         public static IServiceCollection AddHoneycomb(this IServiceCollection services, Action<HoneycombOptions> configureHoneycombOptions = null)
         {
@@ -22,7 +22,7 @@ namespace Honeycomb.OpenTelemetry
             configureHoneycombOptions?.Invoke(honeycombOptions);
             return services.AddHoneycomb(honeycombOptions);
         }
-        
+
         /// <summary>
         /// Configures the <see cref="IServiceCollection"/> to send telemetry data to Honeycomb using options created from an instance of <see cref="IConfiguration"/>
         /// with the <see cref="HoneycombOptions"/> contained in the configuration Section having the named stored in "HoneycombOptions.ConfigSectionName".
@@ -62,7 +62,8 @@ namespace Honeycomb.OpenTelemetry
                             });
                     }))
                 )
-                .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName));
+                .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName))
+                .AddOpenTelemetryMetrics(builder => builder.AddHoneycomb(options));
 #endif
             return services;
         }
