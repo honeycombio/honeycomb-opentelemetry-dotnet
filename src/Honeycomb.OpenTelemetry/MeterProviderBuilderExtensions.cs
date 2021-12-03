@@ -50,8 +50,8 @@ namespace Honeycomb.OpenTelemetry
                         otlpOptions.Headers = $"x-honeycomb-team={options.MetricsApiKey},x-honeycomb-dataset={options.MetricsDataset}";
                     });
 
-                List<string> meterNames = new List<string>(options.MeterNames) { options.ServiceName };
-                foreach (string meterName in meterNames)
+                builder.AddMeter(options.ServiceName);
+                foreach (var meterName in options.MeterNames)
                 {
                     builder.AddMeter(meterName);
                 }

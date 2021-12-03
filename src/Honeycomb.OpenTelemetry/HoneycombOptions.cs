@@ -166,7 +166,7 @@ namespace Honeycomb.OpenTelemetry
         public string ServiceVersion { get; set; } = s_defaultServiceVersion;
 
         /// <summary>
-        /// Redis IConnectionMultiplexer; set this if you aren't using a DI Container.
+        /// Redis <see cref="IConnectionMultiplexer"/>. Set this if you aren't using a DI Container.
         /// If you're using a DI Container, then setting this isn't necessary as it will be resolved from the <see cref="IServiceProvider"/>.
         /// </summary>
         public IConnectionMultiplexer RedisConnection { get; set; }
@@ -242,20 +242,17 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static HoneycombOptions FromArgs(params string[] args)
         {
-            IConfigurationRoot config = new ConfigurationBuilder()
+            var config = new ConfigurationBuilder()
                 .AddCommandLine(args, CommandLineSwitchMap)
                 .Build();
-            HoneycombOptions honeycombOptions = config
+            var honeycombOptions = config
                 .Get<HoneycombOptions>();
 
-            string meterNames = config.GetValue<string>("meternames");
-            if (string.IsNullOrWhiteSpace(meterNames))
+            var meterNames = config.GetValue<string>("meternames");
+            if (!string.IsNullOrWhiteSpace(meterNames))
             {
-                return honeycombOptions;
+                honeycombOptions.MeterNames = new List<string>(meterNames.Split(','));
             }
-
-            string[] names = meterNames.Split(',');
-            honeycombOptions.MeterNames = new List<string>(names);
 
             return honeycombOptions;
         }
