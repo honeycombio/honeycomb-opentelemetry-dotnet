@@ -1,5 +1,17 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.16.0-beta] - 2021-12-06
+
+### Improvements
+
+- Add support for enabling OTLP metrics (#146) | [@MikeGoldsmith](https://github.com/MikeGoldsmith) [@vreynolds](https://github.com/vreynolds)
+- Parse missing command line arguments (#154) | [@vreynolds](https://github.com/vreynolds)
+
+### Fixes
+
+- Re-add net461 target (#155) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Trace extension should use trace config (#156) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.15.0-beta] - 2021-12-01
 
 ### Enhancements
