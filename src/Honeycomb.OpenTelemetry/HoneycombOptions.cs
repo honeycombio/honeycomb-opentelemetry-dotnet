@@ -73,7 +73,6 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// API key used to send telemetry data to Honeycomb.
         /// <para/>
-        /// <b>Required</b>
         /// </summary>
         public string ApiKey { get; set; }
 
@@ -98,7 +97,6 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Honeycomb dataset to store telemetry data.
         /// <para/>
-        /// <b>Required</b>
         /// </summary>
         public string Dataset { get; set; }
 

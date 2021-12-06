@@ -28,9 +28,10 @@ namespace Honeycomb.OpenTelemetry
         /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>
         /// <param name="configureHoneycombOptions">Action delegate that configures a <see cref="HoneycombOptions"/>.</param>
         /// <returns>The instance of <see cref="TracerProviderBuilder"/> to chain the calls.</returns>
-        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, Action<HoneycombOptions> configureHoneycombOptions = null)
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder,
+            Action<HoneycombOptions> configureHoneycombOptions = null)
         {
-            var honeycombOptions = new HoneycombOptions{};
+            var honeycombOptions = new HoneycombOptions { };
             configureHoneycombOptions?.Invoke(honeycombOptions);
             return builder.AddHoneycomb(honeycombOptions);
         }
@@ -41,9 +42,9 @@ namespace Honeycomb.OpenTelemetry
         public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
             if (string.IsNullOrWhiteSpace(options.TracesApiKey))
-                throw new ArgumentException("Traces API key cannot be empty");
+                Console.WriteLine("WARN: missing traces API key");
             if (string.IsNullOrWhiteSpace(options.TracesDataset))
-                throw new ArgumentException("Traces dataset cannot be empty");
+                Console.WriteLine("WARN: missing traces dataset");
 
             builder
                 .AddSource(options.ServiceName)
@@ -51,7 +52,10 @@ namespace Honeycomb.OpenTelemetry
                 .AddOtlpExporter(otlpOptions =>
                 {
                     otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
-                    otlpOptions.Headers = $"x-honeycomb-team={options.TracesApiKey},x-honeycomb-dataset={options.TracesDataset}";
+                    if (!string.IsNullOrWhiteSpace(options.TracesApiKey) &&
+                        !string.IsNullOrWhiteSpace(options.TracesDataset))
+                        otlpOptions.Headers =
+                            $"x-honeycomb-team={options.TracesApiKey},x-honeycomb-dataset={options.TracesDataset}";
                 })
                 .SetResourceBuilder(
                     ResourceBuilder
@@ -61,16 +65,16 @@ namespace Honeycomb.OpenTelemetry
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                 )
                 .AddProcessor(new BaggageSpanProcessor());
-            
+
             if (options.InstrumentHttpClient)
             {
-                #if NET461
+#if NET461
                     builder.AddHttpClientInstrumentation();
-                #else
-                    builder.AddHttpClientInstrumentation(options.ConfigureHttpClientInstrumentationOptions);
-                #endif
+#else
+                builder.AddHttpClientInstrumentation(options.ConfigureHttpClientInstrumentationOptions);
+#endif
             }
-            
+
             if (options.InstrumentSqlClient)
             {
                 builder.AddSqlClientInstrumentation(options.ConfigureSqlClientInstrumentationOptions);
@@ -78,7 +82,8 @@ namespace Honeycomb.OpenTelemetry
 
             if (options.InstrumentStackExchangeRedisClient && options.RedisConnection != null)
             {
-                builder.AddRedisInstrumentation(options.RedisConnection, options.ConfigureStackExchangeRedisClientInstrumentationOptions);
+                builder.AddRedisInstrumentation(options.RedisConnection,
+                    options.ConfigureStackExchangeRedisClientInstrumentationOptions);
             }
 
 #if NET461
