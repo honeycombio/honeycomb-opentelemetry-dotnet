@@ -209,7 +209,7 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public List<string> MeterNames { get; set; } = new List<string>();
 
-        private static Dictionary<string, string> _commandLineSwitchMap = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
             { "--honeycomb-apikey", "apikey" },
             { "--honeycomb-traces-apikey", "tracesapikey" },
@@ -236,7 +236,7 @@ namespace Honeycomb.OpenTelemetry
         public static HoneycombOptions FromArgs(params string[] args)
         {
             var config = new ConfigurationBuilder()
-                .AddCommandLine(args, _commandLineSwitchMap)
+                .AddCommandLine(args, CommandLineSwitchMap)
                 .Build();
             var honeycombOptions = config
                 .Get<HoneycombOptions>();

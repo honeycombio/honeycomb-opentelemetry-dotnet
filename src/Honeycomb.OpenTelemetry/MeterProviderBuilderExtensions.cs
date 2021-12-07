@@ -49,7 +49,8 @@ namespace Honeycomb.OpenTelemetry
                     .AddOtlpExporter(otlpOptions =>
                     {
                         otlpOptions.Endpoint = new Uri(options.MetricsEndpoint);
-                        if (!string.IsNullOrWhiteSpace(options.MetricsApiKey))
+                        if (!string.IsNullOrWhiteSpace(options.MetricsApiKey) &&
+                            !string.IsNullOrWhiteSpace(options.MetricsDataset))
                             otlpOptions.Headers =
                                 $"x-honeycomb-team={options.MetricsApiKey},x-honeycomb-dataset={options.MetricsDataset}";
                     });
