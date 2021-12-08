@@ -16,13 +16,12 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
-        private static readonly string s_defaultServiceName = "{unknown_service_name}";
-        private static readonly string s_defaultServiceVersion = "{unknown_service_version}";
+        private static readonly string SDefaultServiceName = "{unknown_service_name}";
+        private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
         private string _tracesApiKey;
         private string _metricsApiKey;
         private string _tracesDataset;
-        private string _metricsDataset;
         private string _tracesEndpoint;
         private string _metricsEndpoint;
 
@@ -49,8 +48,8 @@ namespace Honeycomb.OpenTelemetry
 #endif
             if (assembly != null)
             {
-                s_defaultServiceName = assembly.GetName().Name;
-                s_defaultServiceVersion =
+                SDefaultServiceName = assembly.GetName().Name;
+                SDefaultServiceVersion =
                     assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ??
                     assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
             }
@@ -74,12 +73,11 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// API key used to send telemetry data to Honeycomb.
         /// <para/>
-        /// <b>Required</b>
         /// </summary>
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// API key used to send trace telemtry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
+        /// API key used to send trace telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
         /// </summary>
         public string TracesApiKey
         {
@@ -88,7 +86,7 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
-        /// API key used to send metrics telemtry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
+        /// API key used to send metrics telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
         /// </summary>
         public string MetricsApiKey
         {
@@ -99,7 +97,6 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Honeycomb dataset to store telemetry data.
         /// <para/>
-        /// <b>Required</b>
         /// </summary>
         public string Dataset { get; set; }
 
@@ -118,11 +115,7 @@ namespace Honeycomb.OpenTelemetry
         /// <para/>
         /// Required to enable metrics.
         /// </summary>        
-        public string MetricsDataset
-        {
-            get { return _metricsDataset; }
-            set { _metricsDataset = value; }
-        }
+        public string MetricsDataset { get; set; }
 
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="DefaultEndpoint"/>.
@@ -158,12 +151,12 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Service name used to identify application. Defaults to application assembly name.
         /// </summary>
-        public string ServiceName { get; set; } = s_defaultServiceName;
+        public string ServiceName { get; set; } = SDefaultServiceName;
 
         /// <summary>
         /// Service version. Defaults to application assembly information version.
         /// </summary>
-        public string ServiceVersion { get; set; } = s_defaultServiceVersion;
+        public string ServiceVersion { get; set; } = SDefaultServiceVersion;
 
         /// <summary>
         /// Redis <see cref="IConnectionMultiplexer"/>. Set this if you aren't using a DI Container.
@@ -216,7 +209,7 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public List<string> MeterNames { get; set; } = new List<string>();
 
-        private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
+        private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
             { "--honeycomb-apikey", "apikey" },
             { "--honeycomb-traces-apikey", "tracesapikey" },

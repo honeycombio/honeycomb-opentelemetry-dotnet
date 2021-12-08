@@ -20,7 +20,8 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb.
         /// </summary>
-        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, Action<HoneycombOptions> configureHoneycombOptions = null)
+        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder,
+            Action<HoneycombOptions> configureHoneycombOptions = null)
         {
             var honeycombOptions = new HoneycombOptions();
             configureHoneycombOptions?.Invoke(honeycombOptions);
@@ -35,6 +36,8 @@ namespace Honeycomb.OpenTelemetry
             // only enable metrics if a metrics dataset is set
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))
             {
+                if (string.IsNullOrWhiteSpace(options.MetricsApiKey))
+                    Console.WriteLine("WARN: missing metrics API key");
                 builder
                     .SetResourceBuilder(
                         ResourceBuilder
@@ -46,7 +49,10 @@ namespace Honeycomb.OpenTelemetry
                     .AddOtlpExporter(otlpOptions =>
                     {
                         otlpOptions.Endpoint = new Uri(options.MetricsEndpoint);
-                        otlpOptions.Headers = $"x-honeycomb-team={options.MetricsApiKey},x-honeycomb-dataset={options.MetricsDataset}";
+                        if (!string.IsNullOrWhiteSpace(options.MetricsApiKey) &&
+                            !string.IsNullOrWhiteSpace(options.MetricsDataset))
+                            otlpOptions.Headers =
+                                $"x-honeycomb-team={options.MetricsApiKey},x-honeycomb-dataset={options.MetricsDataset}";
                     });
 
                 builder.AddMeter(options.ServiceName);
@@ -55,6 +61,7 @@ namespace Honeycomb.OpenTelemetry
                     builder.AddMeter(meterName);
                 }
             }
+
             return builder;
         }
     }
