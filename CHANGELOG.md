@@ -1,5 +1,20 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.17.0-beta] - 2021-12-15
+
+### Changed
+
+- Make API key and dataset optional (#161) | [@vreynolds](https://github.com/vreynolds)
+
+### Maintenance
+
+- Update example core app to use metrics (#158) | [@vreynolds](https://github.com/vreynolds)
+
+### Dependencies
+
+- Bump OpenTelemetry from 1.2.0-beta2.1 to 1.2.0-rc1 (#151)
+- Bump OpenTelemetry.Exporter.OpenTelemetryProtocol (#152)
+
 ## [0.16.0-beta] - 2021-12-06
 
 ### Improvements
@@ -14,7 +29,7 @@
 
 ## [0.15.0-beta] - 2021-12-01
 
-### Enhancements
+### Enhancements
 
 - Update DeterminisitcSampler to use OTel core Parent/TraceIDRatio samplers (#145) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 
