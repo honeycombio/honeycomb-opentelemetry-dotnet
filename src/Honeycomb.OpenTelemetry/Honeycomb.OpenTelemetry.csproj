@@ -11,7 +11,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <!-- NuGet packaging properties -->
-    <VersionPrefix>0.17.0</VersionPrefix>
+    <VersionPrefix>0.18.0</VersionPrefix>
     <VersionSuffix>beta</VersionSuffix>
     <PackageId>Honeycomb.OpenTelemetry</PackageId>
     <Authors>Honeycomb</Authors>
@@ -34,7 +34,7 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.StackExchangeRedis" Version="1.0.0-rc8" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />    
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
   </ItemGroup>
 
   <Choose>
@@ -50,7 +50,7 @@
         <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc8" />
       </ItemGroup>
     </Otherwise>
-  </Choose> 
+  </Choose>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' ">
     <PackageReference Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.0.0-rc8" />
@@ -59,7 +59,7 @@
   <ItemGroup>
     <None Include="../../honeycomb.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
-  
+
   <Choose>
     <When Condition=" $(SIGNED) != 'true' ">
       <ItemGroup>

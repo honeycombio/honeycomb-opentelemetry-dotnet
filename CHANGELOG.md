@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.18.0-beta] - 2021-12-23
+
+### Fixes
+
+- remove parent-based sampler, sample with trace ID ratio only (#164) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.17.0-beta] - 2021-12-15
 
 ### Changed
