@@ -47,7 +47,7 @@ namespace Honeycomb.OpenTelemetry
                     ratio = AlwaysSampleRatio / sampleRate;
                     break;
             }
-            _innerSampler = new ParentBasedSampler(new TraceIdRatioBasedSampler(ratio));
+            _innerSampler = new TraceIdRatioBasedSampler(ratio);
             _sampleResultAttributes = new List<KeyValuePair<string, object>>
             {
                 new KeyValuePair<string, object>(SampleRateField, sampleRate)
