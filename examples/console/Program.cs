@@ -18,6 +18,9 @@ namespace console
                 MetricsDataset = "{metrics-dataset}" // optional
             };
 
+            // You can also pull configuration from .NET command-line arguments
+            var options2 = HoneycombOptions.FromArgs(args);
+
             // ------------ TRACES ------------
 
             // configure OpenTelemetry SDK to send trace data to Honeycomb

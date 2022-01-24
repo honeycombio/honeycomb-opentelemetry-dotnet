@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Reflection;
+using System.Linq;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -209,6 +210,11 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public List<string> MeterNames { get; set; } = new List<string>();
 
+        /// <summary>
+        /// (Optional) Additional OpenTelemetry Resource Attributes a user can configure.
+        /// </summary>
+        public Dictionary<string, object> AdditionalResources { get; set; } = new Dictionary<string, object>();
+
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
             { "--honeycomb-apikey", "apikey" },
@@ -227,7 +233,8 @@ namespace Honeycomb.OpenTelemetry
             { "--instrument-sql", "instrumentsqlclient" },
             { "--instrument-grpc", "instrumentgrpcclient" },
             { "--instrument-redis", "instrumentstackexchangeredisclient" },
-            { "--meter-names", "meternames" }
+            { "--meter-names", "meternames" },
+            { "--additional-resource-attributes", "additionalresourceattributes" }
         };
 
         /// <summary>
@@ -245,6 +252,25 @@ namespace Honeycomb.OpenTelemetry
             if (!string.IsNullOrWhiteSpace(meterNames))
             {
                 honeycombOptions.MeterNames = new List<string>(meterNames.Split(','));
+            }
+
+            var additionaResourceAttributes = config.GetValue<string>("additionalresourceattributes");
+            if (!string.IsNullOrWhiteSpace(additionaResourceAttributes))
+            {
+                var resourceMappings = additionaResourceAttributes.Trim().Split(',');
+                var dict = new Dictionary<string, object>();
+
+                foreach (var mapping in resourceMappings.Select(mapping => mapping.Trim()))
+                {
+                    // Example: "abc:123" --> dict.Add("abc", 123)
+                    // ...we need to do this ugly stuff because of the net461 target.
+                    // ...if/when we can drop that, this can be cleaned up considerably
+                    dict.Add(
+                        mapping.Substring(0, mapping.IndexOf(':')).Trim(),
+                        mapping.Substring(mapping.IndexOf(':') + 1, mapping.Length - 1 - mapping.IndexOf(':')).Trim());
+                }
+
+                honeycombOptions.AdditionalResources = dict;
             }
 
             return honeycombOptions;

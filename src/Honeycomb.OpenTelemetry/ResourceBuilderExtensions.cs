@@ -25,6 +25,14 @@ namespace Honeycomb.OpenTelemetry
                 });
         }
 
+        /// <summary>
+        /// Configures the <see cref="ResourceBuilder"/> with additional, user-provided resource attributes.
+        /// </summary>
+        public static ResourceBuilder AddAdditionalAttributes(this ResourceBuilder builder, HoneycombOptions options)
+        {
+            return builder.AddAttributes(options.AdditionalResources);
+        }
+
         private static string GetFileVersion()
         {
             var version = typeof(ResourceBuilderExtensions)
