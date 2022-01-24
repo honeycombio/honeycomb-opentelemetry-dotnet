@@ -270,7 +270,7 @@ namespace Honeycomb.OpenTelemetry
                         mapping
                         .Substring(mapping.IndexOf(':') + 1, mapping.Length - 1 - mapping.IndexOf(':'))
                         .Trim()
-                        .ToValueAsObject();
+                        .ToHoneycombType();
 
                     dict.Add(key, value);
                 }
