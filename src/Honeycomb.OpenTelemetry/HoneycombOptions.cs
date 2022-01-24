@@ -265,9 +265,14 @@ namespace Honeycomb.OpenTelemetry
                     // Example: "abc:123" --> dict.Add("abc", 123)
                     // ...we need to do this ugly stuff because of the net461 target.
                     // ...if/when we can drop that, this can be cleaned up considerably
-                    dict.Add(
-                        mapping.Substring(0, mapping.IndexOf(':')).Trim(),
-                        mapping.Substring(mapping.IndexOf(':') + 1, mapping.Length - 1 - mapping.IndexOf(':')).Trim());
+                    var key = mapping.Substring(0, mapping.IndexOf(':')).Trim();
+                    var value =
+                        mapping
+                        .Substring(mapping.IndexOf(':') + 1, mapping.Length - 1 - mapping.IndexOf(':'))
+                        .Trim()
+                        .ToValueAsObject();
+
+                    dict.Add(key, value);
                 }
 
                 honeycombOptions.AdditionalResources = dict;
