@@ -4,7 +4,7 @@ namespace Honeycomb.OpenTelemetry
 {
     internal static class StringExtensions
     {
-        internal static object ToValueAsObject(this string str)
+        internal static object ToHoneycombType(this string str)
         {
             if (int.TryParse(str, out int intVal))
             {
