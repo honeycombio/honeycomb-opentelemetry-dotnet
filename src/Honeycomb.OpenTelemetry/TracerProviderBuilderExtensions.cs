@@ -41,6 +41,11 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
+            }
+            
             if (string.IsNullOrWhiteSpace(options.TracesApiKey))
                 Console.WriteLine("WARN: missing traces API key");
             if (string.IsNullOrWhiteSpace(options.TracesDataset))
