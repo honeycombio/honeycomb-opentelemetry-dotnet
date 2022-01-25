@@ -61,6 +61,7 @@ namespace Honeycomb.OpenTelemetry
                     ResourceBuilder
                         .CreateDefault()
                         .AddHoneycombAttributes()
+                        .AddAdditionalAttributes(options)
                         .AddEnvironmentVariableDetector()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                 )

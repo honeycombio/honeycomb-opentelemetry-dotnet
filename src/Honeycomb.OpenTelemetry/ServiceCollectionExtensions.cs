@@ -5,6 +5,7 @@ using OpenTelemetry;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -29,7 +30,27 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static IServiceCollection AddHoneycomb(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.AddHoneycomb(configuration.GetSection(HoneycombOptions.ConfigSectionName).Get<HoneycombOptions>());
+            var options = configuration.GetSection(HoneycombOptions.ConfigSectionName).Get<HoneycombOptions>();
+
+            // This is to make account for the fact that ASP.NET Core parses values from configuration
+            // out as strings. Strings are fun, but Honeycomb has a type system and we should respect that instead.
+            var resources = new Dictionary<string, object>();
+            foreach (var kvp in options.AdditionalResources)
+            {
+                var value = kvp.Value as string;
+                if (value is null)
+                {
+                    resources.Add(kvp.Key, kvp.Value);
+                }
+                else
+                {
+                    resources.Add(kvp.Key, value.ToHoneycombType());
+                }
+            }
+
+            options.AdditionalResources = resources;
+
+            return services.AddHoneycomb(options);
         }
 
         /// <summary>
