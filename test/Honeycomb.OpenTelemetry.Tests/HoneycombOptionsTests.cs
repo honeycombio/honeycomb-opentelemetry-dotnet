@@ -51,7 +51,8 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--instrument-http", "false",
                 "--instrument-sql", "false",
                 "--instrument-grpc", "false",
-                "--instrument-redis", "false"
+                "--instrument-redis", "false",
+                "--additional-resource-attributes", "toot: MgGoot, numbers:123"
             );
 
             Assert.Equal("my-apikey", options.ApiKey);
@@ -67,6 +68,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
+            Assert.Equal(new Dictionary<string, object> {{"toot", "MgGoot"}, {"numbers", 123}}, options.AdditionalResources);
             Assert.False(options.InstrumentHttpClient);
             Assert.False(options.InstrumentSqlClient);
             Assert.False(options.InstrumentGrpcClient);
@@ -93,7 +95,8 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--instrument-http=false",
                 "--instrument-sql=false",
                 "--instrument-grpc=false",
-                "--instrument-redis=false");
+                "--instrument-redis=false",
+                "--additional-resource-attributes=toot: MgGoot, numbers:123");
 
             Assert.Equal("my-apikey", options.ApiKey);
             Assert.Equal("my-traces-apikey", options.TracesApiKey);
@@ -108,6 +111,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
+            Assert.Equal(new Dictionary<string, object> {{"toot", "MgGoot"}, {"numbers", 123}}, options.AdditionalResources);
             Assert.False(options.InstrumentHttpClient);
             Assert.False(options.InstrumentSqlClient);
             Assert.False(options.InstrumentGrpcClient);
