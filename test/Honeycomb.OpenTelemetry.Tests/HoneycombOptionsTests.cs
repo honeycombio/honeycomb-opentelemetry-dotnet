@@ -118,6 +118,30 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.False(options.InstrumentStackExchangeRedisClient);
         }
 
+        [Theory]
+        [InlineData("toot:MgGoot, numbers:123")]
+        [InlineData("toot:MgGoot,numbers:123")]
+        [InlineData("toot: MgGoot,numbers: 123")]
+        [InlineData("toot: MgGoot, numbers: 123")]
+        [InlineData(" toot: MgGoot, numbers: 123")]
+        [InlineData(" toot: MgGoot,numbers: 123")]
+        [InlineData(" toot : MgGoot,numbers : 123 ")]
+        public void CanParseResourceAttributes(string attrs)
+        {
+            var options = HoneycombOptions.FromArgs(
+                "--honeycomb-apikey", "my-apikey",
+                "--additional-resource-attributes", $"{attrs}");
+
+            Assert.Equal(new Dictionary<string, object> { { "toot", "MgGoot" }, { "numbers", 123 } }, options.AdditionalResources);
+
+
+            var options2 = HoneycombOptions.FromArgs(
+                "--honeycomb-apikey=my-apikey",
+                $"--additional-resource-attributes={attrs}");
+
+            Assert.Equal(new Dictionary<string, object> { { "toot", "MgGoot" }, { "numbers", 123 } }, options2.AdditionalResources);
+        }
+
         [Fact]
         public void CanParseOptionsFromConfiguration()
         {
