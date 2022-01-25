@@ -52,7 +52,7 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--instrument-sql", "false",
                 "--instrument-grpc", "false",
                 "--instrument-redis", "false",
-                "--additional-resource-attributes", "toot: MgGoot, numbers:123"
+                "--resource-attributes", "toot: MgGoot, numbers:123"
             );
 
             Assert.Equal("my-apikey", options.ApiKey);
@@ -96,7 +96,7 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--instrument-sql=false",
                 "--instrument-grpc=false",
                 "--instrument-redis=false",
-                "--additional-resource-attributes=toot: MgGoot, numbers:123");
+                "--resource-attributes=toot: MgGoot, numbers:123");
 
             Assert.Equal("my-apikey", options.ApiKey);
             Assert.Equal("my-traces-apikey", options.TracesApiKey);
@@ -130,14 +130,14 @@ namespace Honeycomb.OpenTelemetry.Tests
         {
             var options = HoneycombOptions.FromArgs(
                 "--honeycomb-apikey", "my-apikey",
-                "--additional-resource-attributes", $"{attrs}");
+                "--resource-attributes", $"{attrs}");
 
             Assert.Equal(new Dictionary<string, object> { { "toot", "MgGoot" }, { "numbers", 123 } }, options.ResourceAttributes);
 
 
             var options2 = HoneycombOptions.FromArgs(
                 "--honeycomb-apikey=my-apikey",
-                $"--additional-resource-attributes={attrs}");
+                $"--resource-attributes={attrs}");
 
             Assert.Equal(new Dictionary<string, object> { { "toot", "MgGoot" }, { "numbers", 123 } }, options2.ResourceAttributes);
         }

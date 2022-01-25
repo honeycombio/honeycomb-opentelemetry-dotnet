@@ -234,7 +234,7 @@ namespace Honeycomb.OpenTelemetry
             { "--instrument-grpc", "instrumentgrpcclient" },
             { "--instrument-redis", "instrumentstackexchangeredisclient" },
             { "--meter-names", "meternames" },
-            { "--additional-resource-attributes", "additionalresourceattributes" }
+            { "--resource-attributes", "additionalresourceattributes" }
         };
 
         /// <summary>

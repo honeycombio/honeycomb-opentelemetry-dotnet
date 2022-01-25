@@ -2,7 +2,7 @@
   "profiles": {
     "console": {
       "commandName": "Project",
-      "commandLineArgs": "--additional-resource-attributes \"toot: MgGoot, numbers:123\""
+      "commandLineArgs": "--resource-attributes \"toot: MgGoot, numbers:123\""
     }
   }
 }
