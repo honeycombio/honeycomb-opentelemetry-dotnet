@@ -13,9 +13,10 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Configures the <see cref="ResourceBuilder"/> with Honeycomb attributes.
         /// </summary>
-        public static ResourceBuilder AddHoneycombAttributes(this ResourceBuilder builder)
+        public static ResourceBuilder AddResourceAttributes(this ResourceBuilder builder, HoneycombOptions options)
         {
             return builder
+                .AddAttributes(options.ResourceAttributes)
                 .AddAttributes(new List<KeyValuePair<string, object>>
                 {
                     new KeyValuePair<string, object>("honeycomb.distro.language", "dotnet"),
@@ -23,14 +24,6 @@ namespace Honeycomb.OpenTelemetry
                     new KeyValuePair<string, object>("honeycomb.distro.runtime_version",
                         Environment.Version.ToString()),
                 });
-        }
-
-        /// <summary>
-        /// Configures the <see cref="ResourceBuilder"/> with additional, user-provided resource attributes.
-        /// </summary>
-        public static ResourceBuilder AddAdditionalAttributes(this ResourceBuilder builder, HoneycombOptions options)
-        {
-            return builder.AddAttributes(options.ResourceAttributes);
         }
 
         private static string GetFileVersion()

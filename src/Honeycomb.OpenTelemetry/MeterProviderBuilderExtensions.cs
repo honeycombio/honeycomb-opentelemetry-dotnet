@@ -42,7 +42,7 @@ namespace Honeycomb.OpenTelemetry
                     .SetResourceBuilder(
                         ResourceBuilder
                             .CreateDefault()
-                            .AddHoneycombAttributes()
+                            .AddResourceAttributes(options)
                             .AddEnvironmentVariableDetector()
                             .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                     )
