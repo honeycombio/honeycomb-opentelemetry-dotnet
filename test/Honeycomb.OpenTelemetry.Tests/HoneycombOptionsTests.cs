@@ -68,7 +68,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
-            Assert.Equal(new Dictionary<string, object> {{"toot", "MgGoot"}, {"numbers", 123}}, options.AdditionalResources);
+            Assert.Equal(new Dictionary<string, object> {{"toot", "MgGoot"}, {"numbers", 123}}, options.ResourceAttributes);
             Assert.False(options.InstrumentHttpClient);
             Assert.False(options.InstrumentSqlClient);
             Assert.False(options.InstrumentGrpcClient);
@@ -111,7 +111,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
-            Assert.Equal(new Dictionary<string, object> {{"toot", "MgGoot"}, {"numbers", 123}}, options.AdditionalResources);
+            Assert.Equal(new Dictionary<string, object> {{"toot", "MgGoot"}, {"numbers", 123}}, options.ResourceAttributes);
             Assert.False(options.InstrumentHttpClient);
             Assert.False(options.InstrumentSqlClient);
             Assert.False(options.InstrumentGrpcClient);
@@ -132,14 +132,14 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--honeycomb-apikey", "my-apikey",
                 "--additional-resource-attributes", $"{attrs}");
 
-            Assert.Equal(new Dictionary<string, object> { { "toot", "MgGoot" }, { "numbers", 123 } }, options.AdditionalResources);
+            Assert.Equal(new Dictionary<string, object> { { "toot", "MgGoot" }, { "numbers", 123 } }, options.ResourceAttributes);
 
 
             var options2 = HoneycombOptions.FromArgs(
                 "--honeycomb-apikey=my-apikey",
                 $"--additional-resource-attributes={attrs}");
 
-            Assert.Equal(new Dictionary<string, object> { { "toot", "MgGoot" }, { "numbers", 123 } }, options2.AdditionalResources);
+            Assert.Equal(new Dictionary<string, object> { { "toot", "MgGoot" }, { "numbers", 123 } }, options2.ResourceAttributes);
         }
 
         [Fact]

@@ -30,7 +30,7 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static ResourceBuilder AddAdditionalAttributes(this ResourceBuilder builder, HoneycombOptions options)
         {
-            return builder.AddAttributes(options.AdditionalResources);
+            return builder.AddAttributes(options.ResourceAttributes);
         }
 
         private static string GetFileVersion()

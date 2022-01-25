@@ -35,7 +35,7 @@ namespace Honeycomb.OpenTelemetry
             // This is to make account for the fact that ASP.NET Core parses values from configuration
             // out as strings. Strings are fun, but Honeycomb has a type system and we should respect that instead.
             var resources = new Dictionary<string, object>();
-            foreach (var kvp in options.AdditionalResources)
+            foreach (var kvp in options.ResourceAttributes)
             {
                 var value = kvp.Value as string;
                 if (value is null)
@@ -48,7 +48,7 @@ namespace Honeycomb.OpenTelemetry
                 }
             }
 
-            options.AdditionalResources = resources;
+            options.ResourceAttributes = resources;
 
             return services.AddHoneycomb(options);
         }

@@ -213,7 +213,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// (Optional) Additional OpenTelemetry Resource Attributes a user can configure.
         /// </summary>
-        public Dictionary<string, object> AdditionalResources { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, object> ResourceAttributes { get; set; } = new Dictionary<string, object>();
 
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
@@ -275,7 +275,7 @@ namespace Honeycomb.OpenTelemetry
                     dict.Add(key, value);
                 }
 
-                honeycombOptions.AdditionalResources = dict;
+                honeycombOptions.ResourceAttributes = dict;
             }
 
             return honeycombOptions;
