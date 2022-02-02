@@ -128,7 +128,7 @@ namespace Honeycomb.OpenTelemetry
         public uint SampleRate { get; set; } = DefaultSampleRate;
 
         /// <summary>
-        /// Service name used to identify application. Defaults to application assembly name.
+        /// Service name used to identify application. Defaults to unknown_process:processname.
         /// </summary>
         public string ServiceName { get; set; } = SDefaultServiceName;
 
