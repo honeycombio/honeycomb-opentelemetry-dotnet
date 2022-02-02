@@ -16,7 +16,7 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
-        private static readonly string SDefaultServiceName = "unknown_service";
+        private static readonly string SDefaultServiceName = "unknown_service:" + System.Diagnostics.Process.GetCurrentProcess().ProcessName;
         private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
         private string _tracesApiKey;
@@ -24,19 +24,6 @@ namespace Honeycomb.OpenTelemetry
         private string _tracesDataset;
         private string _tracesEndpoint;
         private string _metricsEndpoint;
-
-        /// <summary>
-        /// Confirm whether api key is legacy
-        /// </summary>
-        public Boolean isLegacyKey() {
-            // legacy key has 32 characters
-            return _tracesApiKey.Length == 32;
-        }
-
-        static HoneycombOptions()
-        {
-            SDefaultServiceName = SDefaultServiceName + ":" + System.Diagnostics.Process.GetCurrentProcess().ProcessName;
-        }
 
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
@@ -58,6 +45,15 @@ namespace Honeycomb.OpenTelemetry
         /// <para/>
         /// </summary>
         public string ApiKey { get; set; }
+
+        /// <summary>
+        /// Confirm whether api key is legacy
+        /// </summary>
+        public Boolean isLegacyKey()
+        {
+            // legacy key has 32 characters
+            return ApiKey.Length == 32;
+        }
 
         /// <summary>
         /// API key used to send trace telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
