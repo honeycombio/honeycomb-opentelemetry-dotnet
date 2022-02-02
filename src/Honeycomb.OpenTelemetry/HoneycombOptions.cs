@@ -16,7 +16,7 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
-        private static readonly string SDefaultServiceName = "{unknown_service_name}";
+        private static readonly string SDefaultServiceName = "unknown_service";
         private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
         private string _tracesApiKey;
@@ -25,34 +25,17 @@ namespace Honeycomb.OpenTelemetry
         private string _tracesEndpoint;
         private string _metricsEndpoint;
 
+        /// <summary>
+        /// Confirm whether api key is legacy
+        /// </summary>
+        public Boolean isLegacyKey() {
+            // legacy key has 32 characters
+            return _tracesApiKey.Length == 32;
+        }
+
         static HoneycombOptions()
         {
-            // This works for everything other than ASP.NET (non-core) web apps
-            // because they are loaded from an unmanaged COM source so
-            // assembly.GetEntryAssembly() returns null
-            var assembly = Assembly.GetEntryAssembly();
-
-#if NET461
-            // inspired from https://stackoverflow.com/a/6754205
-            // try to load the current HTTPContext and work out the assembly name & version
-            if (assembly == null && System.Web.HttpContext.Current?.ApplicationInstance != null)
-            {
-                var type = System.Web.HttpContext.Current.ApplicationInstance.GetType();
-                while (type != null && type.Namespace == "ASP")
-                {
-                    type = type.BaseType;
-                }
-
-                assembly = type?.Assembly;
-            }
-#endif
-            if (assembly != null)
-            {
-                SDefaultServiceName = assembly.GetName().Name;
-                SDefaultServiceVersion =
-                    assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ??
-                    assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
-            }
+            SDefaultServiceName = SDefaultServiceName + ":" + System.Diagnostics.Process.GetCurrentProcess().ProcessName;
         }
 
         /// <summary>

@@ -46,22 +46,8 @@ namespace Honeycomb.OpenTelemetry
                 throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
             }
             
-            if (string.IsNullOrWhiteSpace(options.TracesApiKey))
-                Console.WriteLine("WARN: missing traces API key");
-            if (string.IsNullOrWhiteSpace(options.TracesDataset))
-                Console.WriteLine("WARN: missing traces dataset");
-
             builder
-                .AddSource(options.ServiceName)
                 .SetSampler(new DeterministicSampler(options.SampleRate))
-                .AddOtlpExporter(otlpOptions =>
-                {
-                    otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
-                    if (!string.IsNullOrWhiteSpace(options.TracesApiKey) &&
-                        !string.IsNullOrWhiteSpace(options.TracesDataset))
-                        otlpOptions.Headers =
-                            $"x-honeycomb-team={options.TracesApiKey},x-honeycomb-dataset={options.TracesDataset}";
-                })
                 .SetResourceBuilder(
                     ResourceBuilder
                         .CreateDefault()
@@ -70,6 +56,31 @@ namespace Honeycomb.OpenTelemetry
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                 )
                 .AddProcessor(new BaggageSpanProcessor());
+
+            if (!string.IsNullOrWhiteSpace(options.ServiceName)) {
+                builder.AddSource(options.ServiceName);
+            } else {
+                Console.WriteLine("WARN: missing service name. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(options.TracesApiKey)) {
+                String headers = $"x-honeycomb-team={options.TracesApiKey}";
+                if (options.isLegacyKey()) {
+                    // if the key is legacy, add dataset to the header
+                    if (!string.IsNullOrWhiteSpace(options.TracesDataset)) {
+                        headers += $",x-honeycomb-team={options.TracesDataset}";
+                    } else {
+                        // if legacy key and missing dataset, warn on missing dataset
+                        Console.WriteLine("WARN: missing traces dataset");
+                    }
+                }
+                builder.AddOtlpExporter(otlpOptions => {
+                    otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
+                    otlpOptions.Headers = headers;
+                });
+            } else {
+                Console.WriteLine("WARN: missing traces API key");
+            }
 
             if (options.InstrumentHttpClient)
             {
