@@ -16,7 +16,11 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
-        private static readonly string SDefaultServiceName = "unknown_service:" + System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+
+    /// <summary>
+    /// Default service name if service name is not provided.
+    /// </summary>
+        public static readonly string SDefaultServiceName = "unknown_service:" + System.Diagnostics.Process.GetCurrentProcess().ProcessName;
         private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
         private string _tracesApiKey;
@@ -130,7 +134,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Service name used to identify application. Defaults to unknown_process:processname.
         /// </summary>
-        public string ServiceName { get; set; } = SDefaultServiceName;
+        public string ServiceName { get; set; }
 
         /// <summary>
         /// Service version. Defaults to application assembly information version.

@@ -45,8 +45,15 @@ namespace Honeycomb.OpenTelemetry
             {
                 throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
             }
-            
+
+            // if serviceName is null, warn and set to default
+            if (string.IsNullOrWhiteSpace(options.ServiceName)) {
+                options.ServiceName = HoneycombOptions.SDefaultServiceName;
+                Console.WriteLine("WARN: missing service name. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
+            }
+
             builder
+                .AddSource(options.ServiceName)
                 .SetSampler(new DeterministicSampler(options.SampleRate))
                 .SetResourceBuilder(
                     ResourceBuilder
@@ -56,12 +63,6 @@ namespace Honeycomb.OpenTelemetry
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                 )
                 .AddProcessor(new BaggageSpanProcessor());
-
-            if (!string.IsNullOrWhiteSpace(options.ServiceName)) {
-                builder.AddSource(options.ServiceName);
-            } else {
-                Console.WriteLine("WARN: missing service name. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
-            }
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey)) {
                 String headers = $"x-honeycomb-team={options.TracesApiKey}";
