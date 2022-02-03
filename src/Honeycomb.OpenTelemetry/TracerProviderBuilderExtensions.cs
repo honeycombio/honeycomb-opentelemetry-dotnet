@@ -68,7 +68,7 @@ namespace Honeycomb.OpenTelemetry
                 if (options.isLegacyKey()) {
                     // if the key is legacy, add dataset to the header
                     if (!string.IsNullOrWhiteSpace(options.TracesDataset)) {
-                        headers += $",x-honeycomb-team={options.TracesDataset}";
+                        headers += $",x-honeycomb-dataset={options.TracesDataset}";
                     } else {
                         // if legacy key and missing dataset, warn on missing dataset
                         Console.WriteLine("WARN: missing traces dataset");
