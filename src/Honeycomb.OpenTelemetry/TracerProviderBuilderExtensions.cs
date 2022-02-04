@@ -49,7 +49,7 @@ namespace Honeycomb.OpenTelemetry
             // if serviceName is null, warn and set to default
             if (string.IsNullOrWhiteSpace(options.ServiceName)) {
                 options.ServiceName = HoneycombOptions.SDefaultServiceName;
-                Console.WriteLine("WARN: missing service name. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
+                Console.WriteLine($"WARN: {EnvironmentOptions.getErrorMessage("service name","SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
             }
 
             builder
@@ -72,7 +72,7 @@ namespace Honeycomb.OpenTelemetry
                         headers += $",x-honeycomb-dataset={options.TracesDataset}";
                     } else {
                         // if legacy key and missing dataset, warn on missing dataset
-                        Console.WriteLine("WARN: missing traces dataset");
+                        Console.WriteLine($"WARN: {EnvironmentOptions.getErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
                     }
                 }
                 builder.AddOtlpExporter(otlpOptions => {
@@ -80,7 +80,7 @@ namespace Honeycomb.OpenTelemetry
                     otlpOptions.Headers = headers;
                 });
             } else {
-                Console.WriteLine("WARN: missing traces API key");
+                Console.WriteLine($"WARN: {EnvironmentOptions.getErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
             }
 
             if (options.InstrumentHttpClient)
