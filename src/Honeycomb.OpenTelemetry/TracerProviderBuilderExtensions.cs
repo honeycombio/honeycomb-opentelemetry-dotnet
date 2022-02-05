@@ -83,6 +83,16 @@ namespace Honeycomb.OpenTelemetry
                 Console.WriteLine($"WARN: {EnvironmentOptions.getErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
             }
 
+            // heads up: even if dataset is set, it will be ignored
+            if (!string.IsNullOrWhiteSpace(options.TracesApiKey) & !options.isLegacyKey() & (!string.IsNullOrWhiteSpace(options.TracesDataset))) {
+                if (!string.IsNullOrWhiteSpace(options.ServiceName)) {
+                    Console.WriteLine($"WARN: Dataset is ignored in favor of service name. Data will be sent to service name: {options.ServiceName}");
+                } else {
+                    // should only get here if missing service name and dataset
+                    Console.WriteLine("WARN: Dataset is ignored in favor of service name.");
+                }
+            }      
+
             if (options.InstrumentHttpClient)
             {
 #if NET461
