@@ -1,5 +1,19 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.19.0-beta] - 2022-02-09
+
+### Enhancements
+
+- Provide more feedback to users to help configure for use in E&S (#175) | [@JamieDanielson](https://github.com/JamieDanielson)
+
+### Fixes
+
+- Validate that HoneycombOptions exists before we do anything (#171) | [@cartermp](https://github.com/cartermp)
+
+### Maintenance
+
+- gh: add re-triage workflow (#166) | [@vreynolds](https://github.com/vreynolds)
+
 ## [0.18.0-beta] - 2021-12-23
 
 ### Fixes
