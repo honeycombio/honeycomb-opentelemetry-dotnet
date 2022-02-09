@@ -49,7 +49,7 @@ namespace Honeycomb.OpenTelemetry
             return defaultValue;
         }
 
-        public static string getErrorMessage(string humanKey, string key) {
+        internal static string getErrorMessage(string humanKey, string key) {
             return ($"Missing {humanKey}. Specify {key} environment variable, or the associated property in appsettings.json or the command line");
         }
     }
