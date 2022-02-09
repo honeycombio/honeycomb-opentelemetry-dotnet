@@ -49,7 +49,7 @@ namespace Honeycomb.OpenTelemetry
             // if serviceName is null, warn and set to default
             if (string.IsNullOrWhiteSpace(options.ServiceName)) {
                 options.ServiceName = HoneycombOptions.SDefaultServiceName;
-                Console.WriteLine($"WARN: {EnvironmentOptions.getErrorMessage("service name","SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
+                Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name","SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
             }
 
             builder
@@ -65,14 +65,14 @@ namespace Honeycomb.OpenTelemetry
                 .AddProcessor(new BaggageSpanProcessor());
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey)) {
-                String headers = $"x-honeycomb-team={options.TracesApiKey}";
+                var headers = $"x-honeycomb-team={options.TracesApiKey}";
                 if (options.IsLegacyKey()) {
                     // if the key is legacy, add dataset to the header
                     if (!string.IsNullOrWhiteSpace(options.TracesDataset)) {
                         headers += $",x-honeycomb-dataset={options.TracesDataset}";
                     } else {
                         // if legacy key and missing dataset, warn on missing dataset
-                        Console.WriteLine($"WARN: {EnvironmentOptions.getErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
+                        Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
                     }
                 }
                 builder.AddOtlpExporter(otlpOptions => {
@@ -80,7 +80,7 @@ namespace Honeycomb.OpenTelemetry
                     otlpOptions.Headers = headers;
                 });
             } else {
-                Console.WriteLine($"WARN: {EnvironmentOptions.getErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
+                Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
             }
 
             // heads up: even if dataset is set, it will be ignored

@@ -25,18 +25,18 @@ namespace Honeycomb.OpenTelemetry
             _environmentService = service;
         }
 
-        internal string ApiKey { get => GetEnvironmentVariable(ApiKeyKey); }
-        internal string TracesApiKey { get => GetEnvironmentVariable(TracesApiKeyKey, ApiKey); }
-        internal string MetricsApiKey { get => GetEnvironmentVariable(MetricsApiKeyKey, ApiKey); }
-        internal string Dataset { get => GetEnvironmentVariable(DatasetKey); }
-        internal string TracesDataset { get => GetEnvironmentVariable(TracesDatasetKey, Dataset); }
-        internal string MetricsDataset { get => GetEnvironmentVariable(MetricsDatasetKey); }
-        internal string ApiEndpoint { get => GetEnvironmentVariable(ApiEndpointKey, DefaultApiEndpoint); }
-        internal string TracesEndpoint { get => GetEnvironmentVariable(TracesEndpointKey, ApiEndpoint); }
-        internal string MetricsEndpoint { get => GetEnvironmentVariable(MetricsEndpointKey, ApiEndpoint); }
-        internal string ServiceName { get => GetEnvironmentVariable(ServiceNameKey); }
-        internal string ServiceVersion { get => GetEnvironmentVariable(ServiceVersionKey); }
-        internal uint SampleRate { get => uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate) ? sampleRate : DefaultSampleRate; }
+        internal string ApiKey => GetEnvironmentVariable(ApiKeyKey);
+        internal string TracesApiKey => GetEnvironmentVariable(TracesApiKeyKey, ApiKey);
+        internal string MetricsApiKey => GetEnvironmentVariable(MetricsApiKeyKey, ApiKey);
+        internal string Dataset => GetEnvironmentVariable(DatasetKey);
+        internal string TracesDataset => GetEnvironmentVariable(TracesDatasetKey, Dataset);
+        internal string MetricsDataset => GetEnvironmentVariable(MetricsDatasetKey);
+        internal string ApiEndpoint => GetEnvironmentVariable(ApiEndpointKey, DefaultApiEndpoint);
+        internal string TracesEndpoint => GetEnvironmentVariable(TracesEndpointKey, ApiEndpoint);
+        internal string MetricsEndpoint => GetEnvironmentVariable(MetricsEndpointKey, ApiEndpoint);
+        internal string ServiceName => GetEnvironmentVariable(ServiceNameKey);
+        internal string ServiceVersion => GetEnvironmentVariable(ServiceVersionKey);
+        internal uint SampleRate => uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate) ? sampleRate : DefaultSampleRate;
 
         private string GetEnvironmentVariable(string key, string defaultValue = "")
         {
@@ -49,7 +49,8 @@ namespace Honeycomb.OpenTelemetry
             return defaultValue;
         }
 
-        internal static string getErrorMessage(string humanKey, string key) {
+        internal static string GetErrorMessage(string humanKey, string key)
+        {
             return ($"Missing {humanKey}. Specify {key} environment variable, or the associated property in appsettings.json or the command line");
         }
     }

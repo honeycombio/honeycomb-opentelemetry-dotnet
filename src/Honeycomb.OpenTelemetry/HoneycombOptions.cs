@@ -20,7 +20,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Default service name if service name is not provided.
         /// </summary>
-        internal static readonly string SDefaultServiceName = "unknown_service:" + System.Diagnostics.Process.GetCurrentProcess().ProcessName;
+        internal static readonly string SDefaultServiceName = $"unknown_service: {System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
         private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
         private string _tracesApiKey;
@@ -53,7 +53,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Returns whether <see cref="ApiKey"/> is a legacy key.
         /// </summary>
-        internal Boolean IsLegacyKey()
+        internal bool IsLegacyKey()
         {
             // legacy key has 32 characters
             return ApiKey?.Length == 32;
