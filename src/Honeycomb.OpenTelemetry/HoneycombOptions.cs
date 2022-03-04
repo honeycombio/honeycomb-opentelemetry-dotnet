@@ -20,7 +20,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Default service name if service name is not provided.
         /// </summary>
-        internal static readonly string SDefaultServiceName = $"unknown_service: {System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
+        internal static readonly string SDefaultServiceName = $"unknown_service:{System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
         private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
         private string _tracesApiKey;
