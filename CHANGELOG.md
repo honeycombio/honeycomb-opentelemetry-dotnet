@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.20.0-beta] - 2022-03-07
+
+### Fixes
+
+- Remove white space in default service.name (#182)
+
 ## [0.19.0-beta] - 2022-02-09
 
 ### Enhancements
