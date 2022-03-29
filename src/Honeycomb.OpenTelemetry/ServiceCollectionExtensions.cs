@@ -38,6 +38,7 @@ namespace Honeycomb.OpenTelemetry
         public static IServiceCollection AddHoneycomb(this IServiceCollection services, HoneycombOptions options)
         {
 #if (NETSTANDARD2_0_OR_GREATER)
+            options = options ?? new HoneycombOptions();
             services
                 .AddOpenTelemetryTracing(hostingBuilder => hostingBuilder.Configure(((serviceProvider, builder) =>
                     {
