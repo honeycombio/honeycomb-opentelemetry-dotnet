@@ -55,18 +55,13 @@ namespace Honeycomb.OpenTelemetry
             builder
                 .AddSource(options.ServiceName)
                 .SetSampler(new DeterministicSampler(options.SampleRate))
-                .AddProcessor(new BaggageSpanProcessor());
-
-            if (options.ConfigureResourceBuilder)
-            {
-                builder.SetResourceBuilder(
-                    ResourceBuilder
-                        .CreateDefault()
+                .SetResourceBuilder(
+                    options.ResourceBuilder
                         .AddHoneycombAttributes()
                         .AddEnvironmentVariableDetector()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
-                );
-            }
+                )
+                .AddProcessor(new BaggageSpanProcessor());
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey)) {
                 var headers = $"x-honeycomb-team={options.TracesApiKey}";

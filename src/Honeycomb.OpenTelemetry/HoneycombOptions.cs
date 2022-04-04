@@ -193,13 +193,11 @@ namespace Honeycomb.OpenTelemetry
         public List<string> MeterNames { get; set; } = new List<string>();
 
         /// <summary>
-        /// (Optional) Controls whether a new <see cref="ResourceBuilder" /> is configured for use
-        /// with the OpenTelemetry SDK.
-        /// This can be disabled if the calling application wants to set it's own
-        /// <see cref="ResourceBuilder" /> via <see cref="TracerProviderBuilder.SetResourceBuilder(ResourceBuilder)" />.
-        /// Default is true.
+        /// The <see cref="ResourceBuilder" /> to use to add Resource attributes to.
+        /// A custom ResouceBuilder can be used to set additional resources and then passed here to add
+        /// Honeycomb attributes.
         /// </summary>
-        public bool ConfigureResourceBuilder { get; set; } = true;
+        public ResourceBuilder ResourceBuilder { get; set; } = ResourceBuilder.CreateDefault();
 
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
