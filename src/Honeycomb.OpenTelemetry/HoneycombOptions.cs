@@ -2,12 +2,12 @@ using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Instrumentation.SqlClient;
 using OpenTelemetry.Instrumentation.StackExchangeRedis;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
-using System.Reflection;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -97,7 +97,7 @@ namespace Honeycomb.OpenTelemetry
         /// Honeycomb dataset to store metrics telemetry data. Defaults to "null".
         /// <para/>
         /// Required to enable metrics.
-        /// </summary>        
+        /// </summary>
         public string MetricsDataset { get; set; }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Honeycomb.OpenTelemetry
 
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
-        /// </summary>        
+        /// </summary>
         public string TracesEndpoint
         {
             get { return _tracesEndpoint ?? Endpoint; }
@@ -191,6 +191,15 @@ namespace Honeycomb.OpenTelemetry
         /// <see cref="ServiceName"/> is configured as a meter name by default.
         /// </summary>
         public List<string> MeterNames { get; set; } = new List<string>();
+
+        /// <summary>
+        /// (Optional) Controls whether a new <see cref="ResourceBuilder" /> is configured for use
+        /// with the OpenTelemetry SDK.
+        /// This can be disabled if the calling application wants to set it's own
+        /// <see cref="ResourceBuilder" /> via <see cref="TracerProviderBuilder.SetResourceBuilder(ResourceBuilder)" />.
+        /// Default is true.
+        /// </summary>
+        public bool ConfigureResourceBuilder { get; set; } = true;
 
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {

@@ -55,14 +55,18 @@ namespace Honeycomb.OpenTelemetry
             builder
                 .AddSource(options.ServiceName)
                 .SetSampler(new DeterministicSampler(options.SampleRate))
-                .SetResourceBuilder(
+                .AddProcessor(new BaggageSpanProcessor());
+
+            if (options.ConfigureResourceBuilder)
+            {
+                builder.SetResourceBuilder(
                     ResourceBuilder
                         .CreateDefault()
                         .AddHoneycombAttributes()
                         .AddEnvironmentVariableDetector()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
-                )
-                .AddProcessor(new BaggageSpanProcessor());
+                );
+            }
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey)) {
                 var headers = $"x-honeycomb-team={options.TracesApiKey}";
@@ -91,7 +95,7 @@ namespace Honeycomb.OpenTelemetry
                     // should only get here if missing service name and dataset
                     Console.WriteLine("WARN: Dataset is ignored in favor of service name.");
                 }
-            }      
+            }
 
             if (options.InstrumentHttpClient)
             {
