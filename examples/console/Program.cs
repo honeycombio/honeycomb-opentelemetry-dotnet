@@ -2,6 +2,8 @@
 using Honeycomb.OpenTelemetry;
 using OpenTelemetry.Metrics;
 using System.Diagnostics.Metrics;
+using OpenTelemetry.Resources;
+using System.Collections.Generic;
 
 namespace console
 {
@@ -15,7 +17,12 @@ namespace console
                 ServiceName = "my-app",
                 ApiKey = "{apikey}",
                 TracesDataset = "{traces-dataset}",
-                MetricsDataset = "{metrics-dataset}" // optional
+                MetricsDataset = "{metrics-dataset}", // optional
+                ResourceBuilder = ResourceBuilder.CreateDefault().AddAttributes(
+                new Dictionary<string, object>
+                {
+                    {"my-attribute", "some-value"}
+                })
             };
 
             // ------------ TRACES ------------
