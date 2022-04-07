@@ -2,12 +2,12 @@ using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Instrumentation.SqlClient;
 using OpenTelemetry.Instrumentation.StackExchangeRedis;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
-using System.Reflection;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -97,7 +97,7 @@ namespace Honeycomb.OpenTelemetry
         /// Honeycomb dataset to store metrics telemetry data. Defaults to "null".
         /// <para/>
         /// Required to enable metrics.
-        /// </summary>        
+        /// </summary>
         public string MetricsDataset { get; set; }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Honeycomb.OpenTelemetry
 
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
-        /// </summary>        
+        /// </summary>
         public string TracesEndpoint
         {
             get { return _tracesEndpoint ?? Endpoint; }
@@ -191,6 +191,13 @@ namespace Honeycomb.OpenTelemetry
         /// <see cref="ServiceName"/> is configured as a meter name by default.
         /// </summary>
         public List<string> MeterNames { get; set; } = new List<string>();
+
+        /// <summary>
+        /// The <see cref="ResourceBuilder" /> to use to add Resource attributes to.
+        /// A custom ResouceBuilder can be used to set additional resources and then passed here to add
+        /// Honeycomb attributes.
+        /// </summary>
+        public ResourceBuilder ResourceBuilder { get; set; } = ResourceBuilder.CreateDefault();
 
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {

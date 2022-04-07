@@ -56,8 +56,7 @@ namespace Honeycomb.OpenTelemetry
                 .AddSource(options.ServiceName)
                 .SetSampler(new DeterministicSampler(options.SampleRate))
                 .SetResourceBuilder(
-                    ResourceBuilder
-                        .CreateDefault()
+                    options.ResourceBuilder
                         .AddHoneycombAttributes()
                         .AddEnvironmentVariableDetector()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
@@ -91,7 +90,7 @@ namespace Honeycomb.OpenTelemetry
                     // should only get here if missing service name and dataset
                     Console.WriteLine("WARN: Dataset is ignored in favor of service name.");
                 }
-            }      
+            }
 
             if (options.InstrumentHttpClient)
             {
