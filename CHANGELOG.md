@@ -1,5 +1,21 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.21.0-beta] - 2022-04-14
+
+### Enhancements
+
+- capture null options in IServiceColletion.AddHoneycomb (#184)
+
+### Fixes
+
+- capture null options in IServiceColletion.AddHoneycomb (#184)
+
+### Maintenance
+
+- Bump otel dependdencies (#193)
+- Bump OpenTelemetry.Instrumentation.AspNet from 1.0.0-rc8 to 1.0.0-rc9.1 (#186)
+- Bump coverlet.collector from 3.1.0 to 3.1.2 (#181)
+
 ## [0.20.0-beta] - 2022-03-07
 
 ### Fixes
