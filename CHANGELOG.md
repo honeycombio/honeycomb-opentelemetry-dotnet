@@ -4,11 +4,11 @@
 
 ### Enhancements
 
-- capture null options in IServiceColletion.AddHoneycomb (#184)
+- Capture null options in IServiceColletion.AddHoneycomb (#184) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 
 ### Fixes
 
-- capture null options in IServiceColletion.AddHoneycomb (#184)
+- Add support for providing ResouceBuilder as configuration option (#190) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 
 ### Maintenance
 
