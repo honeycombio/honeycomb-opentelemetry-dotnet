@@ -1,12 +1,13 @@
-using System;
 using Microsoft.Extensions.Configuration;
-using OpenTelemetry.Trace;
 using OpenTelemetry.Instrumentation.Http;
 using OpenTelemetry.Instrumentation.SqlClient;
 using OpenTelemetry.Instrumentation.StackExchangeRedis;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using StackExchange.Redis;
-using System.Reflection;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -15,44 +16,24 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
-        private static readonly string s_defaultServiceName = "{unknown_service_name}";
-        private static readonly string s_defaultServiceVersion = "{unknown_service_version}";
 
-        static HoneycombOptions()
-        {
-            // This works for everything other than ASP.NET (non-core) web apps
-            // because they are loaded from an unmanaged COM source so
-            // assembly.GetEntryAssembly() returns null
-            var assembly = Assembly.GetEntryAssembly();
+        /// <summary>
+        /// Default service name if service name is not provided.
+        /// </summary>
+        internal static readonly string SDefaultServiceName = $"unknown_service:{System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
+        private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
-#if NET461
-            // inspired from https://stackoverflow.com/a/6754205
-            // try to load the current HTTPContext and work out the assembly name & version
-            if (assembly == null && System.Web.HttpContext.Current?.ApplicationInstance != null)
-            {
-                var type = System.Web.HttpContext.Current.ApplicationInstance.GetType();
-                while (type != null && type.Namespace == "ASP")
-                {
-                    type = type.BaseType;
-                }
-
-                assembly = type?.Assembly;
-            }
-#endif
-            if (assembly != null)
-            {
-                s_defaultServiceName = assembly.GetName().Name;
-                s_defaultServiceVersion =
-                    assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ??
-                    assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version;
-            }
-        }
+        private string _tracesApiKey;
+        private string _metricsApiKey;
+        private string _tracesDataset;
+        private string _tracesEndpoint;
+        private string _metricsEndpoint;
 
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
         /// </summary>
         public const string ConfigSectionName = "Honeycomb";
-        
+
         /// <summary>
         /// Default API endpoint.
         /// </summary>
@@ -66,21 +47,82 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// API key used to send telemetry data to Honeycomb.
         /// <para/>
-        /// <b>Required</b>
         /// </summary>
         public string ApiKey { get; set; }
 
         /// <summary>
+        /// Returns whether <see cref="ApiKey"/> is a legacy key.
+        /// </summary>
+        internal bool IsLegacyKey()
+        {
+            // legacy key has 32 characters
+            return ApiKey?.Length == 32;
+        }
+
+        /// <summary>
+        /// API key used to send trace telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
+        /// </summary>
+        public string TracesApiKey
+        {
+            get { return _tracesApiKey ?? ApiKey; }
+            set { _tracesApiKey = value; }
+        }
+
+        /// <summary>
+        /// API key used to send metrics telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
+        /// </summary>
+        public string MetricsApiKey
+        {
+            get { return _metricsApiKey ?? ApiKey; }
+            set { _metricsApiKey = value; }
+        }
+
+        /// <summary>
         /// Honeycomb dataset to store telemetry data.
         /// <para/>
-        /// <b>Required</b>
         /// </summary>
         public string Dataset { get; set; }
+
+
+        /// <summary>
+        /// Honeycomb dataset to store trace telemetry data. Defaults to <see cref="Dataset"/>.
+        /// </summary>
+        public string TracesDataset
+        {
+            get { return _tracesDataset ?? Dataset; }
+            set { _tracesDataset = value; }
+        }
+
+        /// <summary>
+        /// Honeycomb dataset to store metrics telemetry data. Defaults to "null".
+        /// <para/>
+        /// Required to enable metrics.
+        /// </summary>
+        public string MetricsDataset { get; set; }
 
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="DefaultEndpoint"/>.
         /// </summary>
         public string Endpoint { get; set; } = DefaultEndpoint;
+
+
+        /// <summary>
+        /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
+        /// </summary>
+        public string TracesEndpoint
+        {
+            get { return _tracesEndpoint ?? Endpoint; }
+            set { _tracesEndpoint = value; }
+        }
+
+        /// <summary>
+        /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
+        /// </summary>
+        public string MetricsEndpoint
+        {
+            get { return _metricsEndpoint ?? Endpoint; }
+            set { _metricsEndpoint = value; }
+        }
 
         /// <summary>
         /// Sample rate for sending telemetry data. Defaults to <see cref="DefaultSampleRate"/>.
@@ -90,21 +132,21 @@ namespace Honeycomb.OpenTelemetry
         public uint SampleRate { get; set; } = DefaultSampleRate;
 
         /// <summary>
-        /// Serice name used to identify application. Defaults to application assembly name.
+        /// Service name used to identify application. Defaults to unknown_process:processname.
         /// </summary>
-        public string ServiceName { get; set; } = s_defaultServiceName;
+        public string ServiceName { get; set; }
 
         /// <summary>
         /// Service version. Defaults to application assembly information version.
         /// </summary>
-        public string ServiceVersion { get; set; } = s_defaultServiceVersion;
+        public string ServiceVersion { get; set; } = SDefaultServiceVersion;
 
         /// <summary>
-        /// Redis IConnectionMultiplexor; set this if you aren't using a DI Container.
+        /// Redis <see cref="IConnectionMultiplexer"/>. Set this if you aren't using a DI Container.
         /// If you're using a DI Container, then setting this isn't necessary as it will be resolved from the <see cref="IServiceProvider"/>.
         /// </summary>
         public IConnectionMultiplexer RedisConnection { get; set; }
-        
+
         /// <summary>
         /// Controls whether to instrument HttpClient calls.
         /// </summary>
@@ -119,7 +161,7 @@ namespace Honeycomb.OpenTelemetry
         /// Controls whether to instrument GrpcClient calls when running on .NET Standard 2.1 or greater.
         /// Requires <see cref="InstrumentHttpClient" /> to be <see langword="true"/> due to the underlying implementation.
         /// </summary>
-        public bool InstrumentGprcClient { get; set; } = true;
+        public bool InstrumentGrpcClient { get; set; } = true;
 
         /// <summary>
         /// Controls whether the Stack Exchange Redis Client is instrumented.
@@ -139,18 +181,43 @@ namespace Honeycomb.OpenTelemetry
         public Action<SqlClientInstrumentationOptions> ConfigureSqlClientInstrumentationOptions { get; set; }
 
         /// <summary>
-        /// (Optional) Options delegate to configure StackExchance.Redis instrumentation.
+        /// (Optional) Options delegate to configure StackExchange.Redis instrumentation.
         /// </summary>
-        public Action<StackExchangeRedisCallsInstrumentationOptions> ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
+        public Action<StackExchangeRedisCallsInstrumentationOptions>
+            ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
 
-        private static Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
+        /// <summary>
+        /// (Optional) Additional <see cref="Meter"/> names for generating metrics.
+        /// <see cref="ServiceName"/> is configured as a meter name by default.
+        /// </summary>
+        public List<string> MeterNames { get; set; } = new List<string>();
+
+        /// <summary>
+        /// The <see cref="ResourceBuilder" /> to use to add Resource attributes to.
+        /// A custom ResouceBuilder can be used to set additional resources and then passed here to add
+        /// Honeycomb attributes.
+        /// </summary>
+        public ResourceBuilder ResourceBuilder { get; set; } = ResourceBuilder.CreateDefault();
+
+        private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
-            {"--honeycomb-apikey", "apikey"},
-            {"--honeycomb-dataset", "dataset"},
-            {"--honeycomb-endpoint", "endpoint"},
-            {"--honeycomb-samplerate", "samplerate"},
-            {"--service-name", "servicename"},
-            {"--service-version", "serviceversion"}
+            { "--honeycomb-apikey", "apikey" },
+            { "--honeycomb-traces-apikey", "tracesapikey" },
+            { "--honeycomb-metrics-apikey", "metricsapikey" },
+            { "--honeycomb-dataset", "dataset" },
+            { "--honeycomb-traces-dataset", "tracesdataset" },
+            { "--honeycomb-metrics-dataset", "metricsdataset" },
+            { "--honeycomb-endpoint", "endpoint" },
+            { "--honeycomb-traces-endpoint", "tracesendpoint" },
+            { "--honeycomb-metrics-endpoint", "metricsendpoint" },
+            { "--honeycomb-samplerate", "samplerate" },
+            { "--service-name", "servicename" },
+            { "--service-version", "serviceversion" },
+            { "--instrument-http", "instrumenthttpclient" },
+            { "--instrument-sql", "instrumentsqlclient" },
+            { "--instrument-grpc", "instrumentgrpcclient" },
+            { "--instrument-redis", "instrumentstackexchangeredisclient" },
+            { "--meter-names", "meternames" }
         };
 
         /// <summary>
@@ -158,10 +225,19 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static HoneycombOptions FromArgs(params string[] args)
         {
-            return new ConfigurationBuilder()
+            var config = new ConfigurationBuilder()
                 .AddCommandLine(args, CommandLineSwitchMap)
-                .Build()
+                .Build();
+            var honeycombOptions = config
                 .Get<HoneycombOptions>();
+
+            var meterNames = config.GetValue<string>("meternames");
+            if (!string.IsNullOrWhiteSpace(meterNames))
+            {
+                honeycombOptions.MeterNames = new List<string>(meterNames.Split(','));
+            }
+
+            return honeycombOptions;
         }
     }
 }

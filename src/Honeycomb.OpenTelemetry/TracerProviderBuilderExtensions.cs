@@ -1,11 +1,11 @@
-using System.Buffers;
-using Microsoft.Extensions.Configuration;
-using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
+
+#if NET461
 using System.Collections.Generic;
-using System.Reflection;
+using OpenTelemetry;
+#endif
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -28,9 +28,10 @@ namespace Honeycomb.OpenTelemetry
         /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>
         /// <param name="configureHoneycombOptions">Action delegate that configures a <see cref="HoneycombOptions"/>.</param>
         /// <returns>The instance of <see cref="TracerProviderBuilder"/> to chain the calls.</returns>
-        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, Action<HoneycombOptions> configureHoneycombOptions = null)
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder,
+            Action<HoneycombOptions> configureHoneycombOptions = null)
         {
-            var honeycombOptions = new HoneycombOptions{};
+            var honeycombOptions = new HoneycombOptions { };
             configureHoneycombOptions?.Invoke(honeycombOptions);
             return builder.AddHoneycomb(honeycombOptions);
         }
@@ -40,51 +41,74 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
-            if (string.IsNullOrWhiteSpace(options.ApiKey))
-                throw new ArgumentException("API key cannot be empty");
-            if (string.IsNullOrWhiteSpace(options.Dataset))
-                throw new ArgumentException("Dataset cannot be empty");
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
+            }
+
+            // if serviceName is null, warn and set to default
+            if (string.IsNullOrWhiteSpace(options.ServiceName)) {
+                options.ServiceName = HoneycombOptions.SDefaultServiceName;
+                Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name","SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
+            }
 
             builder
                 .AddSource(options.ServiceName)
                 .SetSampler(new DeterministicSampler(options.SampleRate))
-                .AddOtlpExporter(otlpOptions =>
-                {
-                    otlpOptions.Endpoint = new Uri(options.Endpoint);
-                    otlpOptions.Headers = string.Format("x-honeycomb-team={0},x-honeycomb-dataset={1}", options.ApiKey, options.Dataset);
-                })
                 .SetResourceBuilder(
-                    ResourceBuilder
-                        .CreateDefault()
-                        .AddAttributes(new List<KeyValuePair<string, object>>
-                        {
-                            new KeyValuePair<string, object>("honeycomb.distro.language", "dotnet"),
-                            new KeyValuePair<string, object>("honeycomb.distro.version", GetFileVersion()),
-                            new KeyValuePair<string, object>("honeycomb.distro.runtime_version",
-                                Environment.Version.ToString()),
-                        })
+                    options.ResourceBuilder
+                        .AddHoneycombAttributes()
                         .AddEnvironmentVariableDetector()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                 )
                 .AddProcessor(new BaggageSpanProcessor());
-            
+
+            if (!string.IsNullOrWhiteSpace(options.TracesApiKey)) {
+                var headers = $"x-honeycomb-team={options.TracesApiKey}";
+                if (options.IsLegacyKey()) {
+                    // if the key is legacy, add dataset to the header
+                    if (!string.IsNullOrWhiteSpace(options.TracesDataset)) {
+                        headers += $",x-honeycomb-dataset={options.TracesDataset}";
+                    } else {
+                        // if legacy key and missing dataset, warn on missing dataset
+                        Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
+                    }
+                }
+                builder.AddOtlpExporter(otlpOptions => {
+                    otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
+                    otlpOptions.Headers = headers;
+                });
+            } else {
+                Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
+            }
+
+            // heads up: even if dataset is set, it will be ignored
+            if (!string.IsNullOrWhiteSpace(options.TracesApiKey) & !options.IsLegacyKey() & (!string.IsNullOrWhiteSpace(options.TracesDataset))) {
+                if (!string.IsNullOrWhiteSpace(options.ServiceName)) {
+                    Console.WriteLine($"WARN: Dataset is ignored in favor of service name. Data will be sent to service name: {options.ServiceName}");
+                } else {
+                    // should only get here if missing service name and dataset
+                    Console.WriteLine("WARN: Dataset is ignored in favor of service name.");
+                }
+            }
+
             if (options.InstrumentHttpClient)
             {
-                #if NET461
+#if NET461
                     builder.AddHttpClientInstrumentation();
-                #else
-                    builder.AddHttpClientInstrumentation(options.ConfigureHttpClientInstrumentationOptions);
-                #endif
+#else
+                builder.AddHttpClientInstrumentation(options.ConfigureHttpClientInstrumentationOptions);
+#endif
             }
-            
+
             if (options.InstrumentSqlClient)
             {
                 builder.AddSqlClientInstrumentation(options.ConfigureSqlClientInstrumentationOptions);
             }
 
-            if (options.InstrumentStackExchangeRedisClient)
+            if (options.InstrumentStackExchangeRedisClient && options.RedisConnection != null)
             {
-                builder.AddRedisInstrumentation(options.RedisConnection, // if null, resolved using the application IServiceProvider.
+                builder.AddRedisInstrumentation(options.RedisConnection,
                     options.ConfigureStackExchangeRedisClientInstrumentationOptions);
             }
 
@@ -101,7 +125,7 @@ namespace Honeycomb.OpenTelemetry
 #endif
 
 #if NETSTANDARD2_1
-            if (options.InstrumentGprcClient && options.InstrumentHttpClient) // HttpClient needs to be instrumented for GrpcClient instrumentation to work.
+            if (options.InstrumentGrpcClient && options.InstrumentHttpClient) // HttpClient needs to be instrumented for GrpcClient instrumentation to work.
             {
                 // See https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Instrumentation.GrpcNetClient/README.md#suppressdownstreaminstrumentation
                 builder.AddGrpcClientInstrumentation(options => options.SuppressDownstreamInstrumentation = true);
@@ -109,22 +133,6 @@ namespace Honeycomb.OpenTelemetry
 #endif
 
             return builder;
-        }
-
-        private static string GetFileVersion()
-        {
-            var version = typeof(TracerProviderBuilderExtensions)
-                .Assembly
-                .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                .InformationalVersion;
-
-            // AssemblyInformationalVersionAttribute may include the latest commit hash in
-            // the form `{version_prefix}{version_suffix}+{commit_hash}`.
-            // We should trim the hash if present to just leave the version prefix and suffix
-            var i = version.IndexOf("+");
-            return i > 0 
-                ? version.Substring(0, i)
-                : version;
         }
     }
 }

@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/test/Honeycomb.OpenTelemetry.Tests/bin/Debug/netcoreapp2.1/Honeycomb.OpenTelemetry.Tests.dll",
+            "program": "${workspaceFolder}/test/Honeycomb.OpenTelemetry.Tests/bin/Debug/netcoreapp3.1/Honeycomb.OpenTelemetry.Tests.dll",
             "args": [],
             "cwd": "${workspaceFolder}/test/Honeycomb.OpenTelemetry.Tests",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console

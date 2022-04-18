@@ -57,6 +57,33 @@ var tracerProvider = new TracerProviderBuilder()
     .Build()
 ```
 
+### Setting Resource Attributes
+
+You can set additional resource attributes by either using an environment variable or programmatically using HoneycomnOptions when configuring the SDK.
+
+#### Environment Variable
+
+You can use `OTEL_RESOURCE_ATTRIBUTES` to set extra resoruce attributes. The value is key value pairs and multiple entries are separated using a comma (`,`).
+
+For example:
+
+`export OTEL_RESOURCE_ATTRIBUTES="deployment.environment=dev"`
+
+#### Programatically using HoneycombOptions
+
+You can set resource attributes proramatically by creating your own ResourceBuilder and passing adding it to HoneycombOptions.
+
+```csharp
+var resourceBuilder = ResourceBuilder.CreateDefault().AddAttributes(
+  new Dictionary<string, object>
+  {
+      {"deployment.environment", "dev"}
+  });
+var tracerProvider = OpenTelemetry.Sdk.CreateTracerProviderBuilder()
+  .AddHoneycomb(options => options.ResourceBuilder = resourceBuilder)
+  .Build();
+```
+
 ### Example
 
 See [Program.cs](Program.cs) for a complete example.

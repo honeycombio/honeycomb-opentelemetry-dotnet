@@ -1,5 +1,116 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.21.0-beta] - 2022-04-14
+
+### Enhancements
+
+- Capture null options in IServiceColletion.AddHoneycomb (#184) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Fixes
+
+- Add support for providing ResouceBuilder as configuration option (#190) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Maintenance
+
+- Bump otel dependdencies (#193)
+- Bump OpenTelemetry.Instrumentation.AspNet from 1.0.0-rc8 to 1.0.0-rc9.1 (#186)
+- Bump coverlet.collector from 3.1.0 to 3.1.2 (#181)
+
+## [0.20.0-beta] - 2022-03-07
+
+### Fixes
+
+- Remove white space in default service.name (#182)
+
+## [0.19.0-beta] - 2022-02-09
+
+### Enhancements
+
+- Provide more feedback to users to help configure for use in E&S (#175) | [@JamieDanielson](https://github.com/JamieDanielson)
+
+### Fixes
+
+- Validate that HoneycombOptions exists before we do anything (#171) | [@cartermp](https://github.com/cartermp)
+
+### Maintenance
+
+- gh: add re-triage workflow (#166) | [@vreynolds](https://github.com/vreynolds)
+
+## [0.18.0-beta] - 2021-12-23
+
+### Fixes
+
+- remove parent-based sampler, sample with trace ID ratio only (#164) | [@vreynolds](https://github.com/vreynolds)
+
+## [0.17.0-beta] - 2021-12-15
+
+### Changed
+
+- Make API key and dataset optional (#161) | [@vreynolds](https://github.com/vreynolds)
+
+### Maintenance
+
+- Update example core app to use metrics (#158) | [@vreynolds](https://github.com/vreynolds)
+
+### Dependencies
+
+- Bump OpenTelemetry from 1.2.0-beta2.1 to 1.2.0-rc1 (#151)
+- Bump OpenTelemetry.Exporter.OpenTelemetryProtocol (#152)
+
+## [0.16.0-beta] - 2021-12-06
+
+### Improvements
+
+- Add support for enabling OTLP metrics (#146) | [@MikeGoldsmith](https://github.com/MikeGoldsmith) [@vreynolds](https://github.com/vreynolds)
+- Parse missing command line arguments (#154) | [@vreynolds](https://github.com/vreynolds)
+
+### Fixes
+
+- Re-add net461 target (#155) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Trace extension should use trace config (#156) | [@vreynolds](https://github.com/vreynolds)
+
+## [0.15.0-beta] - 2021-12-01
+
+### Enhancements
+
+- Update DeterminisitcSampler to use OTel core Parent/TraceIDRatio samplers (#145) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Fixes
+
+- Fixed Redis auto-detection (#150) | [@JamieDanielson](https://github.com/JamieDanielson)
+
+### Maintenance
+
+- Update dependabot.yml (#147) | [@vreynolds](https://github.com/vreynolds)
+- Update dependencies, remove netcoreapp2.1 (#144) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Update docs when releasing (#142) | [@vreynolds](https://github.com/vreynolds)
+
+## Dependencies
+
+- Bump Microsoft.NET.Test.Sdk from 16.11.0 to 17.0.0 (#148)
+
+## [0.14.0-beta] - 2021-11-18
+
+## Added
+
+- Allow disabling auto-instrumentations (#129) | [@ericsampson](https://github.com/ericsampson)
+
+## Maintenance
+
+- Remove whitespace failing build (#137) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Empower apply-labels action to apply labels (#131) | [@robbkidd](https://github.com/robbkidd)
+- Add prerelease flag to install command (#120) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Add NOTICE (#114) | [@cartermp](https://github.com/cartermp)
+- Only add stale to info needed or revision needed (#115) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Adds stalebot effective Sept 1 2021 (#113) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Fix netcoreapp2.1 example (#102) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Clarify renaming in changelog (#101) | [@cartermp](https://github.com/cartermp)
+
+## Dependencies
+
+- Bump Microsoft.AspNetCore.Razor.Design from 2.1.2 to 2.2.0 (#104)
+- Bump coverlet.collector from 1.3.0 to 3.1.0 (#77)
+
 ## [0.13.0-beta] - 2021-08-26
 
 ## Added
