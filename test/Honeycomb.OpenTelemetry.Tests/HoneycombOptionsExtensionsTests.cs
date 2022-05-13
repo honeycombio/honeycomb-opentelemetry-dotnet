@@ -8,8 +8,8 @@ namespace Honeycomb.OpenTelemetry {
 
         [Theory]
         [InlineData("", "", "x-otlp-version=0.16.0,x-honeycomb-team=")]
-        [InlineData(ModernApiKey, "", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4")]
-        [InlineData(ModernApiKey, "dataset", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4")]
+        [InlineData(ModernApiKey, "", "x-otlp-version=0.16.0,x-honeycomb-team=6936628e60f4c6157fde46")]
+        [InlineData(ModernApiKey, "dataset", "x-otlp-version=0.16.0,x-honeycomb-team=6936628e60f4c6157fde46")]
         [InlineData(ClassicApiKey, "", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4c6157fde46")]
         [InlineData(ClassicApiKey, "dataset", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4c6157fde46,x-honeycomb-dataset=dataset")]
         public void TracesHeaders(string apikey, string dataset, string expectedHeader) {
@@ -23,8 +23,8 @@ namespace Honeycomb.OpenTelemetry {
 
         [Theory]
         [InlineData("", "", "x-otlp-version=0.16.0,x-honeycomb-team=")]
-        [InlineData(ModernApiKey, "", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4")]
-        [InlineData(ModernApiKey, "dataset", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4")]
+        [InlineData(ModernApiKey, "", "x-otlp-version=0.16.0,x-honeycomb-team=6936628e60f4c6157fde46")]
+        [InlineData(ModernApiKey, "dataset", "x-otlp-version=0.16.0,x-honeycomb-team=6936628e60f4c6157fde46")]
         [InlineData(ClassicApiKey, "", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4c6157fde46")]
         [InlineData(ClassicApiKey, "dataset", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4c6157fde46,x-honeycomb-dataset=dataset")]
         public void MetricsHeaders(string apikey, string dataset, string expectedHeader) {
