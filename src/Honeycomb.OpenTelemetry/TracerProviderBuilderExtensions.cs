@@ -64,19 +64,9 @@ namespace Honeycomb.OpenTelemetry
                 .AddProcessor(new BaggageSpanProcessor());
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey)) {
-                var headers = $"x-honeycomb-team={options.TracesApiKey}";
-                if (options.IsLegacyKey()) {
-                    // if the key is legacy, add dataset to the header
-                    if (!string.IsNullOrWhiteSpace(options.TracesDataset)) {
-                        headers += $",x-honeycomb-dataset={options.TracesDataset}";
-                    } else {
-                        // if legacy key and missing dataset, warn on missing dataset
-                        Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
-                    }
-                }
                 builder.AddOtlpExporter(otlpOptions => {
                     otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
-                    otlpOptions.Headers = headers;
+                    otlpOptions.Headers = options.GetTraceHeaders();
                 });
             } else {
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
