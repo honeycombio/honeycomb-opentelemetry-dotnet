@@ -3,8 +3,8 @@ using Xunit;
 namespace Honeycomb.OpenTelemetry {
     public class HoneycombOptionsExtensionsTests
     {
-        private const string ModernApiKey = "";
-        private const string ClassicApiKey = "";
+        private const string ModernApiKey = "a142c03cf06936628e60f4";
+        private const string ClassicApiKey = "a142c03cf06936628e60f4c6157fde46";
 
         [Theory]
         [InlineData("", "", "x-otlp-version=0.16.0,x-honeycomb-team=")]
