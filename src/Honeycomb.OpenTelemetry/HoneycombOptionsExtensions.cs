@@ -7,7 +7,7 @@ namespace Honeycomb.OpenTelemetry {
 
         internal static string GetTraceHeaders(this HoneycombOptions options) {
             return GetHeaders(
-                options.IsLegacyKey(),
+                options.IsLegacyKey(options.TracesApiKey),
                 options.TracesApiKey,
                 options.TracesDataset
             );
@@ -15,7 +15,7 @@ namespace Honeycomb.OpenTelemetry {
 
         internal static string GetMetricsHeaders(this HoneycombOptions options) {
             return GetHeaders(
-                options.IsLegacyKey(),
+                options.IsLegacyKey(options.MetricsApiKey),
                 options.MetricsApiKey,
                 options.MetricsDataset
             );

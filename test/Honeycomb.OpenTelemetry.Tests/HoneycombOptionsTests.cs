@@ -198,14 +198,14 @@ namespace Honeycomb.OpenTelemetry.Tests
         [Fact]
         public void Legacy_key_length()
         {
-            var options = new HoneycombOptions { ApiKey = "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a" };
-            Assert.True(options.IsLegacyKey());
+            var options = new HoneycombOptions();
+            Assert.True(options.IsLegacyKey("1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a"));
         }
         [Fact]
         public void Not_legacy_key_length()
         {
-            var options = new HoneycombOptions { ApiKey = "specialenvkey" };
-            Assert.False(options.IsLegacyKey());
+            var options = new HoneycombOptions();
+            Assert.False(options.IsLegacyKey("specialenvkey"));
         }
     }
 }
