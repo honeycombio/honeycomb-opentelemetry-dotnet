@@ -22,7 +22,7 @@ namespace Honeycomb.OpenTelemetry {
         }
 
         [Theory]
-        [InlineData("", "", "x-otlp-version=0.16.0,x-honeycomb-team=")]
+        [InlineData("", "", "x-otlp-version=0.16.0,x-honeycomb-team=,x-honeycomb-dataset=")]
         [InlineData(ModernApiKey, "", "x-otlp-version=0.16.0,x-honeycomb-team=6936628e60f4c6157fde46,x-honeycomb-dataset=")]
         [InlineData(ModernApiKey, "dataset", "x-otlp-version=0.16.0,x-honeycomb-team=6936628e60f4c6157fde46,x-honeycomb-dataset=dataset")]
         [InlineData(ClassicApiKey, "", "x-otlp-version=0.16.0,x-honeycomb-team=a142c03cf06936628e60f4c6157fde46,x-honeycomb-dataset=")]
