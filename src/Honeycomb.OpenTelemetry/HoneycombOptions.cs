@@ -51,12 +51,21 @@ namespace Honeycomb.OpenTelemetry
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// Returns whether <see cref="ApiKey"/> is a legacy key.
+        /// Returns whether API key used to send trace telemetry is a legacy key.
         /// </summary>
-        internal bool IsLegacyKey()
+        internal bool IsTracesLegacyKey()
         {
             // legacy key has 32 characters
-            return ApiKey?.Length == 32;
+            return TracesApiKey?.Length == 32;
+        }
+
+        /// <summary>
+        /// Returns whether API key used to send metrics telemetry is a legacy key.
+        /// </summary>
+        internal bool IsMetricsLegacyKey()
+        {
+            // legacy key has 32 characters
+            return MetricsApiKey?.Length == 32;
         }
 
         /// <summary>
