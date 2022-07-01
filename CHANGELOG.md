@@ -1,5 +1,17 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.22.0-beta] - 2022-07-01
+
+### Enhancements
+
+- Add OTLP version to headers (HTTP & gRPC) (#205) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Maintenance
+
+- Update README to point to docs website for setup instructions (#208) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Bump otel dependencies #213 | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Bump Microsoft.NET.Test.Sdk from 17.0.0 to 17.1.0 (#195)
+
 ## [0.21.0-beta] - 2022-04-14
 
 ### Enhancements
