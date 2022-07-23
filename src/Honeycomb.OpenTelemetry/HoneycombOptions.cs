@@ -69,6 +69,22 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
+        /// Environment in Honeycomb, only used for writing console links
+        /// <summary>
+        public string Environment { get; set; }
+
+        /// <summary>
+        /// Honeycomb team, only used for writing links to the console.
+        /// </summary>
+        /// <value></value>
+        public string Team { get; set; }
+
+        /// <summary>
+        /// Write links to honeycomb traces as they come in
+        /// </summary>
+        public bool WriteTraceLinksToConsole { get; set; }
+
+        /// <summary>
         /// API key used to send trace telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
         /// </summary>
         public string TracesApiKey

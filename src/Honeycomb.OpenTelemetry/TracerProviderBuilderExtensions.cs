@@ -1,3 +1,4 @@
+using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
@@ -70,6 +71,10 @@ namespace Honeycomb.OpenTelemetry
                 });
             } else {
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
+            }
+
+            if (options.WriteTraceLinksToConsole) {
+                builder.AddProcessor(new SimpleActivityExportProcessor(new ConsoleLinkExporter(options)));
             }
 
             // heads up: even if dataset is set, it will be ignored
