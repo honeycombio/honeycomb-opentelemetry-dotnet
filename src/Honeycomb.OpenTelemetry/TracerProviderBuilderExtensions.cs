@@ -5,7 +5,6 @@ using System;
 
 #if NET461
 using System.Collections.Generic;
-using OpenTelemetry;
 #endif
 
 namespace Honeycomb.OpenTelemetry

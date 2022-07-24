@@ -142,6 +142,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.False(options.InstrumentSqlClient);
             Assert.False(options.InstrumentGrpcClient);
             Assert.False(options.InstrumentStackExchangeRedisClient);
+            Assert.True(options.WriteTraceLinksToConsole);
         }
 
         [Fact]

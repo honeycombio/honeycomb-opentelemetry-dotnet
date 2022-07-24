@@ -28,6 +28,7 @@ namespace Honeycomb.OpenTelemetry
         private string _tracesDataset;
         private string _tracesEndpoint;
         private string _metricsEndpoint;
+        private bool _writeTraceLinksToConsole;
 
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
@@ -69,20 +70,13 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
-        /// Environment in Honeycomb, only used for writing console links
-        /// <summary>
-        public string Environment { get; set; }
-
-        /// <summary>
-        /// Honeycomb team, only used for writing links to the console.
-        /// </summary>
-        /// <value></value>
-        public string Team { get; set; }
-
-        /// <summary>
         /// Write links to honeycomb traces as they come in
         /// </summary>
-        public bool WriteTraceLinksToConsole { get; set; }
+        public bool WriteTraceLinksToConsole
+        { 
+            get { return _writeTraceLinksToConsole; } 
+            set { _writeTraceLinksToConsole = value; }
+        }
 
         /// <summary>
         /// API key used to send trace telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
@@ -209,7 +203,8 @@ namespace Honeycomb.OpenTelemetry
         /// (Optional) Options delegate to configure StackExchange.Redis instrumentation.
         /// </summary>
         public Action<StackExchangeRedisCallsInstrumentationOptions>
-            ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
+            ConfigureStackExchangeRedisClientInstrumentationOptions
+        { get; set; }
 
         /// <summary>
         /// (Optional) Additional <see cref="Meter"/> names for generating metrics.
@@ -236,6 +231,7 @@ namespace Honeycomb.OpenTelemetry
             { "--honeycomb-traces-endpoint", "tracesendpoint" },
             { "--honeycomb-metrics-endpoint", "metricsendpoint" },
             { "--honeycomb-samplerate", "samplerate" },
+            { "--honeycomb-write-trace-links-to-console", "writetracelinkstoconsole" },
             { "--service-name", "servicename" },
             { "--service-version", "serviceversion" },
             { "--instrument-http", "instrumenthttpclient" },

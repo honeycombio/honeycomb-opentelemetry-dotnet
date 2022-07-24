@@ -16,6 +16,7 @@ namespace Honeycomb.OpenTelemetry
         private const string SampleRateKey = "HONEYCOMB_SAMPLE_RATE";
         private const string ServiceNameKey = "SERVICE_NAME";
         private const string ServiceVersionKey = "SERVICE_VERSION";
+        private const string WriteTraceLinksToConsoleKey = "WRITE_TRACE_LINKS_TO_CONSOLE";
         private const uint DefaultSampleRate = 1;
         private const string DefaultApiEndpoint = "https://api.honeycomb.io:443";
         private readonly IDictionary _environmentService;
@@ -36,6 +37,7 @@ namespace Honeycomb.OpenTelemetry
         internal string MetricsEndpoint => GetEnvironmentVariable(MetricsEndpointKey, ApiEndpoint);
         internal string ServiceName => GetEnvironmentVariable(ServiceNameKey);
         internal string ServiceVersion => GetEnvironmentVariable(ServiceVersionKey);
+        internal bool WriteTraceLinksToConsole => bool.TryParse(GetEnvironmentVariable(WriteTraceLinksToConsoleKey), out var writeTraceLinksToConsole) ? writeTraceLinksToConsole : false;
         internal uint SampleRate => uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate) ? sampleRate : DefaultSampleRate;
 
         private string GetEnvironmentVariable(string key, string defaultValue = "")
