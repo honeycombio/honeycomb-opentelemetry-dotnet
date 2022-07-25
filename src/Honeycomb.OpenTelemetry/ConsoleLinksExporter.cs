@@ -8,11 +8,13 @@ using System.Text.Json.Serialization;
 namespace Honeycomb.OpenTelemetry
 {
     /// <summary>
-    /// Writes links to the Honeycomb for all root spans
+    /// Writes links to the Honeycomb UI for all root spans to the console
     /// </summary>
     public class ConsoleLinkExporter : BaseExporter<Activity>
     {
-        private readonly HoneycombOptions _options;
+        private string _apiKey;
+        private string _authApiHost;
+        private string _serviceName;
         private string _teamSlug;
         private string _environmentSlug;
 
@@ -24,20 +26,22 @@ namespace Honeycomb.OpenTelemetry
         /// <param name="options">Settings for Link generation</param>
         public ConsoleLinkExporter(HoneycombOptions options)
         {
-            _options = options;
+            _apiKey = options.ApiKey;
+            _authApiHost = options.TracesEndpoint;
+            _serviceName = options.ServiceName;
             InitTraceLinkParameters();
         }
 
         private void InitTraceLinkParameters()
         {
-            if (string.IsNullOrEmpty(_options.ApiKey))
+            if (string.IsNullOrEmpty(_apiKey))
                 return;
 
             var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("https://api.honeycomb.io/1/auth");
-            httpClient.DefaultRequestHeaders.Add("X-Honeycomb-Team", _options.ApiKey);
+            httpClient.BaseAddress = new Uri(_authApiHost);
+            httpClient.DefaultRequestHeaders.Add("X-Honeycomb-Team", _apiKey);
 
-            var response = httpClient.GetAsync("").GetAwaiter().GetResult();
+            var response = httpClient.GetAsync("/1/auth").GetAwaiter().GetResult();
             if (!response.IsSuccessStatusCode) {
                 Console.WriteLine("Didn't get a valid response from Honeycomb");
                 return;
@@ -74,8 +78,7 @@ namespace Honeycomb.OpenTelemetry
 
         private string GetTraceLink(string traceId)
         {
-            var dataset = _options.ServiceName;   
-            return $"http://ui.honeycomb.io/{_teamSlug}/environments/{_environmentSlug}/datasets/{dataset}/trace?trace_id={traceId}";
+            return $"http://ui.honeycomb.io/{_teamSlug}/environments/{_environmentSlug}/datasets/{_serviceName}/trace?trace_id={traceId}";
         }
     }
 
