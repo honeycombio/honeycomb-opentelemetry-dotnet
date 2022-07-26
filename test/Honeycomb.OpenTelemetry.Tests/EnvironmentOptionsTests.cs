@@ -37,7 +37,7 @@ namespace Honeycomb.OpenTelemetry
             Assert.Equal((uint) 10, options.SampleRate);
             Assert.Equal("my-service-name", options.ServiceName);
             Assert.Equal("my-service-version", options.ServiceVersion);
-            Assert.Equal(true, options.EnableLocalVisualizations);
+            Assert.True(options.EnableLocalVisualizations);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Honeycomb.OpenTelemetry
             Assert.Equal(options.ApiEndpoint, options.TracesEndpoint);
             Assert.Equal(options.ApiEndpoint, options.MetricsEndpoint);
             Assert.Equal((uint) 1, options.SampleRate);
-            Assert.Equal(false, options.EnableLocalVisualizations);
+            Assert.False(options.EnableLocalVisualizations);
         }
 
         [Fact]

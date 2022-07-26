@@ -73,7 +73,7 @@ namespace Honeycomb.OpenTelemetry
             }
 
             if (options.EnableLocalVisualizations) {
-                builder.AddProcessor(new SimpleActivityExportProcessor(new ConsoleLinkExporter(options)));
+                builder.AddProcessor(new SimpleActivityExportProcessor(new ConsoleTraceLinkExporter(options)));
             }
 
             // heads up: even if dataset is set, it will be ignored
