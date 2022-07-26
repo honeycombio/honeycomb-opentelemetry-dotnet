@@ -72,7 +72,7 @@ namespace Honeycomb.OpenTelemetry
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
             }
 
-            if (options.WriteTraceLinksToConsole) {
+            if (options.EnableLocalVisualizations) {
                 builder.AddProcessor(new SimpleActivityExportProcessor(new ConsoleLinkExporter(options)));
             }
 

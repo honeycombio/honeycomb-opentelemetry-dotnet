@@ -28,7 +28,7 @@ namespace Honeycomb.OpenTelemetry
         private string _tracesDataset;
         private string _tracesEndpoint;
         private string _metricsEndpoint;
-        private bool _writeTraceLinksToConsole;
+        private bool _enableLocalVisualizations;
 
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
@@ -72,10 +72,10 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Write links to honeycomb traces as they come in
         /// </summary>
-        public bool WriteTraceLinksToConsole
+        public bool EnableLocalVisualizations
         { 
-            get { return _writeTraceLinksToConsole; } 
-            set { _writeTraceLinksToConsole = value; }
+            get { return _enableLocalVisualizations; } 
+            set { _enableLocalVisualizations = value; }
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace Honeycomb.OpenTelemetry
             { "--honeycomb-traces-endpoint", "tracesendpoint" },
             { "--honeycomb-metrics-endpoint", "metricsendpoint" },
             { "--honeycomb-samplerate", "samplerate" },
-            { "--honeycomb-write-trace-links-to-console", "writetracelinkstoconsole" },
+            { "--honeycomb-enable-local-visualizations", "enablelocalvisualizations" },
             { "--service-name", "servicename" },
             { "--service-version", "serviceversion" },
             { "--instrument-http", "instrumenthttpclient" },
