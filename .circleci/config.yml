@@ -25,7 +25,7 @@ commands:
           name: "Install project dependencies"
           command: |
               $Env:PATH = "%LocalAppData%\Microsoft\dotnet;$Env:PATH"; `
-              | dotnet.exe restore
+              dotnet.exe restore
       - save_cache:
           paths:
             - C:\Users\circleci\.nuget\packages
