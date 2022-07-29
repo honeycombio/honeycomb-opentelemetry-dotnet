@@ -24,7 +24,7 @@ commands:
       - run:
           name: "Install project dependencies"
           command: |
-              $Env:PATH = "%LocalAppData%\Microsoft\dotnet;$Env:PATH" `
+              $Env:PATH = "%LocalAppData%\Microsoft\dotnet;$Env:PATH"; `
               | dotnet.exe restore
       - save_cache:
           paths:
