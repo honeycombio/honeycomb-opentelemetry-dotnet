@@ -18,14 +18,8 @@ commands:
           keys:
             - dotnet-packages-v1-{{ checksum "cache-seed" }}
       - run:
-          name: "Install .NET 6.0"
-          command: |
-            powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1')))"
-      - run:
           name: "Install project dependencies"
-          command: |
-              $Env:PATH = "%LocalAppData%\Microsoft\dotnet;$Env:PATH"; `
-              dotnet.exe restore
+          command: dotnet.exe restore
       - save_cache:
           paths:
             - C:\Users\circleci\.nuget\packages
