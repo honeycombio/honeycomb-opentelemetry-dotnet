@@ -20,11 +20,11 @@ commands:
       - run:
           name: "Install .NET 6.0"
           command: |
-            &powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1')))"
+            powershell -NoProfile -ExecutionPolicy unrestricted -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; &([scriptblock]::Create((Invoke-WebRequest -UseBasicParsing 'https://dot.net/v1/dotnet-install.ps1')))"
       - run:
           name: "Add .NET 6.0 to path"
           command: |
-             setx PATH %LocalAppData%\Microsoft\dotnet;$PATH
+             set path %LocalAppData%\Microsoft\dotnet;%PATH%
       - run:
           name: "Install project dependencies"
           command: dotnet.exe restore
