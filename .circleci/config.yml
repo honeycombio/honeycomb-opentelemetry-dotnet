@@ -24,7 +24,7 @@ commands:
       - run:
           name: "Add .NET 6.0 to path"
           command: |
-             setx path %LocalAppData%\Microsoft\dotnet;%PATH%
+             $Env:PATH = "%LocalAppData%\Microsoft\dotnet;$Env:PATH"
       - run:
           name: "Install project dependencies"
           command: dotnet.exe restore
