@@ -28,6 +28,7 @@ namespace Honeycomb.OpenTelemetry
         private string _tracesDataset;
         private string _tracesEndpoint;
         private string _metricsEndpoint;
+        private bool _enableLocalVisualizations;
 
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
@@ -66,6 +67,15 @@ namespace Honeycomb.OpenTelemetry
         {
             // legacy key has 32 characters
             return MetricsApiKey?.Length == 32;
+        }
+
+        /// <summary>
+        /// Write links to honeycomb traces as they come in
+        /// </summary>
+        public bool EnableLocalVisualizations
+        { 
+            get { return _enableLocalVisualizations; } 
+            set { _enableLocalVisualizations = value; }
         }
 
         /// <summary>
@@ -193,7 +203,8 @@ namespace Honeycomb.OpenTelemetry
         /// (Optional) Options delegate to configure StackExchange.Redis instrumentation.
         /// </summary>
         public Action<StackExchangeRedisCallsInstrumentationOptions>
-            ConfigureStackExchangeRedisClientInstrumentationOptions { get; set; }
+            ConfigureStackExchangeRedisClientInstrumentationOptions
+        { get; set; }
 
         /// <summary>
         /// (Optional) Additional <see cref="Meter"/> names for generating metrics.
@@ -220,6 +231,7 @@ namespace Honeycomb.OpenTelemetry
             { "--honeycomb-traces-endpoint", "tracesendpoint" },
             { "--honeycomb-metrics-endpoint", "metricsendpoint" },
             { "--honeycomb-samplerate", "samplerate" },
+            { "--honeycomb-enable-local-visualizations", "enablelocalvisualizations" },
             { "--service-name", "servicename" },
             { "--service-version", "serviceversion" },
             { "--instrument-http", "instrumenthttpclient" },

@@ -21,7 +21,8 @@ namespace Honeycomb.OpenTelemetry
                 {"HONEYCOMB_METRICS_ENDPOINT", "my-metrics-endpoint"},
                 {"HONEYCOMB_SAMPLE_RATE", "10"},
                 {"SERVICE_NAME", "my-service-name"},
-                {"SERVICE_VERSION", "my-service-version"}
+                {"SERVICE_VERSION", "my-service-version"},
+                {"ENABLE_LOCAL_VISUALIZATIONS", "true" }
             };
             var options = new EnvironmentOptions(values);
             Assert.Equal("my-api-key", options.ApiKey);
@@ -36,6 +37,7 @@ namespace Honeycomb.OpenTelemetry
             Assert.Equal((uint) 10, options.SampleRate);
             Assert.Equal("my-service-name", options.ServiceName);
             Assert.Equal("my-service-version", options.ServiceVersion);
+            Assert.True(options.EnableLocalVisualizations);
         }
 
         [Fact]
@@ -50,6 +52,7 @@ namespace Honeycomb.OpenTelemetry
             Assert.Equal(options.ApiEndpoint, options.TracesEndpoint);
             Assert.Equal(options.ApiEndpoint, options.MetricsEndpoint);
             Assert.Equal((uint) 1, options.SampleRate);
+            Assert.False(options.EnableLocalVisualizations);
         }
 
         [Fact]
