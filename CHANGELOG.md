@@ -1,5 +1,17 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [0.23.0-beta] - 2022-08-03
+
+### Enhancements
+
+- Added Console Trace link writer (#222) | [@martinjt](https://github.com/martinjt)
+
+### Maintenance
+
+- Update minimum target framework from net461 to net462 (#226) | [@vreynolds](https://github.com/vreynolds)
+- Bump OpenTelemetry.Instrumentation.AspNet from 1.0.0-rc9.1 to 1.0.0-rc9.5 (#224) | [dependabot](https://github.com/dependabot)
+- Bump Microsoft.NET.Test.Sdk from 17.1.0 to 17.2.0 (#221) | [dependabot](https://github.com/dependabot)
+
 ## [0.22.0-beta] - 2022-07-01
 
 ### Enhancements
