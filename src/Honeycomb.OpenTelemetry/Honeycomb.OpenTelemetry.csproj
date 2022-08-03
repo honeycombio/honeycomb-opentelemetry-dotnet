@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net461</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net462</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
 
     <!-- For SourceLink. See: https://github.com/dotnet/sourcelink#using-source-link-in-net-projects -->
@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <Choose>
-    <When Condition=" '$(TargetFramework)' == 'net461' ">
+    <When Condition=" '$(TargetFramework)' == 'net462' ">
       <ItemGroup>
         <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
         <PackageReference Include="OpenTelemetry.Instrumentation.AspNet" Version="1.0.0-rc9.1" />
@@ -47,7 +47,7 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc9.1" />
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.0.0-rc9.5" />
         <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.1" />
       </ItemGroup>
     </Otherwise>
