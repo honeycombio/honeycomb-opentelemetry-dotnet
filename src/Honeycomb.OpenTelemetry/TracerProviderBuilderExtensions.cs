@@ -3,7 +3,7 @@ using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
 
-#if NET461
+#if NET462
 using System.Collections.Generic;
 #endif
 
@@ -88,7 +88,7 @@ namespace Honeycomb.OpenTelemetry
 
             if (options.InstrumentHttpClient)
             {
-#if NET461
+#if NET462
                     builder.AddHttpClientInstrumentation();
 #else
                 builder.AddHttpClientInstrumentation(options.ConfigureHttpClientInstrumentationOptions);
@@ -106,7 +106,7 @@ namespace Honeycomb.OpenTelemetry
                     options.ConfigureStackExchangeRedisClientInstrumentationOptions);
             }
 
-#if NET461
+#if NET462
             builder.AddAspNetInstrumentation(opts =>
                 opts.Enrich = (activity, eventName, _) =>
                 {
