@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Honeycomb.OpenTelemetry;
 using System.Diagnostics.Metrics;
+using StackExchange.Redis;
 
 namespace aspnetcore
 {
@@ -38,6 +39,13 @@ namespace aspnetcore
             // you may configure additional meter names using the Honeycomb options
             Meter meter = new Meter("my-web-app");
             services.AddSingleton(meter);
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(
+            new ConfigurationOptions
+            {
+                EndPoints = { "localhost:6379" },
+                AbortOnConnectFail = false, // allow for reconnects if redis is not available
+            });
+            services.AddSingleton<IConnectionMultiplexer>(redis);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
