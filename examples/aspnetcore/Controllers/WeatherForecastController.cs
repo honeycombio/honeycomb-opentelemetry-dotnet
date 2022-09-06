@@ -40,8 +40,7 @@ namespace aspnetcore.Controllers
             {
                 span.SetAttribute("delay_ms", 100);
                 var db = _redisConnection.GetDatabase();
-                var pong = await db.PingAsync();
-                Console.WriteLine(pong);
+                // var pong = await db.PingAsync(); // start redis, and uncomment to enable redis ping span
                 await Task.Delay(TimeSpan.FromMilliseconds(100));
             }
 
