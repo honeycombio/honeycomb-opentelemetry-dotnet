@@ -1,0 +1,32 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+processors:
+  batch:
+
+exporters:
+  # file:
+  #   path: /var/lib/data.json
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      # exporters: [file, logging]
+      exporters: [logging]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      # exporters: [file, logging]
+      exporters: [logging]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      # exporters: [file, logging]
+      exporters: [logging]
