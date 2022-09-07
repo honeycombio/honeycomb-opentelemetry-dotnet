@@ -8,8 +8,8 @@ processors:
   batch:
 
 exporters:
-  # file:
-  #   path: /var/lib/data.json
+  file:
+    path: /var/lib/data.json
   logging:
     loglevel: debug
 
@@ -18,8 +18,7 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      # exporters: [file, logging]
-      exporters: [logging]
+      exporters: [file, logging]
     metrics:
       receivers: [otlp]
       processors: [batch]

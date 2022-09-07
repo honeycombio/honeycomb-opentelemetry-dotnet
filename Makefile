@@ -14,7 +14,7 @@ smoke:
 	@echo ""
 	@echo "+++ Placeholder for Smoking all the tests."
 	@echo ""
-	cd smoke-tests && docker-compose up --build
+	cd smoke-tests && docker-compose up -d --build && docker-compose down --volumes
 
 unsmoke:
 	@echo ""

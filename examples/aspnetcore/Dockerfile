@@ -1,15 +1,14 @@
 ARG PUBLISH_FRAMEWORK=net5.0
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /source
+WORKDIR /app
 COPY . ./
-RUN dotnet restore
-RUN dotnet publish -c release -f net5.0 -o /app --no-restore
+RUN dotnet publish ./examples/aspnetcore -c release -f net5.0 -o /out
 
 # final stage/image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=build /out ./
 
 ENV ASPNETCORE_URLS=http://+:5001
 ENV ASPNETCORE_ENVIRONMENT="development"

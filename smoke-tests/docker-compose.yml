@@ -6,6 +6,7 @@ x-env-base: &env_base
   HONEYCOMB_DATASET: bogus_dataset
   HONEYCOMB_METRICS_DATASET: bogus_dataset
   OTEL_METRIC_EXPORT_INTERVAL: 1000
+  SERVICE_NAME: "my-web-app"
 
 services:
   collector:
@@ -22,6 +23,5 @@ services:
     image: honeycomb/aspnetcore
     environment:
       <<: *env_base
-    command: "dotnet run"
     ports:
       - "127.0.0.1:5001:5001"
