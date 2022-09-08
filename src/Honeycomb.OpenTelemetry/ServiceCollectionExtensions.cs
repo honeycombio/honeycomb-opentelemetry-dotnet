@@ -5,6 +5,7 @@ using OpenTelemetry;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -64,6 +65,7 @@ namespace Honeycomb.OpenTelemetry
                     }))
                 )
                 .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName))
+                .AddSingleton(new ActivitySource(options.ServiceName))
                 .AddOpenTelemetryMetrics(builder => builder.AddHoneycomb(options));
 #endif
             return services;
