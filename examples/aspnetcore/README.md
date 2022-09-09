@@ -1,7 +1,6 @@
 # Honeycomb.OpenTelemetry ASP.NET Core web example
 
 This example shows how to use the Honeycomb OpenTelemetry distro with a .NET Core web application.
-This example also includes metrics and automatic instrumentation of Redis.
 
 ## Using the Example
 
@@ -13,16 +12,9 @@ Run `dotnet run` to start the app.
 
 To generate telemetry, navigate to `localhost:5001/weatherforecast`.
 
-Optional: To include Redis auto-instrumentation:
-
-- Install redis and start the service, for example `brew services start redis`
-- Uncomment the line in `WeatherForecastController.cs` for Redis `var pong = await db.PingAsync();`
-- Run `dotnet run` to start the app
-- Then navigate to `localhost:5001/weatherforecast`
+![my-web-app](./my-web-app.png)
 
 As part of the configuration process, an instance of the Tracer is registed in the services Dependency Injection map that can be be injected into controllers and used to add additional context and create additional spans.
-
-## Example
 
 See [Startup.cs](Startup.cs) for an example of how the `AddHoneycomb` method is called.
 

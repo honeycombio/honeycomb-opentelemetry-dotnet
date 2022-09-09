@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Trace;
 using System.Diagnostics.Metrics;
-using StackExchange.Redis;
 
 namespace aspnetcore.Controllers
 {
@@ -23,14 +22,12 @@ namespace aspnetcore.Controllers
         private readonly Tracer _tracer;
         private readonly Counter<int> _counter;
 
-        private readonly IConnectionMultiplexer _redisConnection;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, Tracer tracer, Meter meter, IConnectionMultiplexer redisConnection)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, Tracer tracer, Meter meter)
         {
             _logger = logger;
             _tracer = tracer;
             _counter = meter.CreateCounter<int>("sheep");
-            _redisConnection = redisConnection;
         }
 
         [HttpGet]
@@ -39,8 +36,6 @@ namespace aspnetcore.Controllers
             using (var span = _tracer.StartActiveSpan("sleep"))
             {
                 span.SetAttribute("delay_ms", 100);
-                var db = _redisConnection.GetDatabase();
-                // var pong = await db.PingAsync(); // start redis, and uncomment to enable redis ping span
                 await Task.Delay(TimeSpan.FromMilliseconds(100));
             }
 
