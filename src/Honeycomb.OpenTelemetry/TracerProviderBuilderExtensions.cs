@@ -75,8 +75,6 @@ namespace Honeycomb.OpenTelemetry
                 )
                 .AddProcessor(new BaggageSpanProcessor());
 
-            Console.WriteLine(options.ServiceName);
-
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey))
             {
                 builder.AddOtlpExporter(otlpOptions =>
