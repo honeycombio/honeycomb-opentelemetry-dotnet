@@ -20,7 +20,7 @@ namespace Honeycomb.OpenTelemetry
                 {"HONEYCOMB_TRACES_ENDPOINT", "my-traces-endpoint"},
                 {"HONEYCOMB_METRICS_ENDPOINT", "my-metrics-endpoint"},
                 {"HONEYCOMB_SAMPLE_RATE", "10"},
-                {"SERVICE_NAME", "my-service-name"},
+                {"OTEL_SERVICE_NAME", "my-service-name"},
                 {"SERVICE_VERSION", "my-service-version"},
                 {"ENABLE_LOCAL_VISUALIZATIONS", "true" }
             };
@@ -34,7 +34,7 @@ namespace Honeycomb.OpenTelemetry
             Assert.Equal("my-endpoint", options.ApiEndpoint);
             Assert.Equal("my-traces-endpoint", options.TracesEndpoint);
             Assert.Equal("my-metrics-endpoint", options.MetricsEndpoint);
-            Assert.Equal((uint) 10, options.SampleRate);
+            Assert.Equal((uint)10, options.SampleRate);
             Assert.Equal("my-service-name", options.ServiceName);
             Assert.Equal("my-service-version", options.ServiceVersion);
             Assert.True(options.EnableLocalVisualizations);
@@ -43,7 +43,7 @@ namespace Honeycomb.OpenTelemetry
         [Fact]
         public void Optional_args_fall_back_to_defaults()
         {
-            var options = new EnvironmentOptions(new Dictionary<string, string>());            
+            var options = new EnvironmentOptions(new Dictionary<string, string>());
             Assert.Equal(options.ApiKey, options.TracesApiKey);
             Assert.Equal(options.ApiKey, options.MetricsApiKey);
             Assert.Equal(options.Dataset, options.TracesDataset);
@@ -51,7 +51,7 @@ namespace Honeycomb.OpenTelemetry
             Assert.Equal("https://api.honeycomb.io:443", options.ApiEndpoint);
             Assert.Equal(options.ApiEndpoint, options.TracesEndpoint);
             Assert.Equal(options.ApiEndpoint, options.MetricsEndpoint);
-            Assert.Equal((uint) 1, options.SampleRate);
+            Assert.Equal((uint)1, options.SampleRate);
             Assert.False(options.EnableLocalVisualizations);
         }
 
@@ -63,7 +63,7 @@ namespace Honeycomb.OpenTelemetry
                 {"HONEYCOMB_SAMPLE_RATE", "invalid"}
             };
             var options = new EnvironmentOptions(values);
-            Assert.Equal((uint) 1, options.SampleRate);
+            Assert.Equal((uint)1, options.SampleRate);
         }
     }
 }

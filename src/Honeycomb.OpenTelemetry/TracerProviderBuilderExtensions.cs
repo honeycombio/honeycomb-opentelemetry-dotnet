@@ -46,11 +46,23 @@ namespace Honeycomb.OpenTelemetry
                 throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
             }
 
-            // if serviceName is null, warn and set to default
-            if (string.IsNullOrWhiteSpace(options.ServiceName)) {
-                options.ServiceName = HoneycombOptions.SDefaultServiceName;
-                Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name","SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
+            var environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
+            // TODO: merge options and environment options
+
+            // if service name set in environment, prioritize it    
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ServiceName))
+            {
+                options.ServiceName = environmentOptions.ServiceName;
             }
+
+            // if serviceName is null, warn and set to default
+            if (string.IsNullOrWhiteSpace(options.ServiceName))
+            {
+                options.ServiceName = HoneycombOptions.SDefaultServiceName;
+                Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name", "OTEL_SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
+            }
+
+
 
             builder
                 .AddSource(options.ServiceName)
@@ -58,29 +70,40 @@ namespace Honeycomb.OpenTelemetry
                 .SetResourceBuilder(
                     options.ResourceBuilder
                         .AddHoneycombAttributes()
-                        .AddEnvironmentVariableDetector()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
+                        .AddEnvironmentVariableDetector()
                 )
                 .AddProcessor(new BaggageSpanProcessor());
 
-            if (!string.IsNullOrWhiteSpace(options.TracesApiKey)) {
-                builder.AddOtlpExporter(otlpOptions => {
+            Console.WriteLine(options.ServiceName);
+
+            if (!string.IsNullOrWhiteSpace(options.TracesApiKey))
+            {
+                builder.AddOtlpExporter(otlpOptions =>
+                {
                     otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
                     otlpOptions.Headers = options.GetTraceHeaders();
                 });
-            } else {
+            }
+            else
+            {
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("API Key", "HONEYCOMB_API_KEY")}.");
             }
 
-            if (options.EnableLocalVisualizations) {
+            if (options.EnableLocalVisualizations)
+            {
                 builder.AddProcessor(new SimpleActivityExportProcessor(new ConsoleTraceLinkExporter(options)));
             }
 
             // heads up: even if dataset is set, it will be ignored
-            if (!string.IsNullOrWhiteSpace(options.TracesApiKey) & !options.IsTracesLegacyKey() & (!string.IsNullOrWhiteSpace(options.TracesDataset))) {
-                if (!string.IsNullOrWhiteSpace(options.ServiceName)) {
+            if (!string.IsNullOrWhiteSpace(options.TracesApiKey) & !options.IsTracesLegacyKey() & (!string.IsNullOrWhiteSpace(options.TracesDataset)))
+            {
+                if (!string.IsNullOrWhiteSpace(options.ServiceName))
+                {
                     Console.WriteLine($"WARN: Dataset is ignored in favor of service name. Data will be sent to service name: {options.ServiceName}");
-                } else {
+                }
+                else
+                {
                     // should only get here if missing service name and dataset
                     Console.WriteLine("WARN: Dataset is ignored in favor of service name.");
                 }
