@@ -46,8 +46,8 @@ namespace Honeycomb.OpenTelemetry
                 throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
             }
 
+            // TODO: Add support for other environment variables
             var environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
-            // TODO: merge options and environment options
 
             // if service name set in environment, prioritize it    
             if (!string.IsNullOrWhiteSpace(environmentOptions.ServiceName))
