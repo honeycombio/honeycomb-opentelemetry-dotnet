@@ -8,7 +8,9 @@
 This is Honeycomb's distribution of OpenTelemetry for .NET.
 It makes getting started with OpenTelemetry and Honeycomb easier!
 
-**OpenTelemetry Version: 1.3.0**
+Latest release built with:
+
+- [OpenTelemetry Version 1.3.0](https://github.com/open-telemetry/opentelemetry-dotnet/releases/tag/core-1.3.0)
 
 ## Getting Started
 
