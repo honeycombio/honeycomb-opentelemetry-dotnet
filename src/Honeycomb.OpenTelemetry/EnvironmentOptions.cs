@@ -43,7 +43,7 @@ namespace Honeycomb.OpenTelemetry
         private string GetEnvironmentVariable(string key, string defaultValue = "")
         {
             var value = _environmentService[key];
-            if (value is string && !string.IsNullOrWhiteSpace((string)value))
+            if (value as string != null)
             {
                 return (string)value;
             }
