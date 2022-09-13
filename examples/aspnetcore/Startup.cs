@@ -20,7 +20,6 @@ namespace aspnetcore
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Console.WriteLine("we'll be running on https://localhost:5001/WeatherForecast");
         }
 
         public IConfiguration Configuration { get; }
