@@ -8,6 +8,12 @@ test: build
 	dotnet test --no-build
 
 clean:
+	rm -rf ./examples/aspnetcore/bin/*
+	rm -rf ./examples/aspnetcore/obj/*
+	rm -rf ./test/Honeycomb.OpenTelemetry.Tests/bin/*
+	rm -rf ./test/Honeycomb.OpenTelemetry.Tests/obj/*
+	rm -rf ./src/Honeycomb.OpenTelemetry/bin/*
+	rm -rf ./src/Honeycomb.OpenTelemetry/obj/*
 	dotnet clean
 
 smoke:
