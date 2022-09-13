@@ -14,7 +14,7 @@ namespace Honeycomb.OpenTelemetry
         private const string TracesEndpointKey = "HONEYCOMB_TRACES_ENDPOINT";
         private const string MetricsEndpointKey = "HONEYCOMB_METRICS_ENDPOINT";
         private const string SampleRateKey = "HONEYCOMB_SAMPLE_RATE";
-        private const string ServiceNameKey = "SERVICE_NAME";
+        private const string ServiceNameKey = "OTEL_SERVICE_NAME";
         private const string ServiceVersionKey = "SERVICE_VERSION";
         private const string EnableLocalVisualizationsKey = "ENABLE_LOCAL_VISUALIZATIONS";
         private const uint DefaultSampleRate = 1;
@@ -43,9 +43,9 @@ namespace Honeycomb.OpenTelemetry
         private string GetEnvironmentVariable(string key, string defaultValue = "")
         {
             var value = _environmentService[key];
-            if (value is string && !string.IsNullOrWhiteSpace((string) value))
+            if (value is string str && !string.IsNullOrWhiteSpace(str))
             {
-                return (string) value;
+                return (string)value;
             }
 
             return defaultValue;
