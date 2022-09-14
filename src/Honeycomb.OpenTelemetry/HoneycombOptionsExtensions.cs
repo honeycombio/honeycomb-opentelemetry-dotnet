@@ -11,11 +11,15 @@ namespace Honeycomb.OpenTelemetry {
                 $"x-otlp-version={OtlpVersion}",
                 $"x-honeycomb-team={options.TracesApiKey}"
             };
-            if (options.IsTracesLegacyKey()) {
+            if (options.IsTracesLegacyKey())
+            {
                 // if the key is legacy, add dataset to the header
-                if (!string.IsNullOrWhiteSpace(options.TracesDataset)) {
+                if (!string.IsNullOrWhiteSpace(options.TracesDataset))
+                {
                     headers.Add($"x-honeycomb-dataset={options.TracesDataset}");
-                } else {
+                }
+                else
+                {
                     // if legacy key and missing dataset, warn on missing dataset
                     Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
                 }

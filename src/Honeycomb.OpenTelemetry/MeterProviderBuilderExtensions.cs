@@ -37,7 +37,10 @@ namespace Honeycomb.OpenTelemetry
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))
             {
                 if (string.IsNullOrWhiteSpace(options.MetricsApiKey))
+                {
                     Console.WriteLine("WARN: missing metrics API key");
+                }
+                
                 builder
                     .SetResourceBuilder(
                         ResourceBuilder

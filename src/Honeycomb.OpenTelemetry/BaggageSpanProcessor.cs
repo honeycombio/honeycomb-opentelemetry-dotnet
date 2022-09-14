@@ -12,7 +12,7 @@ namespace Honeycomb.OpenTelemetry
         /// <inheritdoc />
         public override void OnStart(Activity activity)
         {
-            foreach (KeyValuePair<string, string> entry in Baggage.Current)
+            foreach (var entry in Baggage.Current)
             {
                 activity.SetTag(entry.Key, entry.Value);
             }
