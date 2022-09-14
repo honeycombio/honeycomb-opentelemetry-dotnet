@@ -1,0 +1,27 @@
+version: '3.0'
+
+x-env-base: &env_base
+  HONEYCOMB_API_ENDPOINT: http://collector:4317
+  HONEYCOMB_API_KEY: bogus_key
+  HONEYCOMB_DATASET: bogus_dataset
+  HONEYCOMB_METRICS_DATASET: bogus_dataset
+  OTEL_METRIC_EXPORT_INTERVAL: 1000
+  SERVICE_NAME: "my-web-app"
+
+services:
+  collector:
+    image: otel/opentelemetry-collector:0.52.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - "./collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml"
+      - "./collector:/var/lib"
+
+  app-aspnetcore:
+    build:
+      context: ../
+      dockerfile: ./examples/aspnetcore/Dockerfile
+    image: honeycomb/aspnetcore
+    environment:
+      <<: *env_base
+    ports:
+      - "127.0.0.1:5001:5001"

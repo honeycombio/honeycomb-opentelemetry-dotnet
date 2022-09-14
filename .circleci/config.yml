@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  windows: circleci/windows@4.1.1
+  windows: circleci/windows@5.0.0
 
 commands:
   setup:
@@ -60,6 +60,21 @@ jobs:
             - build\*
       - store_artifacts:
           path: build
+
+  smoke_test:
+    machine:
+      image: ubuntu-2004:202107-02
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ./
+      - run:
+          name: Smoke Test Placeholder
+          command: make smoke
+      - run:
+          name: Extinguish the flames
+          command: make unsmoke
+
   publish_github:
     docker:
       - image: cibuilds/github:0.13.0
@@ -69,6 +84,7 @@ jobs:
       - run:
           name: "Publishing Release on GitHub"
           command: ghr -draft -n ${CIRCLE_TAG} -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} build/
+
   publish_nuget:
     executor:
       name: windows/default
@@ -91,6 +107,13 @@ workflows:
                 - main
     jobs:
       - test
+      - package:
+          requires:
+            - test
+      - smoke_test:
+          requires:
+            - package
+
   build:
     jobs:
       - test:
@@ -108,10 +131,13 @@ workflows:
               ignore:
                 - /pull\/.*/
                 - /dependabot\/.*/
+      - smoke_test:
+          requires:
+            - package
       - publish_github:
           context: Honeycomb Secrets for Public Repos
           requires:
-            - package
+            - smoke_test
           filters:
             tags:
               only: /^v.*/
@@ -120,7 +146,7 @@ workflows:
       - publish_nuget:
           context: Honeycomb Secrets for Public Repos
           requires:
-            - package
+            - smoke_test
           filters:
             tags:
               only: /^v.*/
