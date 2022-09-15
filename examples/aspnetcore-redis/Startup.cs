@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry.Trace;
 using Honeycomb.OpenTelemetry;
 using StackExchange.Redis;
 
@@ -29,16 +30,21 @@ namespace aspnetcoreredis
         {
             services.AddControllers();
 
-            // configure OpenTelemetry SDK to send data to Honeycomb
-            services.AddHoneycomb(Configuration);
-
             ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(
-            new ConfigurationOptions
-            {
-                EndPoints = { "localhost:6379" },
-                AbortOnConnectFail = false, // allow for reconnects if redis is not available
-            });
+                new ConfigurationOptions
+                {
+                    EndPoints = { "localhost:6379" },
+                    AbortOnConnectFail = false, // allow for reconnects if redis is not available
+                }
+            );
             services.AddSingleton<IConnectionMultiplexer>(redis);
+
+            // configure OpenTelemetry SDK to send data to Honeycomb
+            services.AddOpenTelemetryTracing(builder => builder
+                .AddHoneycomb(Configuration)
+                .AddAspNetCoreInstrumentation()
+                .AddRedisInstrumentation(redis)
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
