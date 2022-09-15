@@ -1,10 +1,8 @@
+#if !NET462
 using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenTelemetry;
 using OpenTelemetry.Trace;
-using StackExchange.Redis;
-using System.Collections.Generic;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -37,38 +35,18 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public static IServiceCollection AddHoneycomb(this IServiceCollection services, HoneycombOptions options)
         {
-#if (NET6_0_OR_GREATER)
             options = options ?? new HoneycombOptions();
             services
                 .AddOpenTelemetryTracing(hostingBuilder => hostingBuilder.Configure(((serviceProvider, builder) =>
                     {
-                        if (options.RedisConnection == null && serviceProvider.GetService<IConnectionMultiplexer>() != null)
-                        {
-                            options.RedisConnection = serviceProvider.GetService<IConnectionMultiplexer>();
-                        }
-
                         builder
-                            .AddHoneycomb(options)
-                            .AddAspNetCoreInstrumentation(opts =>
-                            {
-                                opts.RecordException = true;
-                                opts.Enrich = (activity, eventName, _) =>
-                                {
-                                    if (eventName == "OnStartActivity")
-                                    {
-                                        foreach (var entry in Baggage.Current)
-                                        {
-                                            activity.SetTag(entry.Key, entry.Value);
-                                        }
-                                    }
-                                };
-                            });
+                            .AddHoneycomb(options);
                     }))
                 )
                 .AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName))
                 .AddOpenTelemetryMetrics(builder => builder.AddHoneycomb(options));
-#endif
             return services;
         }
     }
 }
+#endif

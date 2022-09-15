@@ -1,10 +1,6 @@
 using Microsoft.Extensions.Configuration;
-using OpenTelemetry.Instrumentation.Http;
-using OpenTelemetry.Instrumentation.SqlClient;
-using OpenTelemetry.Instrumentation.StackExchangeRedis;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -153,52 +149,6 @@ namespace Honeycomb.OpenTelemetry
         public string ServiceVersion { get; set; } = SDefaultServiceVersion;
 
         /// <summary>
-        /// Redis <see cref="IConnectionMultiplexer"/>. Set this if you aren't using a DI Container.
-        /// If you're using a DI Container, then setting this isn't necessary as it will be resolved from the <see cref="IServiceProvider"/>.
-        /// </summary>
-        public IConnectionMultiplexer RedisConnection { get; set; }
-
-        /// <summary>
-        /// Controls whether to instrument HttpClient calls.
-        /// </summary>
-        public bool InstrumentHttpClient { get; set; } = true;
-
-        /// <summary>
-        /// Controls whether to instrument SqlClient calls.
-        /// </summary>
-        public bool InstrumentSqlClient { get; set; } = true;
-
-        /// <summary>
-        /// Controls whether to instrument GrpcClient calls when running on .NET Standard 2.1 or greater.
-        /// Requires <see cref="InstrumentHttpClient" /> to be <see langword="true"/> due to the underlying implementation.
-        /// </summary>
-        public bool InstrumentGrpcClient { get; set; } = true;
-
-        /// <summary>
-        /// Controls whether the Stack Exchange Redis Client is instrumented.
-        /// Requires that either <see cref="RedisConnection"/> is set, if you're not using a DI Container, or
-        /// if you are using a DI Container, then it requires that an <see cref="IConnectionMultiplexer"/> has been registered with the <see cref="IServiceProvider"/>.
-        /// </summary>
-        public bool InstrumentStackExchangeRedisClient { get; set; } = true;
-
-        /// <summary>
-        /// (Optional) Options delegate to configure HttpClient instrumentation.
-        /// </summary>
-        public Action<HttpClientInstrumentationOptions> ConfigureHttpClientInstrumentationOptions { get; set; }
-
-        /// <summary>
-        /// (Optional) Options delegate to configure SqlClient instrumentation.
-        /// </summary>
-        public Action<SqlClientInstrumentationOptions> ConfigureSqlClientInstrumentationOptions { get; set; }
-
-        /// <summary>
-        /// (Optional) Options delegate to configure StackExchange.Redis instrumentation.
-        /// </summary>
-        public Action<StackExchangeRedisCallsInstrumentationOptions>
-            ConfigureStackExchangeRedisClientInstrumentationOptions
-        { get; set; }
-
-        /// <summary>
         /// (Optional) Additional <see cref="Meter"/> names for generating metrics.
         /// <see cref="ServiceName"/> is configured as a meter name by default.
         /// </summary>
@@ -226,10 +176,6 @@ namespace Honeycomb.OpenTelemetry
             { "--honeycomb-enable-local-visualizations", "enablelocalvisualizations" },
             { "--service-name", "servicename" },
             { "--service-version", "serviceversion" },
-            { "--instrument-http", "instrumenthttpclient" },
-            { "--instrument-sql", "instrumentsqlclient" },
-            { "--instrument-grpc", "instrumentgrpcclient" },
-            { "--instrument-redis", "instrumentstackexchangeredisclient" },
             { "--meter-names", "meternames" }
         };
 

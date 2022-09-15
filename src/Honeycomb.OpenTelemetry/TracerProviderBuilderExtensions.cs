@@ -49,7 +49,7 @@ namespace Honeycomb.OpenTelemetry
             // TODO: Add support for other environment variables
             var environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
 
-            // if service name set in environment, prioritize it    
+            // if service name set in environment, prioritize it
             if (!string.IsNullOrWhiteSpace(environmentOptions.ServiceName))
             {
                 options.ServiceName = environmentOptions.ServiceName;
@@ -61,8 +61,6 @@ namespace Honeycomb.OpenTelemetry
                 options.ServiceName = HoneycombOptions.SDefaultServiceName;
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name", "OTEL_SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
             }
-
-
 
             builder
                 .AddSource(options.ServiceName)
@@ -106,48 +104,6 @@ namespace Honeycomb.OpenTelemetry
                     Console.WriteLine("WARN: Dataset is ignored in favor of service name.");
                 }
             }
-
-            if (options.InstrumentHttpClient)
-            {
-#if NET462
-                    builder.AddHttpClientInstrumentation();
-#else
-                builder.AddHttpClientInstrumentation(options.ConfigureHttpClientInstrumentationOptions);
-#endif
-            }
-
-            if (options.InstrumentSqlClient)
-            {
-                builder.AddSqlClientInstrumentation(options.ConfigureSqlClientInstrumentationOptions);
-            }
-
-            if (options.InstrumentStackExchangeRedisClient && options.RedisConnection != null)
-            {
-                builder.AddRedisInstrumentation(options.RedisConnection,
-                    options.ConfigureStackExchangeRedisClientInstrumentationOptions);
-            }
-
-#if NET462
-            builder.AddAspNetInstrumentation(opts =>
-                opts.Enrich = (activity, eventName, _) =>
-                {
-                    if (eventName == "OnStartActivity")
-                    {
-                        foreach (var entry in Baggage.Current)
-                        {
-                            activity.SetTag(entry.Key, entry.Value);
-                        }
-                    }
-                });
-#endif
-
-#if NETSTANDARD2_1
-            if (options.InstrumentGrpcClient && options.InstrumentHttpClient) // HttpClient needs to be instrumented for GrpcClient instrumentation to work.
-            {
-                // See https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Instrumentation.GrpcNetClient/README.md#suppressdownstreaminstrumentation
-                builder.AddGrpcClientInstrumentation(options => options.SuppressDownstreamInstrumentation = true);
-            }
-#endif
 
             return builder;
         }
