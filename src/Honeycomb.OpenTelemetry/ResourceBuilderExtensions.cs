@@ -28,6 +28,12 @@ namespace Honeycomb.OpenTelemetry
                 .AddOSResource();
         }
 
+        /// <summary>
+        /// Determines process runtime resources and adds them to the <see cref="ResourceBuilder"/>.
+        /// </summary>
+        /// <remarks>
+        /// See https://opentelemetry.io/docs/reference/specification/resource/semantic_conventions/process/#process-runtimes
+        /// </remarks>
         private static ResourceBuilder AddRuntimeResource(this ResourceBuilder builder)
         {
             var frameworkDescription = RuntimeInformation.FrameworkDescription;
@@ -35,9 +41,6 @@ namespace Honeycomb.OpenTelemetry
             var runtimeName = "unknown";
             var runtimeVersion = "unknown";
 
-            // See here:
-            // https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.runtimeinformation.frameworkdescription?view=netstandard-2.0
-            // Description likely cannot be synthesized, at least not easily.
             if (!frameworkDescription.StartsWith(".NET"))
             {
                 return builder;
@@ -55,6 +58,7 @@ namespace Honeycomb.OpenTelemetry
             }
             else if (frameworkDescription.StartsWith(".NET Native"))
             {
+                // I doubt we'll ever see a user match this, but it's a valid runtime, so...
                 runtimeName = ".NET Native";
                 runtimeVersion = frameworkDescription.Substring(".NET Native".Length);
             }
@@ -67,7 +71,6 @@ namespace Honeycomb.OpenTelemetry
             return builder
                 .AddAttributes(new List<KeyValuePair<string, object>>
                 {
-                    
                     new KeyValuePair<string, object>("process.runtime.name", runtimeName),
                     new KeyValuePair<string, object>("process.runtime.version", runtimeVersion)
                 });
