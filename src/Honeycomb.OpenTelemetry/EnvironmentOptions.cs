@@ -45,7 +45,7 @@ namespace Honeycomb.OpenTelemetry
             var value = _environmentService[key];
             if (value is string str && !string.IsNullOrWhiteSpace(str))
             {
-                return (string)value;
+                return str;
             }
 
             return defaultValue;

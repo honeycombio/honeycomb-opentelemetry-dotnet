@@ -28,7 +28,8 @@ namespace Honeycomb.OpenTelemetry
         {
             _apiKey = options.ApiKey;
             _serviceName = options.ServiceName;
-            try {
+            try
+            {
                 InitTraceLinkParameters();
             }
             catch (Exception)
@@ -40,14 +41,17 @@ namespace Honeycomb.OpenTelemetry
         private void InitTraceLinkParameters()
         {
             if (string.IsNullOrEmpty(_apiKey))
+            {
                 return;
+            }
 
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(ApiHost);
             httpClient.DefaultRequestHeaders.Add("X-Honeycomb-Team", _apiKey);
 
             var response = httpClient.GetAsync("/1/auth").GetAwaiter().GetResult();
-            if (!response.IsSuccessStatusCode) {
+            if (!response.IsSuccessStatusCode)
+            {
                 Console.WriteLine("WARN: Didn't get a valid response from Honeycomb");
                 return;
             }
@@ -57,7 +61,8 @@ namespace Honeycomb.OpenTelemetry
             _environmentSlug = authResponse.Environment.Slug;
             _teamSlug = authResponse.Team.Slug;
             if (string.IsNullOrEmpty(_environmentSlug) ||
-                string.IsNullOrEmpty(_teamSlug)) {
+                string.IsNullOrEmpty(_teamSlug))
+            {
                 Console.WriteLine("WARN: Team or Environment wasn't returned");
                 return;                
             }
@@ -67,8 +72,10 @@ namespace Honeycomb.OpenTelemetry
         /// <inheritdoc />
         public override ExportResult Export(in Batch<Activity> batch)
         {
-            if (!IsEnabled)
+            if (!IsEnabled) 
+            {
                 return ExportResult.Success;
+            }
 
             foreach (var activity in batch)
             {
@@ -81,13 +88,10 @@ namespace Honeycomb.OpenTelemetry
             return ExportResult.Success;
         }
 
-        private string GetTraceLink(string traceId)
-        {
-            if (_apiKey.Length == 32)
-               return $"http://ui.honeycomb.io/{_teamSlug}/datasets/{_serviceName}/trace?trace_id={traceId}";
-
-            return $"http://ui.honeycomb.io/{_teamSlug}/environments/{_environmentSlug}/datasets/{_serviceName}/trace?trace_id={traceId}";
-        }
+        private string GetTraceLink(string traceId) =>
+            _apiKey.Length == 32
+                ? $"http://ui.honeycomb.io/{_teamSlug}/datasets/{_serviceName}/trace?trace_id={traceId}"
+                : $"http://ui.honeycomb.io/{_teamSlug}/environments/{_environmentSlug}/datasets/{_serviceName}/trace?trace_id={traceId}";
     }
 
     internal class AuthResponse

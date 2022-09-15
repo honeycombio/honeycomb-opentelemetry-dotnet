@@ -132,10 +132,12 @@ namespace Honeycomb.OpenTelemetry
                 opts.Enrich = (activity, eventName, _) =>
                 {
                     if (eventName == "OnStartActivity")
-                        foreach (KeyValuePair<string, string> entry in Baggage.Current)
+                    {
+                        foreach (var entry in Baggage.Current)
                         {
                             activity.SetTag(entry.Key, entry.Value);
                         }
+                    }
                 });
 #endif
 

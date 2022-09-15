@@ -28,7 +28,6 @@ namespace Honeycomb.OpenTelemetry
         private string _tracesDataset;
         private string _tracesEndpoint;
         private string _metricsEndpoint;
-        private bool _enableLocalVisualizations;
 
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
@@ -54,29 +53,23 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Returns whether API key used to send trace telemetry is a legacy key.
         /// </summary>
-        internal bool IsTracesLegacyKey()
-        {
-            // legacy key has 32 characters
-            return TracesApiKey?.Length == 32;
-        }
+        /// <remarks>
+        /// Legacy keys have 32 characters.
+        /// </remarks>
+        internal bool IsTracesLegacyKey() => TracesApiKey?.Length == 32;
 
         /// <summary>
         /// Returns whether API key used to send metrics telemetry is a legacy key.
         /// </summary>
-        internal bool IsMetricsLegacyKey()
-        {
-            // legacy key has 32 characters
-            return MetricsApiKey?.Length == 32;
-        }
+        /// <remarks>
+        /// Legacy keys have 32 characters.
+        /// </remarks>
+        internal bool IsMetricsLegacyKey() => MetricsApiKey?.Length == 32;
 
         /// <summary>
         /// Write links to honeycomb traces as they come in
         /// </summary>
-        public bool EnableLocalVisualizations
-        { 
-            get { return _enableLocalVisualizations; } 
-            set { _enableLocalVisualizations = value; }
-        }
+        public bool EnableLocalVisualizations { get; set; } = false;
 
         /// <summary>
         /// API key used to send trace telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
@@ -101,7 +94,6 @@ namespace Honeycomb.OpenTelemetry
         /// <para/>
         /// </summary>
         public string Dataset { get; set; }
-
 
         /// <summary>
         /// Honeycomb dataset to store trace telemetry data. Defaults to <see cref="Dataset"/>.
@@ -153,7 +145,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Service name used to identify application. Defaults to unknown_process:processname.
         /// </summary>
-        public string ServiceName { get; set; }
+        public string ServiceName { get; set; } = SDefaultServiceName;
 
         /// <summary>
         /// Service version. Defaults to application assembly information version.
@@ -249,8 +241,7 @@ namespace Honeycomb.OpenTelemetry
             var config = new ConfigurationBuilder()
                 .AddCommandLine(args, CommandLineSwitchMap)
                 .Build();
-            var honeycombOptions = config
-                .Get<HoneycombOptions>();
+            var honeycombOptions = config.Get<HoneycombOptions>();
 
             var meterNames = config.GetValue<string>("meternames");
             if (!string.IsNullOrWhiteSpace(meterNames))
