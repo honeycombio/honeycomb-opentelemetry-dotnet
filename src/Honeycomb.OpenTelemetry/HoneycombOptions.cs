@@ -12,6 +12,7 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
+        private const string OtlpVersion = "0.16.0";
 
         /// <summary>
         /// Default service name if service name is not provided.
@@ -196,6 +197,38 @@ namespace Honeycomb.OpenTelemetry
             }
 
             return honeycombOptions;
+        }
+
+        internal string GetTraceHeaders() {
+            var headers = new List<string>
+            {
+                $"x-otlp-version={OtlpVersion}",
+                $"x-honeycomb-team={TracesApiKey}"
+            };
+            if (IsTracesLegacyKey())
+            {
+                // if the key is legacy, add dataset to the header
+                if (!string.IsNullOrWhiteSpace(TracesDataset))
+                {
+                    headers.Add($"x-honeycomb-dataset={TracesDataset}");
+                }
+                else
+                {
+                    // if legacy key and missing dataset, warn on missing dataset
+                    Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
+                }
+            }
+            return string.Join(",", headers);
+        }
+
+        internal string GetMetricsHeaders() {
+            var headers = new List<string>
+            {
+                $"x-otlp-version={OtlpVersion}",
+                $"x-honeycomb-team={MetricsApiKey}",
+                $"x-honeycomb-dataset={MetricsDataset}"
+            };
+            return string.Join(",", headers);
         }
     }
 }
