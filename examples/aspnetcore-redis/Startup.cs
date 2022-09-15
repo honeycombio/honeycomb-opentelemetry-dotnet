@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenTelemetry;
 using OpenTelemetry.Trace;
 using Honeycomb.OpenTelemetry;
 using StackExchange.Redis;
@@ -42,7 +43,21 @@ namespace aspnetcoreredis
             // configure OpenTelemetry SDK to send data to Honeycomb
             services.AddOpenTelemetryTracing(builder => builder
                 .AddHoneycomb(Configuration)
-                .AddAspNetCoreInstrumentation()
+                .AddAspNetCoreInstrumentation(opts =>
+                    {
+                        opts.RecordException = true;
+                        opts.Enrich = (activity, eventName, _) =>
+                        {
+                            if (eventName == "OnStartActivity")
+                            {
+                                foreach (var entry in Baggage.Current)
+                                {
+                                    activity.SetTag(entry.Key, entry.Value);
+                                }
+                            }
+                        };
+                    }
+                )
                 .AddRedisInstrumentation(redis)
             );
         }
