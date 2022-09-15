@@ -31,15 +31,45 @@ namespace Honeycomb.OpenTelemetry
         private static ResourceBuilder AddRuntimeResource(this ResourceBuilder builder)
         {
             var frameworkDescription = RuntimeInformation.FrameworkDescription;
-            var parts = frameworkDescription.Split(' ');
+
+            var runtimeName = "unknown";
+            var runtimeVersion = "unknown";
+
+            // See here:
+            // https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.runtimeinformation.frameworkdescription?view=netstandard-2.0
+            // Description likely cannot be synthesized, at least not easily.
+            if (!frameworkDescription.StartsWith(".NET"))
+            {
+                return builder;
+            }
+
+            if (frameworkDescription.StartsWith(".NET Core"))
+            {
+                runtimeName = ".NET Core";
+                runtimeVersion = frameworkDescription.Substring(".NET Core".Length);
+            }
+            else if (frameworkDescription.StartsWith(".NET Framework"))
+            {
+                runtimeName = ".NET Framework";
+                runtimeVersion = frameworkDescription.Substring(".NET Framework".Length);
+            }
+            else if (frameworkDescription.StartsWith(".NET Native"))
+            {
+                runtimeName = ".NET Native";
+                runtimeVersion = frameworkDescription.Substring(".NET Native".Length);
+            }
+            else
+            {
+                runtimeName = ".NET";
+                runtimeVersion = frameworkDescription.Substring(".NET".Length);
+            }
+
             return builder
                 .AddAttributes(new List<KeyValuePair<string, object>>
                 {
-                    // See here:
-                    // https://docs.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.runtimeinformation.frameworkdescription?view=netstandard-2.0
-                    // Description likely cannot be synthesized, at least not easily.
-                    new KeyValuePair<string, object>("process.runtime.name", parts[0]),
-                    new KeyValuePair<string, object>("process.runtime.version", parts[1])
+                    
+                    new KeyValuePair<string, object>("process.runtime.name", runtimeName),
+                    new KeyValuePair<string, object>("process.runtime.version", runtimeVersion)
                 });
         }
 
