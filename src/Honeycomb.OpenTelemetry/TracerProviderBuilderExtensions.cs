@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -34,6 +35,17 @@ namespace Honeycomb.OpenTelemetry
             var honeycombOptions = new HoneycombOptions { };
             configureHoneycombOptions?.Invoke(honeycombOptions);
             return builder.AddHoneycomb(honeycombOptions);
+        }
+
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
+        /// </summary>
+        /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>
+        /// <param name="configuration">The <see cref="IConfiguration"/> to configure with</param>
+        /// <returns>The instance of <see cref="TracerProviderBuilder"/> to chain the calls.</returns>
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, IConfiguration configuration)
+        {
+            return builder.AddHoneycomb(configuration.GetSection(HoneycombOptions.ConfigSectionName).Get<HoneycombOptions>());
         }
 
         /// <summary>
