@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 
@@ -162,6 +161,15 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public ResourceBuilder ResourceBuilder { get; set; } = ResourceBuilder.CreateDefault();
 
+        /// <summary>
+        /// Determines whether the <see cref="BaggageSpanProcessor"/> is added when configuring a <see cref="TracerProviderBuilder"/>.
+        /// </summary>
+        public bool AddBaggageSpanProcessor { get; set; } = true;
+
+        /// <summary>
+        /// Determines whether the <see cref="DeterministicSampler"/> sampler is added when configuring a <see cref="TracerProviderBuilder"/>.
+        /// </summary>
+        public bool AddDeterministicSampler { get; set; } = true;
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
             { "--honeycomb-apikey", "apikey" },
@@ -175,6 +183,8 @@ namespace Honeycomb.OpenTelemetry
             { "--honeycomb-metrics-endpoint", "metricsendpoint" },
             { "--honeycomb-samplerate", "samplerate" },
             { "--honeycomb-enable-local-visualizations", "enablelocalvisualizations" },
+            { "--honeycomb-add-baggage-span-processor", "addBaggageSpanProcessor" },
+            { "--honeycomb-add-determinisitc-sampler", "addDeterministicSampler" },
             { "--service-name", "servicename" },
             { "--service-version", "serviceversion" },
             { "--meter-names", "meternames" }

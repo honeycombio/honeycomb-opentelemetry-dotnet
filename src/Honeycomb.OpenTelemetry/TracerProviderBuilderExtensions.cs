@@ -76,14 +76,22 @@ namespace Honeycomb.OpenTelemetry
 
             builder
                 .AddSource(options.ServiceName)
-                .SetSampler(new DeterministicSampler(options.SampleRate))
                 .SetResourceBuilder(
                     options.ResourceBuilder
                         .AddHoneycombAttributes()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                         .AddEnvironmentVariableDetector()
-                )
-                .AddProcessor(new BaggageSpanProcessor());
+                );
+
+            if (options.AddDeterministicSampler)
+            {
+                builder.AddDeterministicSampler(options.SampleRate);
+            }
+
+            if (options.AddBaggageSpanProcessor)
+            {
+                builder.AddBaggageSpanProcessor();
+            }
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey))
             {
@@ -118,6 +126,22 @@ namespace Honeycomb.OpenTelemetry
             }
 
             return builder;
+        }
+
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to add the <see cref="BaggageSpanProcessor"/> span processor.
+        /// </summary>
+        public static TracerProviderBuilder AddBaggageSpanProcessor(this TracerProviderBuilder builder)
+        {
+            return builder.AddProcessor(new BaggageSpanProcessor());
+        }
+
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to add the <see cref="DeterministicSampler"/> trace sampler.
+        /// </summary>
+        public static TracerProviderBuilder AddDeterministicSampler(this TracerProviderBuilder builder, uint sampleRate)
+        {
+            return builder.SetSampler(new DeterministicSampler(sampleRate));
         }
     }
 }
