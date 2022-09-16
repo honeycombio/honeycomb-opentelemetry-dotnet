@@ -95,11 +95,7 @@ namespace Honeycomb.OpenTelemetry
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey))
             {
-                builder.AddOtlpExporter(otlpOptions =>
-                {
-                    otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
-                    otlpOptions.Headers = options.GetTraceHeaders();
-                });
+                builder.AddHoneycombOtlpExporter(options.TracesApiKey, options.TracesDataset, options.TracesEndpoint);
             }
             else
             {
@@ -142,6 +138,23 @@ namespace Honeycomb.OpenTelemetry
         public static TracerProviderBuilder AddDeterministicSampler(this TracerProviderBuilder builder, uint sampleRate)
         {
             return builder.SetSampler(new DeterministicSampler(sampleRate));
+        }
+
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> with an OTLP exporter that sends trace telemetry to Honeycomb.
+        /// </summary>
+        public static TracerProviderBuilder AddHoneycombOtlpExporter(this TracerProviderBuilder builder, string apikey, string dataset = null, string endpoint = null)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint))
+            {
+                endpoint = HoneycombOptions.DefaultEndpoint;
+            }
+
+            return builder.AddOtlpExporter(otlpOptions =>
+            {
+                otlpOptions.Endpoint = new Uri(endpoint);
+                otlpOptions.Headers = HoneycombOptions.GetTraceHeaders(apikey, dataset);
+            });
         }
     }
 }

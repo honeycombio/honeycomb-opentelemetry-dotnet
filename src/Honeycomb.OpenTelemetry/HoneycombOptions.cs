@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 
@@ -52,7 +53,7 @@ namespace Honeycomb.OpenTelemetry
         /// <remarks>
         /// Legacy keys have 32 characters.
         /// </remarks>
-        internal bool IsTracesLegacyKey() => TracesApiKey?.Length == 32;
+        internal bool IsTracesLegacyKey() => IsClassicKey(TracesApiKey);
 
         /// <summary>
         /// Returns whether API key used to send metrics telemetry is a legacy key.
@@ -60,7 +61,15 @@ namespace Honeycomb.OpenTelemetry
         /// <remarks>
         /// Legacy keys have 32 characters.
         /// </remarks>
-        internal bool IsMetricsLegacyKey() => MetricsApiKey?.Length == 32;
+        internal bool IsMetricsLegacyKey() => IsClassicKey(MetricsApiKey);
+
+        /// <summary>
+        /// Returns whether the provided API key is a legacy key.
+        /// </summary>
+        /// <remarks>
+        /// Legacy keys have 32 characters.
+        /// </remarks>
+        internal static bool IsClassicKey(string apikey) => apikey?.Length == 32;
 
         /// <summary>
         /// Write links to honeycomb traces as they come in
@@ -210,17 +219,21 @@ namespace Honeycomb.OpenTelemetry
         }
 
         internal string GetTraceHeaders() {
+            return GetTraceHeaders(TracesApiKey, TracesDataset);
+        }
+
+        internal static string GetTraceHeaders(string apikey, string dataset) {
             var headers = new List<string>
             {
                 $"x-otlp-version={OtlpVersion}",
-                $"x-honeycomb-team={TracesApiKey}"
+                $"x-honeycomb-team={apikey}"
             };
-            if (IsTracesLegacyKey())
+            if (IsClassicKey(apikey))
             {
                 // if the key is legacy, add dataset to the header
-                if (!string.IsNullOrWhiteSpace(TracesDataset))
+                if (!string.IsNullOrWhiteSpace(dataset))
                 {
-                    headers.Add($"x-honeycomb-dataset={TracesDataset}");
+                    headers.Add($"x-honeycomb-dataset={dataset}");
                 }
                 else
                 {
@@ -231,12 +244,17 @@ namespace Honeycomb.OpenTelemetry
             return string.Join(",", headers);
         }
 
-        internal string GetMetricsHeaders() {
+        internal string GetMetricsHeaders()
+        {
+            return GetMetricsHeaders(MetricsApiKey, MetricsDataset);
+        }
+
+        internal static string GetMetricsHeaders(string apikey, string dataset) {
             var headers = new List<string>
             {
                 $"x-otlp-version={OtlpVersion}",
-                $"x-honeycomb-team={MetricsApiKey}",
-                $"x-honeycomb-dataset={MetricsDataset}"
+                $"x-honeycomb-team={apikey}",
+                $"x-honeycomb-dataset={dataset}"
             };
             return string.Join(",", headers);
         }
