@@ -13,7 +13,7 @@
     <!-- NuGet packaging properties -->
     <VersionPrefix>0.23.0</VersionPrefix>
     <VersionSuffix>beta</VersionSuffix>
-    <PackageId>Honeycomb.OpenTelemetry.AspNetCore</PackageId>
+    <PackageId>Honeycomb.OpenTelemetry.Instrumentation.AspNetCore</PackageId>
     <Authors>Honeycomb</Authors>
     <Description>OpenTelemetry AspNetCore instrumentation extensions</Description>
     <PackageProjectUrl>https://docs.honeycomb.io/getting-data-in/dotnet/</PackageProjectUrl>
