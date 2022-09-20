@@ -43,6 +43,61 @@ namespace Honeycomb.OpenTelemetry
         }
 
         [Fact]
+        public void EnvironmentOptionsCanOverrideHoneycombOptions()
+        {
+            var honeycombOptions = new HoneycombOptions
+            {
+                ApiKey = "my-api-key",
+                TracesApiKey = "my-traces-api-key",
+                MetricsApiKey = "my-metrics-api-key",
+                Dataset = "my-dataset",
+                TracesDataset = "my-traces-dataset",
+                MetricsDataset = "my-metrics-dataset",
+                Endpoint = "my-endpoint",
+                TracesEndpoint = "my-traces-endpoint",
+                MetricsEndpoint = "my-metrics-endpoint",
+                SampleRate = 2,
+                ServiceName = "my-service-name",
+                ServiceVersion = "my-service-version",
+                EnableLocalVisualizations = false,
+                Debug = false
+            };
+
+            var values = new Dictionary<string, string>
+            {
+                {"HONEYCOMB_API_KEY", "my-env-api-key"},
+                {"HONEYCOMB_TRACES_API_KEY", "my-env-traces-api-key"},
+                {"HONEYCOMB_METRICS_API_KEY", "my-env-metrics-api-key"},
+                {"HONEYCOMB_DATASET", "my-env-dataset"},
+                {"HONEYCOMB_TRACES_DATASET", "my-env-traces-dataset"},
+                {"HONEYCOMB_METRICS_DATASET", "my-env-metrics-dataset"},
+                {"HONEYCOMB_API_ENDPOINT", "my-env-endpoint"},
+                {"HONEYCOMB_TRACES_ENDPOINT", "my-env-traces-endpoint"},
+                {"HONEYCOMB_METRICS_ENDPOINT", "my-env-metrics-endpoint"},
+                {"HONEYCOMB_SAMPLE_RATE", "10"},
+                {"OTEL_SERVICE_NAME", "my-env-service-name"},
+                {"SERVICE_VERSION", "my-env-service-version"},
+                {"ENABLE_LOCAL_VISUALIZATIONS", "true" },
+                {"DEBUG", "true"}
+            };
+            var options = new EnvironmentOptions(values);
+            Assert.Equal("my-env-api-key", options.ApiKey);
+            Assert.Equal("my-env-traces-api-key", options.TracesApiKey);
+            Assert.Equal("my-env-metrics-api-key", options.MetricsApiKey);
+            Assert.Equal("my-env-dataset", options.Dataset);
+            Assert.Equal("my-env-traces-dataset", options.TracesDataset);
+            Assert.Equal("my-env-metrics-dataset", options.MetricsDataset);
+            Assert.Equal("my-env-endpoint", options.ApiEndpoint);
+            Assert.Equal("my-env-traces-endpoint", options.TracesEndpoint);
+            Assert.Equal("my-env-metrics-endpoint", options.MetricsEndpoint);
+            Assert.Equal((uint)10, options.SampleRate);
+            Assert.Equal("my-env-service-name", options.ServiceName);
+            Assert.Equal("my-env-service-version", options.ServiceVersion);
+            Assert.True(options.EnableLocalVisualizations);
+            Assert.True(options.Debug);
+        }
+
+        [Fact]
         public void Optional_args_fall_back_to_defaults()
         {
             var options = new EnvironmentOptions(new Dictionary<string, string>());
