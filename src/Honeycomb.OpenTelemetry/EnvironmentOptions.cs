@@ -17,6 +17,7 @@ namespace Honeycomb.OpenTelemetry
         private const string ServiceNameKey = "OTEL_SERVICE_NAME";
         private const string ServiceVersionKey = "SERVICE_VERSION";
         private const string EnableLocalVisualizationsKey = "ENABLE_LOCAL_VISUALIZATIONS";
+        private const string DebugKey = "DEBUG";
         private const uint DefaultSampleRate = 1;
         private const string DefaultApiEndpoint = "https://api.honeycomb.io:443";
         private readonly IDictionary _environmentService;
@@ -38,6 +39,7 @@ namespace Honeycomb.OpenTelemetry
         internal string ServiceName => GetEnvironmentVariable(ServiceNameKey);
         internal string ServiceVersion => GetEnvironmentVariable(ServiceVersionKey);
         internal bool EnableLocalVisualizations => bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations) ? enableLocalVisualizations : false;
+        internal bool Debug => bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug) ? debug : false;
         internal uint SampleRate => uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate) ? sampleRate : DefaultSampleRate;
 
         private string GetEnvironmentVariable(string key, string defaultValue = "")
