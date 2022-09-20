@@ -179,6 +179,12 @@ namespace Honeycomb.OpenTelemetry
         /// Determines whether the <see cref="DeterministicSampler"/> sampler is added when configuring a <see cref="TracerProviderBuilder"/>.
         /// </summary>
         public bool AddDeterministicSampler { get; set; } = true;
+
+        /// <summary>
+        /// If set to true, enables the console span exporter for local debugging.
+        /// </summary>
+        public bool Debug { get; set; } = false;
+        
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
             { "--honeycomb-apikey", "apikey" },

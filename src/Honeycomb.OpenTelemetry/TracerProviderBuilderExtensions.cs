@@ -107,6 +107,11 @@ namespace Honeycomb.OpenTelemetry
                 builder.AddProcessor(new SimpleActivityExportProcessor(new ConsoleTraceLinkExporter(options)));
             }
 
+            if (options.Debug)
+            {
+                builder.AddConsoleExporter();
+            }
+
             // heads up: even if dataset is set, it will be ignored
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey) & !options.IsTracesLegacyKey() & (!string.IsNullOrWhiteSpace(options.TracesDataset)))
             {
