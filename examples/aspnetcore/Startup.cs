@@ -34,21 +34,7 @@ namespace aspnetcore
             // configure OpenTelemetry SDK to send data to Honeycomb
             services.AddOpenTelemetryTracing(builder => builder
                 .AddHoneycomb(Configuration)
-                .AddAspNetCoreInstrumentation(opts =>
-                    {
-                        opts.RecordException = true;
-                        opts.Enrich = (activity, eventName, _) =>
-                        {
-                            if (eventName == "OnStartActivity")
-                            {
-                                foreach (var entry in Baggage.Current)
-                                {
-                                    activity.SetTag(entry.Key, entry.Value);
-                                }
-                            }
-                        };
-                    }
-                )
+                .AddAspNetCoreInstrumentationWithBaggage()
             );
 
             // (optional metrics setup)
