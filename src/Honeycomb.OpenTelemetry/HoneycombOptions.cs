@@ -202,7 +202,8 @@ namespace Honeycomb.OpenTelemetry
             { "--honeycomb-add-determinisitc-sampler", "addDeterministicSampler" },
             { "--service-name", "servicename" },
             { "--service-version", "serviceversion" },
-            { "--meter-names", "meternames" }
+            { "--meter-names", "meternames" },
+            { "--debug", "debug" }
         };
 
         /// <summary>

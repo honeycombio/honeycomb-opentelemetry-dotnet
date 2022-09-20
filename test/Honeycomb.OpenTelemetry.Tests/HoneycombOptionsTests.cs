@@ -25,6 +25,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal(HoneycombOptions.DefaultEndpoint, options.TracesEndpoint);
             Assert.Equal(HoneycombOptions.DefaultEndpoint, options.MetricsEndpoint);
             Assert.Empty(options.MeterNames);
+            Assert.False(options.Debug);
         }
 
         [Fact]
@@ -43,7 +44,8 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--honeycomb-metrics-endpoint", "my-metrics-endpoint",
                 "--meter-names", "meter1,meter2",
                 "--service-name", "my-service",
-                "--service-version", "my-version"
+                "--service-version", "my-version",
+                "--debug", "true"
             );
 
             Assert.Equal("my-apikey", options.ApiKey);
@@ -59,6 +61,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
+            Assert.True(options.Debug);
         }
 
         [Fact]
@@ -77,7 +80,8 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--honeycomb-metrics-endpoint=my-metrics-endpoint",
                 "--meter-names=meter1,meter2",
                 "--service-name=my-service",
-                "--service-version=my-version"
+                "--service-version=my-version",
+                "--debug=true"
             );
 
             Assert.Equal("my-apikey", options.ApiKey);
@@ -93,6 +97,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
+            Assert.True(options.Debug);
         }
 
         [Fact]
@@ -120,6 +125,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
             Assert.True(options.EnableLocalVisualizations);
+            Assert.True(options.Debug);
         }
 
         [Fact]
