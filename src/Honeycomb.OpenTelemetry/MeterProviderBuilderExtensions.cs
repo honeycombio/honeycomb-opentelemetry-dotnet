@@ -56,6 +56,11 @@ namespace Honeycomb.OpenTelemetry
                 {
                     builder.AddMeter(meterName);
                 }
+
+                if (options.Debug)
+                {
+                    builder.AddConsoleExporter();
+                }
             }
 
             return builder;
