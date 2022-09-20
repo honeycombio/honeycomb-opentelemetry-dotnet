@@ -1,10 +1,6 @@
 using Microsoft.Extensions.Configuration;
-using OpenTelemetry.Instrumentation.Http;
-using OpenTelemetry.Instrumentation.SqlClient;
-using OpenTelemetry.Instrumentation.StackExchangeRedis;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -16,6 +12,7 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
+        private const string OtlpVersion = "0.16.0";
 
         /// <summary>
         /// Default service name if service name is not provided.
@@ -56,7 +53,7 @@ namespace Honeycomb.OpenTelemetry
         /// <remarks>
         /// Legacy keys have 32 characters.
         /// </remarks>
-        internal bool IsTracesLegacyKey() => TracesApiKey?.Length == 32;
+        internal bool IsTracesLegacyKey() => IsClassicKey(TracesApiKey);
 
         /// <summary>
         /// Returns whether API key used to send metrics telemetry is a legacy key.
@@ -64,7 +61,15 @@ namespace Honeycomb.OpenTelemetry
         /// <remarks>
         /// Legacy keys have 32 characters.
         /// </remarks>
-        internal bool IsMetricsLegacyKey() => MetricsApiKey?.Length == 32;
+        internal bool IsMetricsLegacyKey() => IsClassicKey(MetricsApiKey);
+
+        /// <summary>
+        /// Returns whether the provided API key is a legacy key.
+        /// </summary>
+        /// <remarks>
+        /// Legacy keys have 32 characters.
+        /// </remarks>
+        internal static bool IsClassicKey(string apikey) => apikey?.Length == 32;
 
         /// <summary>
         /// Write links to honeycomb traces as they come in
@@ -153,52 +158,6 @@ namespace Honeycomb.OpenTelemetry
         public string ServiceVersion { get; set; } = SDefaultServiceVersion;
 
         /// <summary>
-        /// Redis <see cref="IConnectionMultiplexer"/>. Set this if you aren't using a DI Container.
-        /// If you're using a DI Container, then setting this isn't necessary as it will be resolved from the <see cref="IServiceProvider"/>.
-        /// </summary>
-        public IConnectionMultiplexer RedisConnection { get; set; }
-
-        /// <summary>
-        /// Controls whether to instrument HttpClient calls.
-        /// </summary>
-        public bool InstrumentHttpClient { get; set; } = true;
-
-        /// <summary>
-        /// Controls whether to instrument SqlClient calls.
-        /// </summary>
-        public bool InstrumentSqlClient { get; set; } = true;
-
-        /// <summary>
-        /// Controls whether to instrument GrpcClient calls when running on .NET Standard 2.1 or greater.
-        /// Requires <see cref="InstrumentHttpClient" /> to be <see langword="true"/> due to the underlying implementation.
-        /// </summary>
-        public bool InstrumentGrpcClient { get; set; } = true;
-
-        /// <summary>
-        /// Controls whether the Stack Exchange Redis Client is instrumented.
-        /// Requires that either <see cref="RedisConnection"/> is set, if you're not using a DI Container, or
-        /// if you are using a DI Container, then it requires that an <see cref="IConnectionMultiplexer"/> has been registered with the <see cref="IServiceProvider"/>.
-        /// </summary>
-        public bool InstrumentStackExchangeRedisClient { get; set; } = true;
-
-        /// <summary>
-        /// (Optional) Options delegate to configure HttpClient instrumentation.
-        /// </summary>
-        public Action<HttpClientInstrumentationOptions> ConfigureHttpClientInstrumentationOptions { get; set; }
-
-        /// <summary>
-        /// (Optional) Options delegate to configure SqlClient instrumentation.
-        /// </summary>
-        public Action<SqlClientInstrumentationOptions> ConfigureSqlClientInstrumentationOptions { get; set; }
-
-        /// <summary>
-        /// (Optional) Options delegate to configure StackExchange.Redis instrumentation.
-        /// </summary>
-        public Action<StackExchangeRedisCallsInstrumentationOptions>
-            ConfigureStackExchangeRedisClientInstrumentationOptions
-        { get; set; }
-
-        /// <summary>
         /// (Optional) Additional <see cref="Meter"/> names for generating metrics.
         /// <see cref="ServiceName"/> is configured as a meter name by default.
         /// </summary>
@@ -211,6 +170,15 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public ResourceBuilder ResourceBuilder { get; set; } = ResourceBuilder.CreateDefault();
 
+        /// <summary>
+        /// Determines whether the <see cref="BaggageSpanProcessor"/> is added when configuring a <see cref="TracerProviderBuilder"/>.
+        /// </summary>
+        public bool AddBaggageSpanProcessor { get; set; } = true;
+
+        /// <summary>
+        /// Determines whether the <see cref="DeterministicSampler"/> sampler is added when configuring a <see cref="TracerProviderBuilder"/>.
+        /// </summary>
+        public bool AddDeterministicSampler { get; set; } = true;
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
             { "--honeycomb-apikey", "apikey" },
@@ -224,12 +192,10 @@ namespace Honeycomb.OpenTelemetry
             { "--honeycomb-metrics-endpoint", "metricsendpoint" },
             { "--honeycomb-samplerate", "samplerate" },
             { "--honeycomb-enable-local-visualizations", "enablelocalvisualizations" },
+            { "--honeycomb-add-baggage-span-processor", "addBaggageSpanProcessor" },
+            { "--honeycomb-add-determinisitc-sampler", "addDeterministicSampler" },
             { "--service-name", "servicename" },
             { "--service-version", "serviceversion" },
-            { "--instrument-http", "instrumenthttpclient" },
-            { "--instrument-sql", "instrumentsqlclient" },
-            { "--instrument-grpc", "instrumentgrpcclient" },
-            { "--instrument-redis", "instrumentstackexchangeredisclient" },
             { "--meter-names", "meternames" }
         };
 
@@ -250,6 +216,47 @@ namespace Honeycomb.OpenTelemetry
             }
 
             return honeycombOptions;
+        }
+
+        internal string GetTraceHeaders() {
+            return GetTraceHeaders(TracesApiKey, TracesDataset);
+        }
+
+        internal static string GetTraceHeaders(string apikey, string dataset) {
+            var headers = new List<string>
+            {
+                $"x-otlp-version={OtlpVersion}",
+                $"x-honeycomb-team={apikey}"
+            };
+            if (IsClassicKey(apikey))
+            {
+                // if the key is legacy, add dataset to the header
+                if (!string.IsNullOrWhiteSpace(dataset))
+                {
+                    headers.Add($"x-honeycomb-dataset={dataset}");
+                }
+                else
+                {
+                    // if legacy key and missing dataset, warn on missing dataset
+                    Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
+                }
+            }
+            return string.Join(",", headers);
+        }
+
+        internal string GetMetricsHeaders()
+        {
+            return GetMetricsHeaders(MetricsApiKey, MetricsDataset);
+        }
+
+        internal static string GetMetricsHeaders(string apikey, string dataset) {
+            var headers = new List<string>
+            {
+                $"x-otlp-version={OtlpVersion}",
+                $"x-honeycomb-team={apikey}",
+                $"x-honeycomb-dataset={dataset}"
+            };
+            return string.Join(",", headers);
         }
     }
 }

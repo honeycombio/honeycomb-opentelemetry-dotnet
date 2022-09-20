@@ -12,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Honeycomb.OpenTelemetry;
 using System.Diagnostics.Metrics;
+using OpenTelemetry;
+using OpenTelemetry.Trace;
 
 namespace aspnetcore
 {
@@ -30,7 +32,24 @@ namespace aspnetcore
             services.AddControllers();
 
             // configure OpenTelemetry SDK to send data to Honeycomb
-            services.AddHoneycomb(Configuration);
+            services.AddOpenTelemetryTracing(builder => builder
+                .AddHoneycomb(Configuration)
+                .AddAspNetCoreInstrumentation(opts =>
+                    {
+                        opts.RecordException = true;
+                        opts.Enrich = (activity, eventName, _) =>
+                        {
+                            if (eventName == "OnStartActivity")
+                            {
+                                foreach (var entry in Baggage.Current)
+                                {
+                                    activity.SetTag(entry.Key, entry.Value);
+                                }
+                            }
+                        };
+                    }
+                )
+            );
 
             // (optional metrics setup)
             // meter name used here must be configured in the OpenTelemetry SDK

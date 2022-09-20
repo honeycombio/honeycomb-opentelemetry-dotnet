@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -37,6 +38,17 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
+        /// </summary>
+        /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>
+        /// <param name="configuration">The <see cref="IConfiguration"/> to configure with</param>
+        /// <returns>The instance of <see cref="TracerProviderBuilder"/> to chain the calls.</returns>
+        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, IConfiguration configuration)
+        {
+            return builder.AddHoneycomb(configuration.GetSection(HoneycombOptions.ConfigSectionName).Get<HoneycombOptions>());
+        }
+
+        /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using an instance of <see cref="HoneycombOptions"/>.
         /// </summary>
         public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
@@ -49,7 +61,7 @@ namespace Honeycomb.OpenTelemetry
             // TODO: Add support for other environment variables
             var environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
 
-            // if service name set in environment, prioritize it    
+            // if service name set in environment, prioritize it
             if (!string.IsNullOrWhiteSpace(environmentOptions.ServiceName))
             {
                 options.ServiceName = environmentOptions.ServiceName;
@@ -62,26 +74,28 @@ namespace Honeycomb.OpenTelemetry
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name", "OTEL_SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
             }
 
-
-
             builder
                 .AddSource(options.ServiceName)
-                .SetSampler(new DeterministicSampler(options.SampleRate))
                 .SetResourceBuilder(
                     options.ResourceBuilder
                         .AddHoneycombAttributes()
                         .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                         .AddEnvironmentVariableDetector()
-                )
-                .AddProcessor(new BaggageSpanProcessor());
+                );
+
+            if (options.AddDeterministicSampler)
+            {
+                builder.AddDeterministicSampler(options.SampleRate);
+            }
+
+            if (options.AddBaggageSpanProcessor)
+            {
+                builder.AddBaggageSpanProcessor();
+            }
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey))
             {
-                builder.AddOtlpExporter(otlpOptions =>
-                {
-                    otlpOptions.Endpoint = new Uri(options.TracesEndpoint);
-                    otlpOptions.Headers = options.GetTraceHeaders();
-                });
+                builder.AddHoneycombOtlpExporter(options.TracesApiKey, options.TracesDataset, options.TracesEndpoint);
             }
             else
             {
@@ -107,49 +121,40 @@ namespace Honeycomb.OpenTelemetry
                 }
             }
 
-            if (options.InstrumentHttpClient)
-            {
-#if NET462
-                    builder.AddHttpClientInstrumentation();
-#else
-                builder.AddHttpClientInstrumentation(options.ConfigureHttpClientInstrumentationOptions);
-#endif
-            }
-
-            if (options.InstrumentSqlClient)
-            {
-                builder.AddSqlClientInstrumentation(options.ConfigureSqlClientInstrumentationOptions);
-            }
-
-            if (options.InstrumentStackExchangeRedisClient && options.RedisConnection != null)
-            {
-                builder.AddRedisInstrumentation(options.RedisConnection,
-                    options.ConfigureStackExchangeRedisClientInstrumentationOptions);
-            }
-
-#if NET462
-            builder.AddAspNetInstrumentation(opts =>
-                opts.Enrich = (activity, eventName, _) =>
-                {
-                    if (eventName == "OnStartActivity")
-                    {
-                        foreach (var entry in Baggage.Current)
-                        {
-                            activity.SetTag(entry.Key, entry.Value);
-                        }
-                    }
-                });
-#endif
-
-#if NETSTANDARD2_1
-            if (options.InstrumentGrpcClient && options.InstrumentHttpClient) // HttpClient needs to be instrumented for GrpcClient instrumentation to work.
-            {
-                // See https://github.com/open-telemetry/opentelemetry-dotnet/blob/main/src/OpenTelemetry.Instrumentation.GrpcNetClient/README.md#suppressdownstreaminstrumentation
-                builder.AddGrpcClientInstrumentation(options => options.SuppressDownstreamInstrumentation = true);
-            }
-#endif
-
             return builder;
+        }
+
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to add the <see cref="BaggageSpanProcessor"/> span processor.
+        /// </summary>
+        public static TracerProviderBuilder AddBaggageSpanProcessor(this TracerProviderBuilder builder)
+        {
+            return builder.AddProcessor(new BaggageSpanProcessor());
+        }
+
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> to add the <see cref="DeterministicSampler"/> trace sampler.
+        /// </summary>
+        public static TracerProviderBuilder AddDeterministicSampler(this TracerProviderBuilder builder, uint sampleRate)
+        {
+            return builder.SetSampler(new DeterministicSampler(sampleRate));
+        }
+
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> with an OTLP exporter that sends trace telemetry to Honeycomb.
+        /// </summary>
+        public static TracerProviderBuilder AddHoneycombOtlpExporter(this TracerProviderBuilder builder, string apikey, string dataset = null, string endpoint = null)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint))
+            {
+                endpoint = HoneycombOptions.DefaultEndpoint;
+            }
+
+            return builder.AddOtlpExporter(otlpOptions =>
+            {
+                otlpOptions.Endpoint = new Uri(endpoint);
+                otlpOptions.Headers = HoneycombOptions.GetTraceHeaders(apikey, dataset);
+            });
         }
     }
 }

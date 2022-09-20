@@ -40,7 +40,7 @@ namespace Honeycomb.OpenTelemetry
                 {
                     Console.WriteLine("WARN: missing metrics API key");
                 }
-                
+
                 builder
                     .SetResourceBuilder(
                         ResourceBuilder
@@ -49,11 +49,7 @@ namespace Honeycomb.OpenTelemetry
                             .AddEnvironmentVariableDetector()
                             .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                     )
-                    .AddOtlpExporter(otlpOptions =>
-                    {
-                        otlpOptions.Endpoint = new Uri(options.MetricsEndpoint);
-                        otlpOptions.Headers = options.GetMetricsHeaders();
-                    });
+                    .AddHoneycombOtlpExporter(options.MetricsApiKey, options.MetricsDataset, options.MetricsEndpoint);
 
                 builder.AddMeter(options.ServiceName);
                 foreach (var meterName in options.MeterNames)
@@ -63,6 +59,23 @@ namespace Honeycomb.OpenTelemetry
             }
 
             return builder;
+        }
+
+        /// <summary>
+        /// Configures the <see cref="MeterProviderBuilder"/> with an OTLP exporter that sends metrics telemetry to Honeycomb.
+        /// </summary>
+        public static MeterProviderBuilder AddHoneycombOtlpExporter(this MeterProviderBuilder builder, string apikey, string dataset = null, string endpoint = null)
+        {
+            if (string.IsNullOrWhiteSpace(endpoint))
+            {
+                endpoint = HoneycombOptions.DefaultEndpoint;
+            }
+
+            return builder.AddOtlpExporter(otlpOptions =>
+            {
+                otlpOptions.Endpoint = new Uri(endpoint);
+                otlpOptions.Headers = HoneycombOptions.GetMetricsHeaders(apikey, dataset);
+            });
         }
     }
 }

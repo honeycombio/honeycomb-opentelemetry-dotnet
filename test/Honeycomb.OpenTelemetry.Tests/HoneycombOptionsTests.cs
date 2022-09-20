@@ -25,10 +25,6 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal(HoneycombOptions.DefaultEndpoint, options.TracesEndpoint);
             Assert.Equal(HoneycombOptions.DefaultEndpoint, options.MetricsEndpoint);
             Assert.Empty(options.MeterNames);
-            Assert.True(options.InstrumentHttpClient);
-            Assert.True(options.InstrumentSqlClient);
-            Assert.True(options.InstrumentGrpcClient);
-            Assert.True(options.InstrumentStackExchangeRedisClient);
         }
 
         [Fact]
@@ -47,11 +43,7 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--honeycomb-metrics-endpoint", "my-metrics-endpoint",
                 "--meter-names", "meter1,meter2",
                 "--service-name", "my-service",
-                "--service-version", "my-version",
-                "--instrument-http", "false",
-                "--instrument-sql", "false",
-                "--instrument-grpc", "false",
-                "--instrument-redis", "false"
+                "--service-version", "my-version"
             );
 
             Assert.Equal("my-apikey", options.ApiKey);
@@ -67,10 +59,6 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
-            Assert.False(options.InstrumentHttpClient);
-            Assert.False(options.InstrumentSqlClient);
-            Assert.False(options.InstrumentGrpcClient);
-            Assert.False(options.InstrumentStackExchangeRedisClient);
         }
 
         [Fact]
@@ -89,11 +77,8 @@ namespace Honeycomb.OpenTelemetry.Tests
                 "--honeycomb-metrics-endpoint=my-metrics-endpoint",
                 "--meter-names=meter1,meter2",
                 "--service-name=my-service",
-                "--service-version=my-version",
-                "--instrument-http=false",
-                "--instrument-sql=false",
-                "--instrument-grpc=false",
-                "--instrument-redis=false");
+                "--service-version=my-version"
+            );
 
             Assert.Equal("my-apikey", options.ApiKey);
             Assert.Equal("my-traces-apikey", options.TracesApiKey);
@@ -108,10 +93,6 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
-            Assert.False(options.InstrumentHttpClient);
-            Assert.False(options.InstrumentSqlClient);
-            Assert.False(options.InstrumentGrpcClient);
-            Assert.False(options.InstrumentStackExchangeRedisClient);
         }
 
         [Fact]
@@ -138,10 +119,6 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("my-service", options.ServiceName);
             Assert.Equal("my-version", options.ServiceVersion);
             Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
-            Assert.False(options.InstrumentHttpClient);
-            Assert.False(options.InstrumentSqlClient);
-            Assert.False(options.InstrumentGrpcClient);
-            Assert.False(options.InstrumentStackExchangeRedisClient);
             Assert.True(options.EnableLocalVisualizations);
         }
 
