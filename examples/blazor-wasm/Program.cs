@@ -18,6 +18,7 @@ builder.Services.AddOpenTelemetryTracing(builder =>
     {
         options.ServiceName = appName;
         options.ApiKey = "{apikey}";
+        options.Debug = true;
     });
     builder.AddConsoleExporter();
 });
