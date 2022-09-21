@@ -101,19 +101,19 @@ namespace Honeycomb.OpenTelemetry
                 options.ServiceVersion = ServiceVersion;
             }
 
-            if (!options.EnableLocalVisualizations)
+            if (bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations))
             {
-                options.EnableLocalVisualizations = EnableLocalVisualizations;
+                options.EnableLocalVisualizations = enableLocalVisualizations;
             }
 
-            if (!options.Debug)
+            if (bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug))
             {
-                options.Debug = Debug;
+                options.Debug = debug;
             }
 
-            if (options.SampleRate == DefaultSampleRate)
+            if (uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate))
             {
-                options.SampleRate = SampleRate;
+                options.SampleRate = sampleRate;
             }
         }
 
