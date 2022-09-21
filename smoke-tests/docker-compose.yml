@@ -8,6 +8,14 @@ x-env-base: &env_base
   OTEL_METRIC_EXPORT_INTERVAL: 1000
   SERVICE_NAME: "my-web-app"
 
+x-app-base: &app_base
+  build:
+    context: ../
+    dockerfile: ./examples/aspnetcore/Dockerfile
+  image: honeycomb/aspnetcore
+  depends_on:
+    - collector
+
 services:
   collector:
     image: otel/opentelemetry-collector:0.52.0
@@ -17,11 +25,17 @@ services:
       - "./collector:/var/lib"
 
   app-aspnetcore:
-    build:
-      context: ../
-      dockerfile: ./examples/aspnetcore/Dockerfile
-    image: honeycomb/aspnetcore
+    <<: *app_base
     environment:
       <<: *env_base
+    ports:
+      - "127.0.0.1:5001:5001"
+  
+  app-sdk-http:
+    <<: *app_base
+    environment:
+      <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
     ports:
       - "127.0.0.1:5001:5001"
