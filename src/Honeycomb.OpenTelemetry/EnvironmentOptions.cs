@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -22,6 +23,7 @@ namespace Honeycomb.OpenTelemetry
         private const string DefaultApiEndpoint = "https://api.honeycomb.io:443";
         private readonly IDictionary _environmentService;
 
+        internal EnvironmentOptions() => new EnvironmentOptions(new Dictionary<string, string>());
         internal EnvironmentOptions(IDictionary service)
         {
             _environmentService = service;
@@ -41,6 +43,79 @@ namespace Honeycomb.OpenTelemetry
         internal bool EnableLocalVisualizations => bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations) ? enableLocalVisualizations : false;
         internal bool Debug => bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug) ? debug : false;
         internal uint SampleRate => uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate) ? sampleRate : DefaultSampleRate;
+
+        internal void SetOptionsFromEnvironmentIfTheyExist(HoneycombOptions options)
+        {
+            if (!string.IsNullOrWhiteSpace(ApiKey))
+            {
+                options.ApiKey = ApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(TracesApiKey))
+            {
+                options.TracesApiKey = TracesApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(MetricsApiKey))
+            {
+                options.MetricsApiKey = MetricsApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(Dataset))
+            {
+                options.Dataset = Dataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(TracesDataset))
+            {
+                options.TracesDataset = TracesDataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(MetricsDataset))
+            {
+                options.MetricsDataset = MetricsDataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(ApiEndpoint))
+            {
+                options.Endpoint = ApiEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(TracesEndpoint))
+            {
+                options.TracesEndpoint = TracesEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(MetricsEndpoint))
+            {
+                options.MetricsEndpoint = MetricsEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(ServiceName))
+            {
+                options.ServiceName = ServiceName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(ServiceVersion))
+            {
+                options.ServiceVersion = ServiceVersion;
+            }
+
+            if (bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations))
+            {
+                options.EnableLocalVisualizations = enableLocalVisualizations;
+            }
+
+            if (bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug))
+            {
+                options.Debug = debug;
+            }
+
+            if (uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate))
+            {
+                options.SampleRate = sampleRate;
+            }
+        }
 
         private string GetEnvironmentVariable(string key, string defaultValue = "")
         {
