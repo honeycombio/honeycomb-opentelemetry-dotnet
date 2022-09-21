@@ -41,11 +41,13 @@ namespace aspnetcoreredis
             services.AddSingleton<IConnectionMultiplexer>(redis);
 
             // configure OpenTelemetry SDK to send data to Honeycomb
+            var options = Configuration.GetSection(HoneycombOptions.ConfigSectionName).Get<HoneycombOptions>();
             services.AddOpenTelemetryTracing(builder => builder
-                .AddHoneycomb(Configuration)
+                .AddHoneycomb(options)
                 .AddAspNetCoreInstrumentationWithBaggage()
                 .AddRedisInstrumentation(redis)
             );
+            services.AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
