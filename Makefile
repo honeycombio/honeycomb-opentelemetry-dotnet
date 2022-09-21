@@ -14,16 +14,23 @@ clean:
 	rm -rf ./test/Honeycomb.OpenTelemetry.Tests/obj/*
 	rm -rf ./src/Honeycomb.OpenTelemetry/bin/*
 	rm -rf ./src/Honeycomb.OpenTelemetry/obj/*
+	rm -rf ./smoke-tests/report.*
+	rm -rf ./smoke-tests/collector/data.json
+	rm -rf ./smoke-tests/collector/data-results/*.json
 	dotnet clean
 
+smoke-tests/collector/data.json:
+	@echo ""
+	@echo "+++ Zhuzhing smoke test's Collector data.json"
+	@touch $@ && chmod o+w $@
 
-smoke-sdk-grpc:
+smoke-sdk-grpc: smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Running gRPC smoke tests."
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-grpc.bats --report-formatter junit --output ./
 
-smoke-sdk-http:
+smoke-sdk-http: smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Running HTTP smoke tests."
 	@echo ""
