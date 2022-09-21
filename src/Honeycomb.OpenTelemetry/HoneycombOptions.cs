@@ -225,16 +225,16 @@ namespace Honeycomb.OpenTelemetry
             return honeycombOptions;
         }
 
-        internal string GetTraceHeaders() {
-            return GetTraceHeaders(TracesApiKey, TracesDataset);
-        }
+        internal string GetTraceHeaders() => GetTraceHeaders(TracesApiKey, TracesDataset);
 
-        internal static string GetTraceHeaders(string apikey, string dataset) {
+        internal static string GetTraceHeaders(string apikey, string dataset)
+        {
             var headers = new List<string>
             {
                 $"x-otlp-version={OtlpVersion}",
                 $"x-honeycomb-team={apikey}"
             };
+
             if (IsClassicKey(apikey))
             {
                 // if the key is legacy, add dataset to the header
@@ -248,21 +248,21 @@ namespace Honeycomb.OpenTelemetry
                     Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("dataset", "HONEYCOMB_DATASET")}.");
                 }
             }
+
             return string.Join(",", headers);
         }
 
-        internal string GetMetricsHeaders()
-        {
-            return GetMetricsHeaders(MetricsApiKey, MetricsDataset);
-        }
+        internal string GetMetricsHeaders() => GetMetricsHeaders(MetricsApiKey, MetricsDataset);
 
-        internal static string GetMetricsHeaders(string apikey, string dataset) {
+        internal static string GetMetricsHeaders(string apikey, string dataset)
+        {
             var headers = new List<string>
             {
                 $"x-otlp-version={OtlpVersion}",
                 $"x-honeycomb-team={apikey}",
                 $"x-honeycomb-dataset={dataset}"
             };
+            
             return string.Join(",", headers);
         }
     }
