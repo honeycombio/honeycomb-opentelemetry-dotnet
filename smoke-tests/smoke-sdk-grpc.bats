@@ -2,7 +2,7 @@
 
 load test_helpers/utilities
 
-CONTAINER_NAME="app-sdk-http"
+CONTAINER_NAME="app-sdk-grpc"
 OTEL_SERVICE_NAME="aspnetcore-example"
 
 setup_file() {
@@ -14,7 +14,7 @@ setup_file() {
 }
 
 teardown_file() {
-	cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
+    cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
 	docker-compose stop ${CONTAINER_NAME}
 	docker-compose restart collector
 	wait_for_flush
