@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Honeycomb.OpenTelemetry\Honeycomb.OpenTelemetry.csproj" />
+    <ProjectReference Include="..\..\src\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>

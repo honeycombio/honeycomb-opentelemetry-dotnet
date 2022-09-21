@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aspnetcore", "examples\aspn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aspnetcoreredis", "examples\aspnetcore-redis\aspnetcoreredis.csproj", "{41B05546-CC58-4546-AC73-2497F7CD8FD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Honeycomb.OpenTelemetry.Instrumentation.AspNetCore", "src\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore.csproj", "{DB772676-A314-44DC-8EBD-971FBE6953B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,18 @@ Global
 		{41B05546-CC58-4546-AC73-2497F7CD8FD8}.Release|x64.Build.0 = Release|Any CPU
 		{41B05546-CC58-4546-AC73-2497F7CD8FD8}.Release|x86.ActiveCfg = Release|Any CPU
 		{41B05546-CC58-4546-AC73-2497F7CD8FD8}.Release|x86.Build.0 = Release|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Debug|x64.Build.0 = Debug|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Debug|x86.Build.0 = Debug|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|x64.ActiveCfg = Release|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|x64.Build.0 = Release|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{061494E1-D5D7-479E-BE88-FE0E2F94D9F5} = {3E7EDB35-637A-402C-ABA6-EF8E4C55C051}
@@ -99,5 +113,6 @@ Global
 		{DC70B54C-4F4E-4826-A41B-99E976E9475A} = {B2B54384-A507-44F4-B611-039F7CC27AC0}
 		{37D377D0-7C5A-4F44-B535-C9DA60FDB723} = {B2B54384-A507-44F4-B611-039F7CC27AC0}
 		{41B05546-CC58-4546-AC73-2497F7CD8FD8} = {B2B54384-A507-44F4-B611-039F7CC27AC0}
+		{DB772676-A314-44DC-8EBD-971FBE6953B9} = {3E7EDB35-637A-402C-ABA6-EF8E4C55C051}
 	EndGlobalSection
 EndGlobal
