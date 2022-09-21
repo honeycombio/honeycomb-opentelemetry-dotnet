@@ -32,16 +32,18 @@ namespace aspnetcore
             services.AddControllers();
 
             // configure OpenTelemetry SDK to send data to Honeycomb
+            var options = Configuration.GetSection(HoneycombOptions.ConfigSectionName).Get<HoneycombOptions>();
             services.AddOpenTelemetryTracing(builder => builder
-                .AddHoneycomb(Configuration)
+                .AddHoneycomb(options)
                 .AddAspNetCoreInstrumentationWithBaggage()
             );
+            services.AddSingleton(TracerProvider.Default.GetTracer(options.ServiceName));
 
             // (optional metrics setup)
             // meter name used here must be configured in the OpenTelemetry SDK
             // service name is configured by default
             // you may configure additional meter names using the Honeycomb options
-            Meter meter = new Meter("my-web-app");
+            Meter meter = new Meter(options.MetricsDataset);
             services.AddSingleton(meter);
         }
 
