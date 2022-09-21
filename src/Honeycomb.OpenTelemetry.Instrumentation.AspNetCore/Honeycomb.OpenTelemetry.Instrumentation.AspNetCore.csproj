@@ -30,7 +30,7 @@
     <ProjectReference Include="..\Honeycomb.OpenTelemetry\Honeycomb.OpenTelemetry.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+  <ItemGroup>
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.6" />
   </ItemGroup>
 
