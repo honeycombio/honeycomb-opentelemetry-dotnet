@@ -21,12 +21,12 @@ teardown_file() {
 
 # TESTS
 
-# @test "Manual instrumentation produces span with name of span" {
-# 	result=$(span_names_for 'examples')
-# 	assert_equal "$result" '"greetings"'
-# }
+@test "Manual instrumentation produces span with name of span" {
+	result=$(span_names_for "aspnetcore-example")
+	assert_equal "$result" '"sleep"'
+}
 
-# @test "Manual instrumentation adds custom attribute" {
-# 	result=$(span_attributes_for "examples" | jq "select(.key == \"custom_field\").value.stringValue")
-# 	assert_equal "$result" '"important value"'
-# }
+@test "Manual instrumentation adds custom attribute" {
+	result=$(span_attributes_for "aspnetcore-example" | jq "select(.key == \"delay_ms\").value.intValue")
+	assert_equal "$result" '"100"'
+}
