@@ -16,11 +16,22 @@ clean:
 	rm -rf ./src/Honeycomb.OpenTelemetry/obj/*
 	dotnet clean
 
-smoke:
+
+smoke-sdk-grpc:
 	@echo ""
-	@echo "+++ Placeholder for Smoking all the tests."
+	@echo "+++ Running gRPC smoke tests."
 	@echo ""
-	cd smoke-tests && docker-compose up -d --build collector app-sdk-http && docker-compose down --volumes
+	cd smoke-tests && bats ./smoke-sdk-grpc.bats --report-formatter junit --output ./
+
+smoke-sdk-http:
+	@echo ""
+	@echo "+++ Running HTTP smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-http.bats --report-formatter junit --output ./
+
+smoke-sdk: smoke-sdk-grpc smoke-sdk-http
+
+smoke: smoke-sdk
 
 unsmoke:
 	@echo ""
@@ -40,4 +51,4 @@ publish_local: local_nuget_source_registered
 	@echo "Publishing nuget package(s) to: ${NUGET_PACKAGES_LOCAL}\n"
 	@dotnet pack -c release -o ${NUGET_PACKAGES_LOCAL} -p:signed=false
 
-.PHONY: build test clean smoke unsmoke resmoke local_nuget_source_registered publish_local
+.PHONY: build test clean smoke unsmoke resmoke local_nuget_source_registered publish_local smoke-sdk-grpc smoke-sdk
