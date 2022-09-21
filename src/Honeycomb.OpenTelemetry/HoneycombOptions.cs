@@ -17,8 +17,27 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Default service name if service name is not provided.
         /// </summary>
-        internal static readonly string SDefaultServiceName = $"unknown_service:{System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
+        internal static readonly string SDefaultServiceName = GetDefaultServiceName();
         private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
+
+        private static string GetDefaultServiceName()
+        {
+            var serviceName = "unknown_service";
+            try
+            {
+                serviceName += $":{System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
+            }
+            catch (PlatformNotSupportedException)
+            {
+                // some platforms do not have access, ignore
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"ERROR: unable to determine process name - {exception.ToString()}");
+            }
+
+            return serviceName;
+        }
 
         private string _tracesApiKey;
         private string _metricsApiKey;
@@ -184,7 +203,7 @@ namespace Honeycomb.OpenTelemetry
         /// If set to true, enables the console span exporter for local debugging.
         /// </summary>
         public bool Debug { get; set; } = false;
-        
+
         private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
         {
             { "--honeycomb-apikey", "apikey" },
@@ -262,7 +281,7 @@ namespace Honeycomb.OpenTelemetry
                 $"x-honeycomb-team={apikey}",
                 $"x-honeycomb-dataset={dataset}"
             };
-            
+
             return string.Join(",", headers);
         }
     }
