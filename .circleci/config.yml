@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   windows: circleci/windows@5.0.0
+  bats: circleci/bats@1.0.0
 
 commands:
   setup:
@@ -68,6 +69,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: ./
+      - bats/install
+      - run:
+          name: What's the BATS?
+          command: |
+            which bats
+            bats --version
       - run:
           name: Smoke Test
           command: make smoke
