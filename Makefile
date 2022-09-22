@@ -62,4 +62,4 @@ publish_local: local_nuget_source_registered
 	@echo "Publishing nuget package(s) to: ${NUGET_PACKAGES_LOCAL}\n"
 	@dotnet pack -c release -o ${NUGET_PACKAGES_LOCAL} -p:signed=false
 
-.PHONY: build test clean smoke unsmoke resmoke local_nuget_source_registered publish_local smoke-sdk-grpc smoke-sdk-http smoke-sdk
+.PHONY: build test clean smoke unsmoke resmoke local_nuget_source_registered publish_local smoke-sdk-grpc smoke-sdk-http smoke-sdk clean-smoke-tests
