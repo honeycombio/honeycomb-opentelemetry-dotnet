@@ -27,7 +27,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <ProjectReference Include="..\src\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore.csproj" />
+    <ProjectReference Include="..\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
