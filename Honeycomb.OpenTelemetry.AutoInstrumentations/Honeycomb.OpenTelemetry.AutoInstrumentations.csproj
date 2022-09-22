@@ -53,4 +53,8 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.Wcf" Version="1.0.0-rc.7" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="../../honeycomb.png" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>
+
 </Project>
