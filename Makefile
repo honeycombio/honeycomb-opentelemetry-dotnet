@@ -7,17 +7,20 @@ build:
 test: build
 	dotnet test --no-build
 
-clean:
+clean-smoke-tests:
+	rm -rf ./smoke-tests/collector/data.json
+	rm -rf ./smoke-tests/collector/data-results/*.json
+	rm -rf ./smoke-tests/report.*
+
+clean: clean-smoke-tests
 	rm -rf ./examples/aspnetcore/bin/*
 	rm -rf ./examples/aspnetcore/obj/*
 	rm -rf ./test/Honeycomb.OpenTelemetry.Tests/bin/*
 	rm -rf ./test/Honeycomb.OpenTelemetry.Tests/obj/*
 	rm -rf ./src/Honeycomb.OpenTelemetry/bin/*
 	rm -rf ./src/Honeycomb.OpenTelemetry/obj/*
-	rm -rf ./smoke-tests/report.*
-	rm -rf ./smoke-tests/collector/data.json
-	rm -rf ./smoke-tests/collector/data-results/*.json
 	dotnet clean
+
 
 smoke-tests/collector/data.json:
 	@echo ""
@@ -40,7 +43,7 @@ smoke-sdk: smoke-sdk-grpc smoke-sdk-http
 
 smoke: smoke-sdk
 
-unsmoke:
+unsmoke: clean-smoke-tests
 	@echo ""
 	@echo "+++ Spinning down the smokers."
 	@echo ""
