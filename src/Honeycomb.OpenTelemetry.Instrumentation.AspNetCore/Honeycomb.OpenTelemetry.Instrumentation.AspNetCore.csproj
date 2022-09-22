@@ -27,10 +27,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Honeycomb.OpenTelemetry\Honeycomb.OpenTelemetry.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.6" />
   </ItemGroup>
 
