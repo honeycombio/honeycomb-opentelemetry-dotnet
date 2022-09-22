@@ -43,12 +43,13 @@ smoke-sdk: smoke-sdk-grpc smoke-sdk-http
 
 smoke: smoke-sdk
 
-unsmoke: clean-smoke-tests
+unsmoke:
 	@echo ""
 	@echo "+++ Spinning down the smokers."
 	@echo ""
 	cd smoke-tests && docker-compose down --volumes
 
+## use this for local testing
 resmoke: unsmoke smoke
 
 ${NUGET_PACKAGES_LOCAL}:
