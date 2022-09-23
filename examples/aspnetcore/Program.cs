@@ -1,26 +1,30 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Honeycomb.OpenTelemetry;
+using OpenTelemetry.Trace;
+using System.Diagnostics.Metrics;
 
-namespace aspnetcore
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
-}
+var honeycombOptions =
+    builder.Configuration.GetSection(HoneycombOptions.ConfigSectionName)
+        .Get<HoneycombOptions>();
+
+builder.Services.AddOpenTelemetryTracing(otelBuilder =>
+    otelBuilder
+        .AddHoneycomb(builder.Configuration)
+        .AddAspNetCoreInstrumentationWithBaggage()
+);
+
+builder.Services.AddSingleton(TracerProvider.Default.GetTracer(honeycombOptions.ServiceName));
+
+// (optional metrics setup)
+// meter name used here must be configured in the OpenTelemetry SDK
+// service name is configured by default
+// you may configure additional meter names using the Honeycomb options
+var meter = new Meter(honeycombOptions.MetricsDataset);
+builder.Services.AddSingleton(meter);
+
+var app = builder.Build();
+
+app.MapControllers();
+await app.RunAsync();
