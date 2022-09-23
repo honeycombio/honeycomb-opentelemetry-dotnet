@@ -22,7 +22,7 @@ namespace Honeycomb.OpenTelemetry
                 {"HONEYCOMB_SAMPLE_RATE", "10"},
                 {"OTEL_SERVICE_NAME", "my-service-name"},
                 {"SERVICE_VERSION", "my-service-version"},
-                {"ENABLE_LOCAL_VISUALIZATIONS", "true" },
+                {"HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS", "true" },
                 {"DEBUG", "true"}
             };
             var options = new EnvironmentOptions(values);
@@ -77,7 +77,7 @@ namespace Honeycomb.OpenTelemetry
                 {"HONEYCOMB_SAMPLE_RATE", "10"},
                 {"OTEL_SERVICE_NAME", "my-env-service-name"},
                 {"SERVICE_VERSION", "my-env-service-version"},
-                {"ENABLE_LOCAL_VISUALIZATIONS", "true" },
+                {"HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS", "true" },
                 {"DEBUG", "true"}
             };
             var options = new EnvironmentOptions(values);

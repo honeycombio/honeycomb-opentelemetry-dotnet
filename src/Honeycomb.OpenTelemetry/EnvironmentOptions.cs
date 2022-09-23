@@ -17,7 +17,7 @@ namespace Honeycomb.OpenTelemetry
         private const string SampleRateKey = "HONEYCOMB_SAMPLE_RATE";
         private const string ServiceNameKey = "OTEL_SERVICE_NAME";
         private const string ServiceVersionKey = "SERVICE_VERSION";
-        private const string EnableLocalVisualizationsKey = "ENABLE_LOCAL_VISUALIZATIONS";
+        private const string EnableLocalVisualizationsKey = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS";
         private const string DebugKey = "DEBUG";
         private const uint DefaultSampleRate = 1;
         private const string DefaultApiEndpoint = "https://api.honeycomb.io:443";
