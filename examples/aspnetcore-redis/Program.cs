@@ -1,26 +1,32 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Honeycomb.OpenTelemetry;
+using OpenTelemetry.Trace;
+using StackExchange.Redis;
 
-namespace aspnetcoreredis
-{
-    public class Program
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+
+var redis = ConnectionMultiplexer.Connect(
+    new ConfigurationOptions
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        EndPoints = { "localhost:6379" },
+        AbortOnConnectFail = false, // allow for reconnects if redis is not available
     }
-}
+);
+builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
+
+var honeycombOptions =
+    builder.Configuration.GetSection(HoneycombOptions.ConfigSectionName)
+        .Get<HoneycombOptions>();
+
+builder.Services.AddOpenTelemetryTracing(otelBuilder =>
+    otelBuilder
+        .AddHoneycomb(builder.Configuration)
+        .AddAspNetCoreInstrumentationWithBaggage()
+        .AddRedisInstrumentation(redis)
+);
+
+builder.Services.AddSingleton(TracerProvider.Default.GetTracer(honeycombOptions.ServiceName));
+
+var app = builder.Build();
+app.MapControllers();
+await app.RunAsync();

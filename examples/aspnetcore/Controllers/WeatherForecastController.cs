@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Trace;
 using System.Diagnostics.Metrics;
 
@@ -21,7 +16,6 @@ namespace aspnetcore.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly Tracer _tracer;
         private readonly Counter<int> _counter;
-
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger, Tracer tracer, Meter meter)
         {
