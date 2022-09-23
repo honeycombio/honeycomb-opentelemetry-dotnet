@@ -1,25 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.32916.344
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3E7EDB35-637A-402C-ABA6-EF8E4C55C051}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Honeycomb.OpenTelemetry", "src\Honeycomb.OpenTelemetry\Honeycomb.OpenTelemetry.csproj", "{061494E1-D5D7-479E-BE88-FE0E2F94D9F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Honeycomb.OpenTelemetry", "src\Honeycomb.OpenTelemetry\Honeycomb.OpenTelemetry.csproj", "{061494E1-D5D7-479E-BE88-FE0E2F94D9F5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B622C013-E4C5-4632-A263-B652C38D2E27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Honeycomb.OpenTelemetry.Tests", "test\Honeycomb.OpenTelemetry.Tests\Honeycomb.OpenTelemetry.Tests.csproj", "{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Honeycomb.OpenTelemetry.Tests", "test\Honeycomb.OpenTelemetry.Tests\Honeycomb.OpenTelemetry.Tests.csproj", "{DE41D67B-F18B-4EAD-A1AC-D7AAB1DEB55E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{B2B54384-A507-44F4-B611-039F7CC27AC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "console", "examples\console\console.csproj", "{DC70B54C-4F4E-4826-A41B-99E976E9475A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "console", "examples\console\console.csproj", "{DC70B54C-4F4E-4826-A41B-99E976E9475A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aspnetcore", "examples\aspnetcore\aspnetcore.csproj", "{37D377D0-7C5A-4F44-B535-C9DA60FDB723}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aspnetcore", "examples\aspnetcore\aspnetcore.csproj", "{37D377D0-7C5A-4F44-B535-C9DA60FDB723}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aspnetcoreredis", "examples\aspnetcore-redis\aspnetcoreredis.csproj", "{41B05546-CC58-4546-AC73-2497F7CD8FD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aspnetcoreredis", "examples\aspnetcore-redis\aspnetcoreredis.csproj", "{41B05546-CC58-4546-AC73-2497F7CD8FD8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Honeycomb.OpenTelemetry.Instrumentation.AspNetCore", "src\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore.csproj", "{DB772676-A314-44DC-8EBD-971FBE6953B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Honeycomb.OpenTelemetry.Instrumentation.AspNetCore", "src\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore\Honeycomb.OpenTelemetry.Instrumentation.AspNetCore.csproj", "{DB772676-A314-44DC-8EBD-971FBE6953B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Honeycomb.OpenTelemetry.AutoInstrumentations", "src\Honeycomb.OpenTelemetry.AutoInstrumentations\Honeycomb.OpenTelemetry.AutoInstrumentations.csproj", "{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,9 +31,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{061494E1-D5D7-479E-BE88-FE0E2F94D9F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -106,6 +105,21 @@ Global
 		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|x64.Build.0 = Release|Any CPU
 		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|x86.ActiveCfg = Release|Any CPU
 		{DB772676-A314-44DC-8EBD-971FBE6953B9}.Release|x86.Build.0 = Release|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Debug|x64.Build.0 = Debug|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Debug|x86.Build.0 = Debug|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Release|x64.ActiveCfg = Release|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Release|x64.Build.0 = Release|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{061494E1-D5D7-479E-BE88-FE0E2F94D9F5} = {3E7EDB35-637A-402C-ABA6-EF8E4C55C051}
@@ -114,5 +128,9 @@ Global
 		{37D377D0-7C5A-4F44-B535-C9DA60FDB723} = {B2B54384-A507-44F4-B611-039F7CC27AC0}
 		{41B05546-CC58-4546-AC73-2497F7CD8FD8} = {B2B54384-A507-44F4-B611-039F7CC27AC0}
 		{DB772676-A314-44DC-8EBD-971FBE6953B9} = {3E7EDB35-637A-402C-ABA6-EF8E4C55C051}
+		{CA34C8B5-6C46-41C5-8931-AAFAD732DF5F} = {3E7EDB35-637A-402C-ABA6-EF8E4C55C051}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AFD90899-B909-432A-BBAA-BBC662E19E7C}
 	EndGlobalSection
 EndGlobal
