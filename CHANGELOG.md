@@ -2,9 +2,11 @@
 
 ## [1.0.0/0.24.0-beta] - 2022-09-23
 
+### !!! Breaking Changes !!!
+
 ### Enhancements
 
-- Add support for `OTEL_SERVICE_NAME` environment variable (#245)
+- Add support for `OTEL_SERVICE_NAME` environment variable (#245) | [@pkanal](https://github.com/pkanal)
 - Attempt to match Java distro resources (#249) | [@cartermp](https://github.com/cartermp)
 - Don't bundle instrumentation packages in distro (#250) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 - Support debug option (#254) | [@cartermp](https://github.com/cartermp)
