@@ -18,14 +18,9 @@ namespace Honeycomb.OpenTelemetry.AutoInstrumentations
             return
                 builder
 #if NET6_0_OR_GREATER
-                .AddAspNetCoreInstrumentation(options =>
-                {
-                    options.RecordException = true;
-                    options.EnrichWithBaggage();
-                })
+                .AddAspNetCoreInstrumentationWithBaggage()
                 .AddGrpcClientInstrumentation()
-#endif
-#if NET462_OR_GREATER
+#elif NET462_OR_GREATER
                 .AddAspNetInstrumentation()
 #endif
 #if NETSTANDARD2_0_OR_GREATER
@@ -38,7 +33,6 @@ namespace Honeycomb.OpenTelemetry.AutoInstrumentations
                 .AddRedisInstrumentation()
                 .AddWcfInstrumentation()
                 .AddNpgsql();
-
         }
     }
 }
