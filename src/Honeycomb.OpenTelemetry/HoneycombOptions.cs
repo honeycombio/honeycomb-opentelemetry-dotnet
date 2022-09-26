@@ -125,11 +125,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
         /// </summary>
-        public string TracesEndpoint
-        {
-            get { return _tracesEndpoint ?? Endpoint; }
-            set { _tracesEndpoint = value; }
-        }
+        public string TracesEndpoint { get; set; }
 
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.

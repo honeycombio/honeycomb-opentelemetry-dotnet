@@ -16,11 +16,14 @@ namespace Honeycomb.OpenTelemetry
         private const string MetricsEndpointKey = "HONEYCOMB_METRICS_ENDPOINT";
         private const string SampleRateKey = "HONEYCOMB_SAMPLE_RATE";
         private const string ServiceNameKey = "OTEL_SERVICE_NAME";
+
         private const string ServiceVersionKey = "SERVICE_VERSION";
         private const string EnableLocalVisualizationsKey = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS";
         private const string DebugKey = "DEBUG";
+        private const string OtelExporterOtlpProtocolKey = "OTEL_EXPORTER_OTLP_PROTOCOL";
         private const uint DefaultSampleRate = 1;
         private const string DefaultApiEndpoint = "https://api.honeycomb.io:443";
+
         private readonly IDictionary _environmentService;
 
         internal EnvironmentOptions() => new EnvironmentOptions(new Dictionary<string, string>());
@@ -35,14 +38,15 @@ namespace Honeycomb.OpenTelemetry
         internal string Dataset => GetEnvironmentVariable(DatasetKey);
         internal string TracesDataset => GetEnvironmentVariable(TracesDatasetKey, Dataset);
         internal string MetricsDataset => GetEnvironmentVariable(MetricsDatasetKey);
-        internal string ApiEndpoint => GetEnvironmentVariable(ApiEndpointKey, DefaultApiEndpoint);
-        internal string TracesEndpoint => GetEnvironmentVariable(TracesEndpointKey, ApiEndpoint);
+        internal string ApiEndpoint => GetEnvironmentVariable(ApiEndpointKey);
+        internal string TracesEndpoint => GetEnvironmentVariable(TracesEndpointKey);
         internal string MetricsEndpoint => GetEnvironmentVariable(MetricsEndpointKey, ApiEndpoint);
         internal string ServiceName => GetEnvironmentVariable(ServiceNameKey);
         internal string ServiceVersion => GetEnvironmentVariable(ServiceVersionKey);
         internal bool EnableLocalVisualizations => bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations) ? enableLocalVisualizations : false;
         internal bool Debug => bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug) ? debug : false;
         internal uint SampleRate => uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate) ? sampleRate : DefaultSampleRate;
+        internal string OtelExporterOtlpProtocol => GetEnvironmentVariable(OtelExporterOtlpProtocolKey);
 
         internal void SetOptionsFromEnvironmentIfTheyExist(HoneycombOptions options)
         {

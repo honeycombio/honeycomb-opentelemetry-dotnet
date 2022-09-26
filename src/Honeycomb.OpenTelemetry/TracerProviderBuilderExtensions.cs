@@ -14,6 +14,7 @@ namespace OpenTelemetry.Trace
     /// </summary>
     public static class TracerProviderBuilderExtensions
     {
+        private static EnvironmentOptions _environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
         /// </summary>
@@ -49,14 +50,19 @@ namespace OpenTelemetry.Trace
                 throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
             }
 
-            var environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
-            environmentOptions.SetOptionsFromEnvironmentIfTheyExist(options);
+            _environmentOptions.SetOptionsFromEnvironmentIfTheyExist(options);
 
             // if serviceName is null, warn and set to default
             if (string.IsNullOrWhiteSpace(options.ServiceName))
             {
                 options.ServiceName = HoneycombOptions.SDefaultServiceName;
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name", "OTEL_SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
+            }
+
+            // if the protocol is set to http/protobuf, append traces path to http endpoint
+            if (_environmentOptions.OtelExporterOtlpProtocol == "http/protobuf")
+            {
+                options.Endpoint = options.Endpoint + "/v1/traces";
             }
 
             builder
@@ -80,7 +86,7 @@ namespace OpenTelemetry.Trace
 
             if (!string.IsNullOrWhiteSpace(options.TracesApiKey))
             {
-                builder.AddHoneycombOtlpExporter(options.TracesApiKey, options.TracesDataset, options.TracesEndpoint);
+                builder.AddHoneycombOtlpExporter(options.TracesApiKey, options.TracesDataset, options.TracesEndpoint ?? options.Endpoint);
             }
             else
             {
