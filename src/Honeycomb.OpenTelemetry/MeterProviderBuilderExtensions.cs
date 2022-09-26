@@ -41,7 +41,7 @@ namespace OpenTelemetry.Metrics
 
                 var _metricsEndpoint = options.MetricsEndpoint ?? options.Endpoint;
                 var _metricsApiKey = options.MetricsApiKey ?? options.ApiKey;
-                var _metricsDataset = options.MetricsDataset ?? options.Dataset;
+                var _metricsDataset = options.MetricsDataset;
 
                 builder
                     .SetResourceBuilder(
