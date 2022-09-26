@@ -1,8 +1,8 @@
-using OpenTelemetry.Metrics;
+using Honeycomb.OpenTelemetry;
 using OpenTelemetry.Resources;
 using System;
 
-namespace Honeycomb.OpenTelemetry
+namespace OpenTelemetry.Metrics
 {
     /// <summary>
     /// Extension methods to configure <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb.

@@ -1,7 +1,6 @@
 ﻿using Npgsql;
-using OpenTelemetry.Trace;
 
-namespace Honeycomb.OpenTelemetry.AutoInstrumentations
+namespace OpenTelemetry.Trace
 {
     /// <summary>
     /// Extension methods to add instrumentation support for many common instrumentation packages.
@@ -13,7 +12,7 @@ namespace Honeycomb.OpenTelemetry.AutoInstrumentations
         /// </summary>
         /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>
         /// <returns>The instance of <see cref="TracerProviderBuilder"/> to chain the calls.</returns>
-        public static TracerProviderBuilder AddAllInstrumentation(this TracerProviderBuilder builder)
+        public static TracerProviderBuilder AddAutoInstrumentations(this TracerProviderBuilder builder)
         {
             return
                 builder
