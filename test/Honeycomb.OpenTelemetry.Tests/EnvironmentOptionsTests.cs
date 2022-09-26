@@ -101,13 +101,6 @@ namespace Honeycomb.OpenTelemetry
         public void Optional_args_fall_back_to_defaults()
         {
             var options = new EnvironmentOptions(new Dictionary<string, string>());
-            Assert.Equal(options.ApiKey, options.TracesApiKey);
-            Assert.Equal(options.ApiKey, options.MetricsApiKey);
-            Assert.Equal(options.Dataset, options.TracesDataset);
-            Assert.Empty(options.MetricsDataset);
-            Assert.Equal("https://api.honeycomb.io:443", options.ApiEndpoint);
-            Assert.Equal(options.ApiEndpoint, options.TracesEndpoint);
-            Assert.Equal(options.ApiEndpoint, options.MetricsEndpoint);
             Assert.Equal((uint)1, options.SampleRate);
             Assert.False(options.EnableLocalVisualizations);
         }
