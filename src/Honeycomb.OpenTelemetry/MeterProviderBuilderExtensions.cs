@@ -9,6 +9,9 @@ namespace OpenTelemetry.Metrics
     /// </summary>
     public static class MeterProviderBuilderExtensions
     {
+
+        private static EnvironmentOptions _environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
+
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb.
         /// </summary>
@@ -25,13 +28,20 @@ namespace OpenTelemetry.Metrics
         /// </summary>
         public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, HoneycombOptions options)
         {
+            _environmentOptions.SetOptionsFromEnvironmentIfTheyExist(options);
+
             // only enable metrics if a metrics dataset is set
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))
             {
+
                 if (string.IsNullOrWhiteSpace(options.MetricsApiKey))
                 {
                     Console.WriteLine("WARN: missing metrics API key");
                 }
+
+                var _metricsEndpoint = options.MetricsEndpoint ?? options.Endpoint;
+                var _metricsApiKey = options.MetricsApiKey ?? options.ApiKey;
+                var _metricsDataset = options.MetricsDataset ?? options.Dataset;
 
                 builder
                     .SetResourceBuilder(
@@ -41,7 +51,7 @@ namespace OpenTelemetry.Metrics
                             .AddEnvironmentVariableDetector()
                             .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                     )
-                    .AddHoneycombOtlpExporter(options.MetricsApiKey, options.MetricsDataset, options.MetricsEndpoint);
+                    .AddHoneycombOtlpExporter(_metricsApiKey, _metricsDataset, _metricsEndpoint);
 
                 builder.AddMeter(options.MetricsDataset);
                 foreach (var meterName in options.MeterNames)

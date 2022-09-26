@@ -33,14 +33,14 @@ namespace Honeycomb.OpenTelemetry
         }
 
         internal string ApiKey => GetEnvironmentVariable(ApiKeyKey);
-        internal string TracesApiKey => GetEnvironmentVariable(TracesApiKeyKey, ApiKey);
-        internal string MetricsApiKey => GetEnvironmentVariable(MetricsApiKeyKey, ApiKey);
+        internal string TracesApiKey => GetEnvironmentVariable(TracesApiKeyKey);
+        internal string MetricsApiKey => GetEnvironmentVariable(MetricsApiKeyKey);
         internal string Dataset => GetEnvironmentVariable(DatasetKey);
-        internal string TracesDataset => GetEnvironmentVariable(TracesDatasetKey, Dataset);
+        internal string TracesDataset => GetEnvironmentVariable(TracesDatasetKey);
         internal string MetricsDataset => GetEnvironmentVariable(MetricsDatasetKey);
         internal string ApiEndpoint => GetEnvironmentVariable(ApiEndpointKey);
         internal string TracesEndpoint => GetEnvironmentVariable(TracesEndpointKey);
-        internal string MetricsEndpoint => GetEnvironmentVariable(MetricsEndpointKey, ApiEndpoint);
+        internal string MetricsEndpoint => GetEnvironmentVariable(MetricsEndpointKey);
         internal string ServiceName => GetEnvironmentVariable(ServiceNameKey);
         internal string ServiceVersion => GetEnvironmentVariable(ServiceVersionKey);
         internal bool EnableLocalVisualizations => bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations) ? enableLocalVisualizations : false;

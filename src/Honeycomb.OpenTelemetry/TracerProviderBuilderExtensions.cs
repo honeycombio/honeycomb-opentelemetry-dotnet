@@ -52,6 +52,11 @@ namespace OpenTelemetry.Trace
 
             _environmentOptions.SetOptionsFromEnvironmentIfTheyExist(options);
 
+            var _endpoint = _environmentOptions.OtelExporterOtlpProtocol == "http/protobuf" ? options.Endpoint + "/v1/traces" : options.Endpoint;
+            var _tracesEndpoint = options.TracesEndpoint ?? _endpoint;
+            var _tracesApiKey = options.TracesApiKey ?? options.ApiKey;
+            var _tracesDataset = options.TracesDataset ?? options.Dataset;
+
             // if serviceName is null, warn and set to default
             if (string.IsNullOrWhiteSpace(options.ServiceName))
             {
@@ -59,11 +64,7 @@ namespace OpenTelemetry.Trace
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name", "OTEL_SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
             }
 
-            // if the protocol is set to http/protobuf, append traces path to http endpoint
-            if (_environmentOptions.OtelExporterOtlpProtocol == "http/protobuf")
-            {
-                options.Endpoint = options.Endpoint + "/v1/traces";
-            }
+
 
             builder
                 .AddSource(options.ServiceName)
@@ -84,9 +85,9 @@ namespace OpenTelemetry.Trace
                 builder.AddBaggageSpanProcessor();
             }
 
-            if (!string.IsNullOrWhiteSpace(options.TracesApiKey))
+            if (!string.IsNullOrWhiteSpace(_tracesApiKey))
             {
-                builder.AddHoneycombOtlpExporter(options.TracesApiKey, options.TracesDataset, options.TracesEndpoint ?? options.Endpoint);
+                builder.AddHoneycombOtlpExporter(_tracesApiKey, _tracesDataset, _tracesEndpoint);
             }
             else
             {
@@ -104,7 +105,7 @@ namespace OpenTelemetry.Trace
             }
 
             // heads up: even if dataset is set, it will be ignored
-            if (!string.IsNullOrWhiteSpace(options.TracesApiKey) & !options.IsTracesLegacyKey() & (!string.IsNullOrWhiteSpace(options.TracesDataset)))
+            if (!string.IsNullOrWhiteSpace(_tracesApiKey) & !options.IsTracesLegacyKey() & (!string.IsNullOrWhiteSpace(_tracesDataset)))
             {
                 if (!string.IsNullOrWhiteSpace(options.ServiceName))
                 {
@@ -141,11 +142,6 @@ namespace OpenTelemetry.Trace
         /// </summary>
         public static TracerProviderBuilder AddHoneycombOtlpExporter(this TracerProviderBuilder builder, string apikey, string dataset = null, string endpoint = null)
         {
-            if (string.IsNullOrWhiteSpace(endpoint))
-            {
-                endpoint = HoneycombOptions.DefaultEndpoint;
-            }
-
             return builder.AddOtlpExporter(otlpOptions =>
             {
                 otlpOptions.Endpoint = new Uri(endpoint);

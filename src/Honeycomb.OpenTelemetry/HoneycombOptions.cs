@@ -20,10 +20,7 @@ namespace Honeycomb.OpenTelemetry
         internal static readonly string SDefaultServiceName = $"unknown_service:{System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
         private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
-        private string _tracesApiKey;
         private string _metricsApiKey;
-        private string _tracesDataset;
-        private string _tracesEndpoint;
         private string _metricsEndpoint;
 
         /// <summary>
@@ -79,20 +76,12 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// API key used to send trace telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
         /// </summary>
-        public string TracesApiKey
-        {
-            get { return _tracesApiKey ?? ApiKey; }
-            set { _tracesApiKey = value; }
-        }
+        public string TracesApiKey { get; set; }
 
         /// <summary>
         /// API key used to send metrics telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
         /// </summary>
-        public string MetricsApiKey
-        {
-            get { return _metricsApiKey ?? ApiKey; }
-            set { _metricsApiKey = value; }
-        }
+        public string MetricsApiKey { get; set; }
 
         /// <summary>
         /// Honeycomb dataset to store telemetry data.
@@ -103,11 +92,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Honeycomb dataset to store trace telemetry data. Defaults to <see cref="Dataset"/>.
         /// </summary>
-        public string TracesDataset
-        {
-            get { return _tracesDataset ?? Dataset; }
-            set { _tracesDataset = value; }
-        }
+        public string TracesDataset { get; set; }
 
         /// <summary>
         /// Honeycomb dataset to store metrics telemetry data. Defaults to "null".
@@ -130,11 +115,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
         /// </summary>
-        public string MetricsEndpoint
-        {
-            get { return _metricsEndpoint ?? Endpoint; }
-            set { _metricsEndpoint = value; }
-        }
+        public string MetricsEndpoint { get; set; }
 
         /// <summary>
         /// Sample rate for sending telemetry data. Defaults to <see cref="DefaultSampleRate"/>.
