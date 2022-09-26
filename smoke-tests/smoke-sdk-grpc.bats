@@ -9,7 +9,7 @@ setup_file() {
 	echo "# 🚧" >&3
 	docker-compose up --detach collector ${CONTAINER_NAME}
 	wait_for_ready_app ${CONTAINER_NAME}
-	curl --silent "http://localhost:5001/weatherforecast"
+	curl --silent "https://localhost:5001/weatherforecast"
 	wait_for_traces
 }
 
