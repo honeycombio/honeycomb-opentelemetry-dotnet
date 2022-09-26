@@ -1,5 +1,5 @@
 version: '3.0'
-
+  
 x-env-base: &env_base
   HONEYCOMB_API_ENDPOINT: http://collector:4317
   HONEYCOMB_API_KEY: bogus_key
@@ -36,6 +36,7 @@ services:
     environment:
       <<: *env_base
       HONEYCOMB_API_ENDPOINT: http://collector:4318
+      HONEYCOMB_TRACES_ENDPOINT: ${HONEYCOMB_TRACES_ENDPOINT}
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
       DEBUG: "true"
     ports:

@@ -102,6 +102,11 @@ namespace OpenTelemetry.Trace
             if (options.Debug)
             {
                 builder.AddConsoleExporter();
+                Console.WriteLine("Traces Endpoint: " + _tracesEndpoint);
+                Console.WriteLine("Traces API Key: " + _tracesApiKey);
+                Console.WriteLine("Traces Dataset: " + _tracesDataset);
+                Console.WriteLine("Service Name: " + options.ServiceName);
+                Console.WriteLine("Sample Rate :" + options.SampleRate);
             }
 
             // heads up: even if dataset is set, it will be ignored
