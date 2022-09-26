@@ -1,7 +1,6 @@
 ﻿using Npgsql;
-using OpenTelemetry.Trace;
 
-namespace Honeycomb.OpenTelemetry.AutoInstrumentations
+namespace OpenTelemetry.Trace
 {
     /// <summary>
     /// Extension methods to add instrumentation support for many common instrumentation packages.

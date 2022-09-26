@@ -1,10 +1,9 @@
-using OpenTelemetry.Resources;
 using System;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Honeycomb.OpenTelemetry
+namespace OpenTelemetry.Resources
 {
     /// <summary>
     /// Extension methods to configure <see cref="ResourceBuilder"/> with Honeycomb distro attributes.
@@ -111,7 +110,7 @@ namespace Honeycomb.OpenTelemetry
 
         private static string GetFileVersion()
         {
-            var version = typeof(ResourceBuilderExtensions)
+            var version = typeof(Honeycomb.OpenTelemetry.HoneycombOptions)
                 .Assembly
                 .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                 .InformationalVersion;
@@ -120,7 +119,7 @@ namespace Honeycomb.OpenTelemetry
             // the form `{version_prefix}{version_suffix}+{commit_hash}`.
             // We should trim the hash if present to just leave the version prefix and suffix
             var i = version.IndexOf("+");
-            return i > 0 
+            return i > 0
                 ? version.Substring(0, i)
                 : version;
         }

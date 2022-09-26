@@ -1,14 +1,13 @@
+using Honeycomb.OpenTelemetry;
 using Microsoft.Extensions.Configuration;
-using OpenTelemetry;
 using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using System;
 
 #if NET462
 using System.Collections.Generic;
 #endif
 
-namespace Honeycomb.OpenTelemetry
+namespace OpenTelemetry.Trace
 {
     /// <summary>
     /// Extension methods to configure <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
