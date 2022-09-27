@@ -97,7 +97,6 @@ namespace OpenTelemetry.Trace
             if (options.Debug)
             {
                 builder.AddConsoleExporter();
-                // TODO: add debug with JSON serializer for options
                 Console.WriteLine("DEBUG: HoneycombOptions");
                 Console.WriteLine(JsonSerializer.Serialize(options, new JsonSerializerOptions { WriteIndented = true }));
             }
