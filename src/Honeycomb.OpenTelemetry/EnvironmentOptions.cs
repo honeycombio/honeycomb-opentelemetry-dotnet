@@ -43,83 +43,87 @@ namespace Honeycomb.OpenTelemetry
         internal string MetricsEndpoint => GetEnvironmentVariable(MetricsEndpointKey);
         internal string ServiceName => GetEnvironmentVariable(ServiceNameKey);
         internal string ServiceVersion => GetEnvironmentVariable(ServiceVersionKey);
-        internal bool EnableLocalVisualizations => bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations) ? enableLocalVisualizations : false;
-        internal bool Debug => bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug) ? debug : false;
-        internal uint SampleRate => uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate) ? sampleRate : DefaultSampleRate;
+        internal string EnableLocalVisualizationsValue => GetEnvironmentVariable(EnableLocalVisualizationsKey);
+        internal bool EnableLocalVisualizations => bool.TryParse(EnableLocalVisualizationsValue, out var enableLocalVisualizations) ? enableLocalVisualizations : false;
+        internal string DebugValue => GetEnvironmentVariable(DebugKey);
+        internal bool Debug => bool.TryParse(DebugValue, out var debug) ? debug : false;
+        internal string SampleRateValue => GetEnvironmentVariable(SampleRateKey);
+        internal uint SampleRate => uint.TryParse(SampleRateValue, out var sampleRate) ? sampleRate : DefaultSampleRate;
         internal string OtelExporterOtlpProtocol => GetEnvironmentVariable(OtelExporterOtlpProtocolKey);
 
-        internal void SetOptionsFromEnvironmentIfTheyExist(HoneycombOptions options)
-        {
-            if (!string.IsNullOrWhiteSpace(ApiKey))
-            {
-                options.ApiKey = ApiKey;
-            }
+        // TODO: Delete this once the other thing is working
+        // internal void SetOptionsFromEnvironmentIfTheyExist(HoneycombOptions options)
+        // {
+        //     if (!string.IsNullOrWhiteSpace(ApiKey))
+        //     {
+        //         options.ApiKey = ApiKey;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(TracesApiKey))
-            {
-                options.TracesApiKey = TracesApiKey;
-            }
+        //     if (!string.IsNullOrWhiteSpace(TracesApiKey))
+        //     {
+        //         options.TracesApiKey = TracesApiKey;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(MetricsApiKey))
-            {
-                options.MetricsApiKey = MetricsApiKey;
-            }
+        //     if (!string.IsNullOrWhiteSpace(MetricsApiKey))
+        //     {
+        //         options.MetricsApiKey = MetricsApiKey;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(Dataset))
-            {
-                options.Dataset = Dataset;
-            }
+        //     if (!string.IsNullOrWhiteSpace(Dataset))
+        //     {
+        //         options.Dataset = Dataset;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(TracesDataset))
-            {
-                options.TracesDataset = TracesDataset;
-            }
+        //     if (!string.IsNullOrWhiteSpace(TracesDataset))
+        //     {
+        //         options.TracesDataset = TracesDataset;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(MetricsDataset))
-            {
-                options.MetricsDataset = MetricsDataset;
-            }
+        //     if (!string.IsNullOrWhiteSpace(MetricsDataset))
+        //     {
+        //         options.MetricsDataset = MetricsDataset;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(ApiEndpoint))
-            {
-                options.Endpoint = ApiEndpoint;
-            }
+        //     if (!string.IsNullOrWhiteSpace(ApiEndpoint))
+        //     {
+        //         options.Endpoint = ApiEndpoint;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(TracesEndpoint))
-            {
-                options.TracesEndpoint = TracesEndpoint;
-            }
+        //     if (!string.IsNullOrWhiteSpace(TracesEndpoint))
+        //     {
+        //         options.TracesEndpoint = TracesEndpoint;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(MetricsEndpoint))
-            {
-                options.MetricsEndpoint = MetricsEndpoint;
-            }
+        //     if (!string.IsNullOrWhiteSpace(MetricsEndpoint))
+        //     {
+        //         options.MetricsEndpoint = MetricsEndpoint;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(ServiceName))
-            {
-                options.ServiceName = ServiceName;
-            }
+        //     if (!string.IsNullOrWhiteSpace(ServiceName))
+        //     {
+        //         options.ServiceName = ServiceName;
+        //     }
 
-            if (!string.IsNullOrWhiteSpace(ServiceVersion))
-            {
-                options.ServiceVersion = ServiceVersion;
-            }
+        //     if (!string.IsNullOrWhiteSpace(ServiceVersion))
+        //     {
+        //         options.ServiceVersion = ServiceVersion;
+        //     }
 
-            if (bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations))
-            {
-                options.EnableLocalVisualizations = enableLocalVisualizations;
-            }
+        //     if (bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations))
+        //     {
+        //         options.EnableLocalVisualizations = enableLocalVisualizations;
+        //     }
 
-            if (bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug))
-            {
-                options.Debug = debug;
-            }
+        //     if (bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug))
+        //     {
+        //         options.Debug = debug;
+        //     }
 
-            if (uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate))
-            {
-                options.SampleRate = sampleRate;
-            }
-        }
+        //     if (uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate))
+        //     {
+        //         options.SampleRate = sampleRate;
+        //     }
+        // }
 
         private string GetEnvironmentVariable(string key, string defaultValue = "")
         {

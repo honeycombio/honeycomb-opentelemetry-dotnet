@@ -10,7 +10,6 @@ namespace OpenTelemetry.Metrics
     public static class MeterProviderBuilderExtensions
     {
 
-        private static EnvironmentOptions _environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
 
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb.
@@ -28,7 +27,12 @@ namespace OpenTelemetry.Metrics
         /// </summary>
         public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, HoneycombOptions options)
         {
-            _environmentOptions.SetOptionsFromEnvironmentIfTheyExist(options);
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(Environment.GetEnvironmentVariables()));
+
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
+            }
 
             // only enable metrics if a metrics dataset is set
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))

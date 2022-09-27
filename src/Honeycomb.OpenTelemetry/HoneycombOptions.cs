@@ -13,12 +13,17 @@ namespace Honeycomb.OpenTelemetry
     public class HoneycombOptions
     {
         private const string OtlpVersion = "0.16.0";
+        private const string OtelExporterOtlpProtcolHttp = "http/protobuf";
+        private const string OtelExporterOtlpProtcolGrpc = "grpc";
+        private const string OtelExporterHttpTracesPath = "/v1/traces";
+
+        private bool isHttp = false;
 
         /// <summary>
         /// Default service name if service name is not provided.
         /// </summary>
         internal static readonly string SDefaultServiceName = $"unknown_service:{System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
-        private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
+        internal static readonly string SDefaultServiceVersion = "{unknown_service_version}";
 
         private string _metricsApiKey;
         private string _metricsEndpoint;
@@ -43,22 +48,6 @@ namespace Honeycomb.OpenTelemetry
         /// <para/>
         /// </summary>
         public string ApiKey { get; set; }
-
-        /// <summary>
-        /// Returns whether API key used to send trace telemetry is a legacy key.
-        /// </summary>
-        /// <remarks>
-        /// Legacy keys have 32 characters.
-        /// </remarks>
-        internal bool IsTracesLegacyKey() => IsClassicKey(TracesApiKey);
-
-        /// <summary>
-        /// Returns whether API key used to send metrics telemetry is a legacy key.
-        /// </summary>
-        /// <remarks>
-        /// Legacy keys have 32 characters.
-        /// </remarks>
-        internal bool IsMetricsLegacyKey() => IsClassicKey(MetricsApiKey);
 
         /// <summary>
         /// Returns whether the provided API key is a legacy key.
@@ -105,7 +94,6 @@ namespace Honeycomb.OpenTelemetry
         /// API endpoint to send telemetry data. Defaults to <see cref="DefaultEndpoint"/>.
         /// </summary>
         public string Endpoint { get; set; } = DefaultEndpoint;
-
 
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
@@ -162,6 +150,109 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public bool Debug { get; set; } = false;
 
+        /// <summary>
+        /// Applies environment variable option overrides.
+        /// </summary>
+        internal void ApplyEnvironmentOptions(EnvironmentOptions environmentOptions)
+        {
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ApiKey))
+            {
+                ApiKey = environmentOptions.ApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.TracesApiKey))
+            {
+                TracesApiKey = environmentOptions.TracesApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.MetricsApiKey))
+            {
+                MetricsApiKey = environmentOptions.MetricsApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ApiEndpoint))
+            {
+                Endpoint = environmentOptions.ApiEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.Dataset))
+            {
+                Dataset = environmentOptions.Dataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.TracesDataset))
+            {
+                TracesDataset = environmentOptions.TracesDataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.MetricsDataset))
+            {
+                MetricsDataset = environmentOptions.MetricsDataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.TracesEndpoint))
+            {
+                TracesEndpoint = environmentOptions.TracesEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.MetricsEndpoint))
+            {
+                MetricsEndpoint = environmentOptions.MetricsEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ServiceName))
+            {
+                ServiceName = environmentOptions.ServiceName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ServiceVersion))
+            {
+                ServiceVersion = environmentOptions.ServiceVersion;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.EnableLocalVisualizationsValue))
+            {
+                EnableLocalVisualizations = environmentOptions.EnableLocalVisualizations;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.DebugValue))
+            {
+                Debug = environmentOptions.Debug;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.SampleRateValue))
+            {
+                SampleRate = environmentOptions.SampleRate;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.OtelExporterOtlpProtocol))
+            {
+                isHttp = true;
+            }
+        }
+
+        /// <summary>
+        /// Computes the final traces endpoint.
+        /// </summary>
+        internal string GetTracesEndpoint()
+        {
+            var endpoint = new UriBuilder(Endpoint);
+            if (isHttp)
+            {
+                endpoint.Path = OtelExporterHttpTracesPath;
+            }
+            return TracesEndpoint ?? endpoint.ToString();
+        }
+
+        internal string GetTracesApiKey()
+        {
+            return TracesApiKey ?? ApiKey;
+        }
+
+        internal string GetTracesDataset()
+        {
+            return TracesDataset ?? Dataset;
+        }
         internal string GetTraceHeaders() => GetTraceHeaders(TracesApiKey, TracesDataset);
 
         internal static string GetTraceHeaders(string apikey, string dataset)

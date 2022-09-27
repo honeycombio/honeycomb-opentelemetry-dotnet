@@ -98,22 +98,15 @@ wait_for_flush() {
 wait_for_ready_app() {
 	CONTAINER=${1:?container name is a required parameter}
 	MAX_RETRIES=10
-    READY_APP_LOG="Now listening on:"
 	echo -n "# 🍿 Setting up ${CONTAINER}" >&3
 	NEXT_WAIT_TIME=0
-	until [ $NEXT_WAIT_TIME -eq $MAX_RETRIES ] || [[ $(search_logs_for ${CONTAINER} ${READY_APP_LOG}) ]]
+	until [ $NEXT_WAIT_TIME -eq $MAX_RETRIES ] || [[ $(docker-compose logs ${CONTAINER} | grep "Now listening on:") ]]
 	do
 		echo -n " ... $(( NEXT_WAIT_TIME++ ))s" >&3
 		sleep $NEXT_WAIT_TIME
 	done
 	echo "" >&3
 	[ $NEXT_WAIT_TIME -lt $MAX_RETRIES ]
-}
-
-search_logs_for() {
-    CONTAINER=${1:?container name is a required parameter}
-    SEARCH_TERM=${2:?search term is a required parameter}
-    docker-compose logs ${CONTAINER} | grep -o ${SEARCH_TERM} | head -1
 }
 
 # Fail and display details if the expected and actual values do not

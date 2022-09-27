@@ -14,7 +14,6 @@ namespace OpenTelemetry.Trace
     /// </summary>
     public static class TracerProviderBuilderExtensions
     {
-        private static EnvironmentOptions _environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
         /// </summary>
@@ -45,17 +44,12 @@ namespace OpenTelemetry.Trace
         /// </summary>
         public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(Environment.GetEnvironmentVariables()));
+
             if (options is null)
             {
                 throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
             }
-
-            _environmentOptions.SetOptionsFromEnvironmentIfTheyExist(options);
-
-            var _endpoint = _environmentOptions.OtelExporterOtlpProtocol == "http/protobuf" ? options.Endpoint + "/v1/traces" : options.Endpoint;
-            var _tracesEndpoint = options.TracesEndpoint ?? _endpoint;
-            var _tracesApiKey = options.TracesApiKey ?? options.ApiKey;
-            var _tracesDataset = options.TracesDataset ?? options.Dataset;
 
             // if serviceName is null, warn and set to default
             if (string.IsNullOrWhiteSpace(options.ServiceName))
@@ -85,9 +79,9 @@ namespace OpenTelemetry.Trace
                 builder.AddBaggageSpanProcessor();
             }
 
-            if (!string.IsNullOrWhiteSpace(_tracesApiKey))
+            if (!string.IsNullOrWhiteSpace(options.GetTracesApiKey()))
             {
-                builder.AddHoneycombOtlpExporter(_tracesApiKey, _tracesDataset, _tracesEndpoint);
+                builder.AddHoneycombOtlpExporter(options.GetTracesApiKey(), options.GetTracesDataset(), options.GetTracesEndpoint());
             }
             else
             {
@@ -102,15 +96,11 @@ namespace OpenTelemetry.Trace
             if (options.Debug)
             {
                 builder.AddConsoleExporter();
-                Console.WriteLine("Traces Endpoint: " + _tracesEndpoint);
-                Console.WriteLine("Traces API Key: " + _tracesApiKey);
-                Console.WriteLine("Traces Dataset: " + _tracesDataset);
-                Console.WriteLine("Service Name: " + options.ServiceName);
-                Console.WriteLine("Sample Rate :" + options.SampleRate);
+                // TODO: add debug with JSON serializer for options
             }
 
             // heads up: even if dataset is set, it will be ignored
-            if (!string.IsNullOrWhiteSpace(_tracesApiKey) & !options.IsTracesLegacyKey() & (!string.IsNullOrWhiteSpace(_tracesDataset)))
+            if (!string.IsNullOrWhiteSpace(options.GetTracesApiKey()) & !HoneycombOptions.IsClassicKey(options.GetTracesApiKey()) & (!string.IsNullOrWhiteSpace(options.GetTracesDataset())))
             {
                 if (!string.IsNullOrWhiteSpace(options.ServiceName))
                 {
