@@ -184,46 +184,6 @@ namespace Honeycomb.OpenTelemetry
         /// If set to true, enables the console span exporter for local debugging.
         /// </summary>
         public bool Debug { get; set; } = false;
-        
-        private static readonly Dictionary<string, string> CommandLineSwitchMap = new Dictionary<string, string>
-        {
-            { "--honeycomb-apikey", "apikey" },
-            { "--honeycomb-traces-apikey", "tracesapikey" },
-            { "--honeycomb-metrics-apikey", "metricsapikey" },
-            { "--honeycomb-dataset", "dataset" },
-            { "--honeycomb-traces-dataset", "tracesdataset" },
-            { "--honeycomb-metrics-dataset", "metricsdataset" },
-            { "--honeycomb-endpoint", "endpoint" },
-            { "--honeycomb-traces-endpoint", "tracesendpoint" },
-            { "--honeycomb-metrics-endpoint", "metricsendpoint" },
-            { "--honeycomb-samplerate", "samplerate" },
-            { "--honeycomb-enable-local-visualizations", "enablelocalvisualizations" },
-            { "--honeycomb-add-baggage-span-processor", "addBaggageSpanProcessor" },
-            { "--honeycomb-add-determinisitc-sampler", "addDeterministicSampler" },
-            { "--service-name", "servicename" },
-            { "--service-version", "serviceversion" },
-            { "--meter-names", "meternames" },
-            { "--debug", "debug" }
-        };
-
-        /// <summary>
-        /// Creates an instance of <see cref="HoneycombOptions"/> from command line parameters.
-        /// </summary>
-        public static HoneycombOptions FromArgs(params string[] args)
-        {
-            var config = new ConfigurationBuilder()
-                .AddCommandLine(args, CommandLineSwitchMap)
-                .Build();
-            var honeycombOptions = config.Get<HoneycombOptions>();
-
-            var meterNames = config.GetValue<string>("meternames");
-            if (!string.IsNullOrWhiteSpace(meterNames))
-            {
-                honeycombOptions.MeterNames = new List<string>(meterNames.Split(','));
-            }
-
-            return honeycombOptions;
-        }
 
         internal string GetTraceHeaders() => GetTraceHeaders(TracesApiKey, TracesDataset);
 
@@ -262,7 +222,7 @@ namespace Honeycomb.OpenTelemetry
                 $"x-honeycomb-team={apikey}",
                 $"x-honeycomb-dataset={dataset}"
             };
-            
+
             return string.Join(",", headers);
         }
     }

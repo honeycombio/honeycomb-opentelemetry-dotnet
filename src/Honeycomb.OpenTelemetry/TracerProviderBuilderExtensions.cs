@@ -15,14 +15,6 @@ namespace OpenTelemetry.Trace
     public static class TracerProviderBuilderExtensions
     {
         /// <summary>
-        /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb using options created from command line arguments.
-        /// </summary>
-        public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, string[] args)
-        {
-            return builder.AddHoneycomb(HoneycombOptions.FromArgs(args));
-        }
-
-        /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
         /// </summary>
         /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>

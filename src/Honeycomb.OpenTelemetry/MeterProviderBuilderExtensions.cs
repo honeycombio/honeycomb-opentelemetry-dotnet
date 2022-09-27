@@ -10,14 +10,6 @@ namespace OpenTelemetry.Metrics
     public static class MeterProviderBuilderExtensions
     {
         /// <summary>
-        /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb using options created from command line arguments.
-        /// </summary>
-        public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, string[] args)
-        {
-            return builder.AddHoneycomb(HoneycombOptions.FromArgs(args));
-        }
-
-        /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb.
         /// </summary>
         public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder,
