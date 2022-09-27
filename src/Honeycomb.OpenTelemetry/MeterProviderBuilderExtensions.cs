@@ -43,10 +43,6 @@ namespace OpenTelemetry.Metrics
                     Console.WriteLine("WARN: missing metrics API key");
                 }
 
-                var _metricsEndpoint = options.MetricsEndpoint ?? options.Endpoint;
-                var _metricsApiKey = options.MetricsApiKey ?? options.ApiKey;
-                var _metricsDataset = options.MetricsDataset;
-
                 builder
                     .SetResourceBuilder(
                         ResourceBuilder
@@ -55,7 +51,7 @@ namespace OpenTelemetry.Metrics
                             .AddEnvironmentVariableDetector()
                             .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                     )
-                    .AddHoneycombOtlpExporter(_metricsApiKey, _metricsDataset, _metricsEndpoint);
+                    .AddHoneycombOtlpExporter(options.GetMetricsApiKey(), options.MetricsDataset, options.GetMetricsEndpoint());
 
                 builder.AddMeter(options.MetricsDataset);
                 foreach (var meterName in options.MeterNames)

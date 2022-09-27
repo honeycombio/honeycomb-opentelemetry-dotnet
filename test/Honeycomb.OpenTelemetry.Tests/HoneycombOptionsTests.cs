@@ -7,81 +7,6 @@ namespace Honeycomb.OpenTelemetry.Tests
     public class HoneycombOptionsHelperTests
     {
         [Fact]
-<<<<<<< HEAD
-=======
-        public void CanParseOptionsFromSpacedCommandLineArgs()
-        {
-            var options = HoneycombOptions.FromArgs(
-                "--honeycomb-apikey", "my-apikey",
-                "--honeycomb-traces-apikey", "my-traces-apikey",
-                "--honeycomb-metrics-apikey", "my-metrics-apikey",
-                "--honeycomb-dataset", "my-dataset",
-                "--honeycomb-traces-dataset", "my-traces-dataset",
-                "--honeycomb-metrics-dataset", "my-metrics-dataset",
-                "--honeycomb-samplerate", "5",
-                "--honeycomb-endpoint", "my-endpoint",
-                "--honeycomb-traces-endpoint", "my-traces-endpoint",
-                "--honeycomb-metrics-endpoint", "my-metrics-endpoint",
-                "--meter-names", "meter1,meter2",
-                "--service-name", "my-service",
-                "--service-version", "my-version",
-                "--debug", "true"
-            );
-
-            Assert.Equal("my-apikey", options.ApiKey);
-            Assert.Equal("my-traces-apikey", options.TracesApiKey);
-            Assert.Equal("my-metrics-apikey", options.MetricsApiKey);
-            Assert.Equal("my-dataset", options.Dataset);
-            Assert.Equal("my-traces-dataset", options.TracesDataset);
-            Assert.Equal("my-metrics-dataset", options.MetricsDataset);
-            Assert.Equal((uint)5, options.SampleRate);
-            Assert.Equal("my-endpoint", options.Endpoint);
-            Assert.Equal("my-traces-endpoint", options.TracesEndpoint);
-            Assert.Equal("my-metrics-endpoint", options.MetricsEndpoint);
-            Assert.Equal("my-service", options.ServiceName);
-            Assert.Equal("my-version", options.ServiceVersion);
-            Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
-            Assert.True(options.Debug);
-        }
-
-        [Fact]
-        public void CanParseOptionsFromInlineCommandLineArgs()
-        {
-            var options = HoneycombOptions.FromArgs(
-                "--honeycomb-apikey=my-apikey",
-                "--honeycomb-traces-apikey=my-traces-apikey",
-                "--honeycomb-metrics-apikey=my-metrics-apikey",
-                "--honeycomb-dataset=my-dataset",
-                "--honeycomb-traces-dataset=my-traces-dataset",
-                "--honeycomb-metrics-dataset=my-metrics-dataset",
-                "--honeycomb-samplerate=5",
-                "--honeycomb-endpoint=my-endpoint",
-                "--honeycomb-traces-endpoint=my-traces-endpoint",
-                "--honeycomb-metrics-endpoint=my-metrics-endpoint",
-                "--meter-names=meter1,meter2",
-                "--service-name=my-service",
-                "--service-version=my-version",
-                "--debug=true"
-            );
-
-            Assert.Equal("my-apikey", options.ApiKey);
-            Assert.Equal("my-traces-apikey", options.TracesApiKey);
-            Assert.Equal("my-metrics-apikey", options.MetricsApiKey);
-            Assert.Equal("my-dataset", options.Dataset);
-            Assert.Equal("my-traces-dataset", options.TracesDataset);
-            Assert.Equal("my-metrics-dataset", options.MetricsDataset);
-            Assert.Equal((uint)5, options.SampleRate);
-            Assert.Equal("my-endpoint", options.Endpoint);
-            Assert.Equal("my-traces-endpoint", options.TracesEndpoint);
-            Assert.Equal("my-metrics-endpoint", options.MetricsEndpoint);
-            Assert.Equal("my-service", options.ServiceName);
-            Assert.Equal("my-version", options.ServiceVersion);
-            Assert.Equal(new List<string> { "meter1", "meter2" }, options.MeterNames);
-            Assert.True(options.Debug);
-        }
-
-        [Fact]
->>>>>>> df7f3b7 (remove options unit tests related to fallbacks)
         public void CanParseOptionsFromConfiguration()
         {
             var options =
@@ -236,6 +161,22 @@ namespace Honeycomb.OpenTelemetry.Tests
         }
 
         [Fact]
+        public void UsesGenericValuesIfMetricsSpecificValuesAreNotSet_Config()
+        {
+            var options = new HoneycombOptions
+            {
+                Endpoint = "http://collector:4318",
+                ApiKey = "my-api-key",
+                Dataset = "my-dataset"
+            };
+
+            Assert.Equal("http://collector:4318/", options.GetMetricsEndpoint());
+            Assert.Equal("my-api-key", options.GetMetricsApiKey());
+            // Should not fall override metrics dataset
+            Assert.NotEqual("my-dataset", options.MetricsDataset);
+        }
+
+        [Fact]
         public void UsesTracesSpecificValuesIfSet_Config()
         {
             var options = new HoneycombOptions
@@ -247,6 +188,18 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("http://collector:4318", options.GetTracesEndpoint());
             Assert.Equal("my-api-key", options.GetTracesApiKey());
             Assert.Equal("my-dataset", options.GetTracesDataset());
+        }
+
+        [Fact]
+        public void UsesMetricsSpecificValuesIfSet_Config()
+        {
+            var options = new HoneycombOptions
+            {
+                MetricsEndpoint = "http://collector:4318",
+                MetricsApiKey = "my-api-key",
+            };
+            Assert.Equal("http://collector:4318/", options.GetMetricsEndpoint());
+            Assert.Equal("my-api-key", options.GetMetricsApiKey());
         }
 
         [Fact]
@@ -268,6 +221,21 @@ namespace Honeycomb.OpenTelemetry.Tests
         }
 
         [Fact]
+        public void UseMetricsSpecificValuesOverGenericValues_Config()
+        {
+            var options = new HoneycombOptions
+            {
+                Endpoint = "http://collector:4318",
+                ApiKey = "my-api-key",
+                MetricsEndpoint = "http://collector:4318/v1/metrics",
+                MetricsApiKey = "my-api-key-metrics",
+            };
+
+            Assert.Equal("http://collector:4318/v1/metrics", options.GetMetricsEndpoint());
+            Assert.Equal("my-api-key-metrics", options.GetMetricsApiKey());
+        }
+
+        [Fact]
         public void UsesGenericValuesIfTracesSpecificValuesAreNotSet_EnvVars()
         {
             var options = new HoneycombOptions { };
@@ -282,6 +250,22 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("http://collector:4318/", options.GetTracesEndpoint());
             Assert.Equal("my-api-key-env-var", options.GetTracesApiKey());
             Assert.Equal("my-dataset-env-var", options.GetTracesDataset());
+        }
+
+        [Fact]
+        public void UsesGenericValuesIfMetricsSpecificValuesAreNotSet_EnvVars()
+        {
+            var options = new HoneycombOptions { };
+            var values = new Dictionary<string, string>
+            {
+                {"HONEYCOMB_API_KEY", "my-api-key-env-var"},
+                {"HONEYCOMB_DATASET", "my-dataset-env-var"},
+                {"HONEYCOMB_API_ENDPOINT", "http://collector:4318/"},
+            };
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+
+            Assert.Equal("http://collector:4318/", options.GetMetricsEndpoint());
+            Assert.Equal("my-api-key-env-var", options.GetMetricsApiKey());
         }
 
         [Fact]
@@ -302,6 +286,21 @@ namespace Honeycomb.OpenTelemetry.Tests
         }
 
         [Fact]
+        public void UsesMetricsSpecificValuesIfSet_EnvVars()
+        {
+            var options = new HoneycombOptions { };
+            var values = new Dictionary<string, string>
+            {
+                {"HONEYCOMB_METRICS_API_KEY", "my-metrics-api-key-env-var"},
+                {"HONEYCOMB_METRICS_ENDPOINT", "http://collector:4318/v1/metrics"},
+            };
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+
+            Assert.Equal("http://collector:4318/v1/metrics", options.GetMetricsEndpoint());
+            Assert.Equal("my-metrics-api-key-env-var", options.GetMetricsApiKey());
+        }
+
+        [Fact]
         public void UseTracesSpecificValuesOverGenericValues_EnvVars()
         {
             var options = new HoneycombOptions { };
@@ -319,6 +318,23 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.Equal("http://collector:4318/v1/traces", options.GetTracesEndpoint());
             Assert.Equal("my-traces-api-key-env-var", options.GetTracesApiKey());
             Assert.Equal("my-traces-dataset-env-var", options.GetTracesDataset());
+        }
+
+        [Fact]
+        public void UseMetricsSpecificValuesOverGenericValues_EnvVars()
+        {
+            var options = new HoneycombOptions { };
+            var values = new Dictionary<string, string>
+            {
+                {"HONEYCOMB_API_KEY", "my-api-key-env-var"},
+                {"HONEYCOMB_API_ENDPOINT", "http://collector:4318/"},
+                {"HONEYCOMB_METRICS_API_KEY", "my-metrics-api-key-env-var"},
+                {"HONEYCOMB_METRICS_ENDPOINT", "http://collector:4318/v1/metrics"},
+            };
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+
+            Assert.Equal("http://collector:4318/v1/metrics", options.GetMetricsEndpoint());
+            Assert.Equal("my-metrics-api-key-env-var", options.GetMetricsApiKey());
         }
 
         [Fact]
