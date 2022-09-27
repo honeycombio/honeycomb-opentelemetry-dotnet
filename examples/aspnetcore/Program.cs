@@ -23,7 +23,7 @@ builder.Services.AddOpenTelemetryMetrics(otelBuilder =>
 );
 
 // Register Meter so it can be injected into other components (eg controllers)
-builder.Services.AddSingleton(new Meter(honeycombOptions.ServiceName));
+builder.Services.AddSingleton(new Meter(honeycombOptions.MetricsDataset));
 
 var app = builder.Build();
 
