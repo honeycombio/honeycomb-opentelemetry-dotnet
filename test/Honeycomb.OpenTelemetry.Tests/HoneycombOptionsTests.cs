@@ -230,7 +230,7 @@ namespace Honeycomb.OpenTelemetry.Tests
                 Dataset = "my-dataset"
             };
 
-            Assert.Equal("http://collector:4318", options.GetTracesEndpoint());
+            Assert.Equal("http://collector:4318/", options.GetTracesEndpoint());
             Assert.Equal("my-api-key", options.GetTracesApiKey());
             Assert.Equal("my-dataset", options.GetTracesDataset());
         }
