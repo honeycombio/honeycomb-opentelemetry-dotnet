@@ -54,7 +54,7 @@ namespace Honeycomb.OpenTelemetry.Tests
                 {"HONEYCOMB_SAMPLE_RATE", "20"},
                 {"OTEL_SERVICE_NAME", "my-service-name-env-var"},
                 {"SERVICE_VERSION", "my-service-version-env-var"},
-                {"ENABLE_LOCAL_VISUALIZATIONS", "false" },
+                {"HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS", "false" },
                 {"DEBUG", "false"}
             };
 
@@ -102,7 +102,7 @@ namespace Honeycomb.OpenTelemetry.Tests
                 {"HONEYCOMB_SAMPLE_RATE", "20"},
                 {"OTEL_SERVICE_NAME", "my-service-name-env-var"},
                 {"SERVICE_VERSION", "my-service-version-env-var"},
-                {"ENABLE_LOCAL_VISUALIZATIONS", "false" },
+                {"HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS", "false" },
                 {"DEBUG", "false"}
             };
 
