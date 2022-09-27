@@ -1,4 +1,3 @@
-using Honeycomb.OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using System.Diagnostics.Metrics;
@@ -6,14 +5,12 @@ using System.Diagnostics.Metrics;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
-var honeycombOptions =
-    builder.Configuration.GetSection(HoneycombOptions.ConfigSectionName)
-        .Get<HoneycombOptions>();
+var honeycombOptions = builder.Configuration.GetHoneycombOptions();
 
 // Setup OpenTelemetry Tracing
 builder.Services.AddOpenTelemetryTracing(otelBuilder =>
     otelBuilder
-        .AddHoneycomb(builder.Configuration)
+        .AddHoneycomb(honeycombOptions)
         .AddAspNetCoreInstrumentationWithBaggage()
 );
 

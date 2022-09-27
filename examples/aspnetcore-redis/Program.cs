@@ -1,4 +1,3 @@
-using Honeycomb.OpenTelemetry;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
 
@@ -14,9 +13,7 @@ var redis = ConnectionMultiplexer.Connect(
 );
 builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
-var honeycombOptions =
-    builder.Configuration.GetSection(HoneycombOptions.ConfigSectionName)
-        .Get<HoneycombOptions>();
+var honeycombOptions = builder.Configuration.GetHoneycombOptions();
 
 builder.Services.AddOpenTelemetryTracing(otelBuilder =>
     otelBuilder
