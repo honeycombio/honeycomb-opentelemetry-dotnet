@@ -16,14 +16,12 @@ namespace Honeycomb.OpenTelemetry
         private const string MetricsEndpointKey = "HONEYCOMB_METRICS_ENDPOINT";
         private const string SampleRateKey = "HONEYCOMB_SAMPLE_RATE";
         private const string ServiceNameKey = "OTEL_SERVICE_NAME";
-
         private const string ServiceVersionKey = "SERVICE_VERSION";
         private const string EnableLocalVisualizationsKey = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS";
         private const string DebugKey = "DEBUG";
         private const string OtelExporterOtlpProtocolKey = "OTEL_EXPORTER_OTLP_PROTOCOL";
         private const uint DefaultSampleRate = 1;
         private const string DefaultApiEndpoint = "https://api.honeycomb.io:443";
-
         private readonly IDictionary _environmentService;
 
         internal EnvironmentOptions() => new EnvironmentOptions(new Dictionary<string, string>());

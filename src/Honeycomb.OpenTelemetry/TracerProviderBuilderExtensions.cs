@@ -2,6 +2,7 @@ using Honeycomb.OpenTelemetry;
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Resources;
 using System;
+using System.Text.Json;
 
 #if NET462
 using System.Collections.Generic;
@@ -97,6 +98,8 @@ namespace OpenTelemetry.Trace
             {
                 builder.AddConsoleExporter();
                 // TODO: add debug with JSON serializer for options
+                Console.WriteLine("DEBUG: HoneycombOptions");
+                Console.WriteLine(JsonSerializer.Serialize(options, new JsonSerializerOptions { WriteIndented = true }));
             }
 
             // heads up: even if dataset is set, it will be ignored

@@ -1,5 +1,5 @@
 version: '3.0'
-  
+
 x-env-base: &env_base
   HONEYCOMB_API_ENDPOINT: http://collector:4317
   HONEYCOMB_API_KEY: bogus_key
@@ -7,6 +7,7 @@ x-env-base: &env_base
   HONEYCOMB_METRICS_DATASET: bogus_dataset
   OTEL_METRIC_EXPORT_INTERVAL: 1000
   OTEL_SERVICE_NAME: "aspnetcore-example"
+  DEBUG: "true"
 
 x-app-base: &app_base
   build:
@@ -37,7 +38,6 @@ services:
       <<: *env_base
       HONEYCOMB_API_ENDPOINT: http://collector:4318
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
-      DEBUG: "true"
     ports:
       - "127.0.0.1:5001:5001"
 
