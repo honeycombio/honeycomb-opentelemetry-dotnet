@@ -1,3 +1,4 @@
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using System.Diagnostics.Metrics;
 
@@ -6,20 +7,23 @@ builder.Services.AddControllers();
 
 var honeycombOptions = builder.Configuration.GetHoneycombOptions();
 
+// Setup OpenTelemetry Tracing
 builder.Services.AddOpenTelemetryTracing(otelBuilder =>
     otelBuilder
         .AddHoneycomb(honeycombOptions)
         .AddAspNetCoreInstrumentationWithBaggage()
 );
 
+// Register Tracer so it can be injected into other components (eg Controllers)
 builder.Services.AddSingleton(TracerProvider.Default.GetTracer(honeycombOptions.ServiceName));
 
-// (optional metrics setup)
-// meter name used here must be configured in the OpenTelemetry SDK
-// service name is configured by default
-// you may configure additional meter names using the Honeycomb options
-var meter = new Meter(honeycombOptions.MetricsDataset);
-builder.Services.AddSingleton(meter);
+// Setup OpenTelemetry Metrics
+builder.Services.AddOpenTelemetryMetrics(otelBuilder =>
+    otelBuilder.AddHoneycomb(honeycombOptions)
+);
+
+// Register Meter so it can be injected into other components (eg controllers)
+builder.Services.AddSingleton(new Meter(honeycombOptions.MetricsDataset));
 
 var app = builder.Build();
 

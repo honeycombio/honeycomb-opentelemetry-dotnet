@@ -51,7 +51,7 @@ namespace OpenTelemetry.Metrics
                     )
                     .AddHoneycombOtlpExporter(options.MetricsApiKey, options.MetricsDataset, options.MetricsEndpoint);
 
-                builder.AddMeter(options.ServiceName);
+                builder.AddMeter(options.MetricsDataset);
                 foreach (var meterName in options.MeterNames)
                 {
                     builder.AddMeter(meterName);
