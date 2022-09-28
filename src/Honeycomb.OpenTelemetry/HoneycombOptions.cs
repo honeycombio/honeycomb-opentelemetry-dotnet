@@ -13,8 +13,9 @@ namespace Honeycomb.OpenTelemetry
     public class HoneycombOptions
     {
         private const string OtlpVersion = "0.16.0";
-        private const string OtelExporterOtlpProtcolHttp = "http/protobuf";
-        private const string OtelExporterOtlpProtcolGrpc = "grpc";
+        private const string OtelExporterOtlpProtocolHttpProtobuf = "http/protobuf";
+        private const string OtelExporterOtlpProtocolHttpJson = "http/json";
+        private const string OtelExporterOtlpProtocolGrpc = "grpc";
         private const string OtelExporterHttpTracesPath = "/v1/traces";
 
         private bool isHttp = false;
@@ -222,7 +223,7 @@ namespace Honeycomb.OpenTelemetry
                 SampleRate = environmentOptions.SampleRate;
             }
 
-            if (!string.IsNullOrWhiteSpace(environmentOptions.OtelExporterOtlpProtocol))
+            if (environmentOptions.OtelExporterOtlpProtocol == OtelExporterOtlpProtocolHttpProtobuf || environmentOptions.OtelExporterOtlpProtocol == OtelExporterOtlpProtocolHttpJson)
             {
                 isHttp = true;
             }

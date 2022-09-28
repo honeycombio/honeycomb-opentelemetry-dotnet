@@ -338,7 +338,7 @@ namespace Honeycomb.OpenTelemetry.Tests
         }
 
         [Fact]
-        public void AppendsTracesPathIfProtocolIsHttp_Config()
+        public void AppendsTracesPathIfProtocolIsHttpProtobuf_Config()
         {
             var options = new HoneycombOptions
             {
@@ -354,7 +354,40 @@ namespace Honeycomb.OpenTelemetry.Tests
         }
 
         [Fact]
-        public void AppendsTracesPathIfProtocolIsHttp_EnvVars()
+        public void AppendsTracesPathIfProtocolIsHttpJson_Config()
+        {
+            var options = new HoneycombOptions
+            {
+                Endpoint = "http://collector:4318/"
+            };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", "http/json"},
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4318/v1/traces", options.GetTracesEndpoint());
+        }
+
+        [Fact]
+        public void DoesNotAppendTracesPathIfProtocolIsGrpc_Config()
+        {
+            var options = new HoneycombOptions
+            {
+                Endpoint = "http://collector:4317/"
+            };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", "grpc"},
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4317/", options.GetTracesEndpoint());
+            Assert.DoesNotContain("/v1/traces", options.GetTracesEndpoint());
+        }
+
+        [Fact]
+        public void AppendsTracesPathIfProtocolIsHttpProtobuf_EnvVars()
         {
             var options = new HoneycombOptions { };
             var values = new Dictionary<string, string>
@@ -365,6 +398,34 @@ namespace Honeycomb.OpenTelemetry.Tests
 
             options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
             Assert.Equal("http://collector:4318/v1/traces", options.GetTracesEndpoint());
+        }
+
+        [Fact]
+        public void AppendsTracesPathIfProtocolIsHttpJson_EnvVars()
+        {
+            var options = new HoneycombOptions { };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", "http/json"},
+                {"HONEYCOMB_API_ENDPOINT", "http://collector:4318/"}
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4318/v1/traces", options.GetTracesEndpoint());
+        }
+        [Fact]
+        public void DoesNotAppendTracesPathIfProtocolIsGrpc_EnvVars()
+        {
+            var options = new HoneycombOptions { };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", "grpc"},
+                {"HONEYCOMB_API_ENDPOINT", "http://collector:4317/"}
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4317/", options.GetTracesEndpoint());
+            Assert.DoesNotContain("/v1/traces", options.GetTracesEndpoint());
         }
 
         [Fact]
