@@ -35,10 +35,10 @@ namespace OpenTelemetry.Metrics
             // only enable metrics if a metrics dataset is set
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))
             {
-                var _metricsApiKey = options.GetMetricsApiKey();
-                var _metricsEndpoint = options.GetMetricsEndpoint();
+                var metricsApiKey = options.GetMetricsApiKey();
+                var metricsEndpoint = options.GetMetricsEndpoint();
 
-                if (string.IsNullOrWhiteSpace(_metricsApiKey))
+                if (string.IsNullOrWhiteSpace(metricsApiKey))
                 {
                     Console.WriteLine("WARN: missing metrics API key");
                 }
@@ -51,7 +51,7 @@ namespace OpenTelemetry.Metrics
                             .AddEnvironmentVariableDetector()
                             .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                     )
-                    .AddHoneycombOtlpExporter(_metricsApiKey, options.MetricsDataset, _metricsEndpoint);
+                    .AddHoneycombOtlpExporter(metricsApiKey, options.MetricsDataset, metricsEndpoint);
 
                 builder.AddMeter(options.MetricsDataset);
                 foreach (var meterName in options.MeterNames)
