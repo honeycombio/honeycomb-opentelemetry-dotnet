@@ -17,7 +17,7 @@ namespace Honeycomb.OpenTelemetry
         private const string OtelExporterOtlpProtocolHttpJson = "http/json";
         private const string OtelExporterOtlpProtocolGrpc = "grpc";
         private const string OtelExporterHttpTracesPath = "/v1/traces";
-        private const string OtelExporterHttpMetricsPath = "/v1/traces";
+        private const string OtelExporterHttpMetricsPath = "/v1/metrics";
         private bool isHttp = false;
 
         /// <summary>

@@ -430,6 +430,99 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.DoesNotContain("/v1/traces", options.GetTracesEndpoint());
         }
 
+        [Theory]
+        [InlineData("http/protobuf", "http://collector:4318", null)]
+        [InlineData("http/json", "http://collector:4318", null)]
+        [InlineData("http/protobuf", null, "http://collector:4318")]
+        [InlineData("http/json", null, "http://collector:4318")]
+        [InlineData("http/protobuf", "http://collector:4318", "http://collector:4318")]
+        [InlineData("http/json", "http://collector:4318", "http://collector:4318")]
+        public void AppendsMetricsPathIfProtocolIsHttp(string protocol, string configEndpoint, string envVarEndpoint)
+        {
+            var options = new HoneycombOptions
+            {
+                Endpoint = configEndpoint
+            };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", protocol},
+                {"HONEYCOMB_API_ENDPOINT", envVarEndpoint},
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal($"{options.Endpoint}/v1/metrics", options.GetMetricsEndpoint());
+        }
+
+        [Theory]
+        [InlineData("http://collector:4317", null)]
+        [InlineData(null, "http://collector:4317")]
+        [InlineData("http://collector:4317", "http://collector:4317")]
+        public void DoesNotAppendMetricsPathIfProtocolIsGrpc(string configEndpoint, string envVarEndpoint)
+        {
+            var options = new HoneycombOptions
+            {
+                Endpoint = configEndpoint
+            };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", "grpc"},
+                {"HONEYCOMB_API_ENDPOINT", envVarEndpoint},
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4317/", options.GetMetricsEndpoint());
+            Assert.DoesNotContain("/v1/metrics", options.GetMetricsEndpoint());
+        }
+
+        [Theory]
+        [InlineData("http/protobuf", "http://collector:4318", null)]
+        [InlineData("http/json", "http://collector:4318", null)]
+        [InlineData("http/protobuf", null, "http://collector:4318")]
+        [InlineData("http/json", null, "http://collector:4318")]
+        [InlineData("http/protobuf", "http://collector:4318", "http://collector:4318")]
+        [InlineData("http/json", "http://collector:4318", "http://collector:4318")]
+        public void DoesNotAppendMetricsPathToMetricsEndpoints(string protocol, string configEndpoint, string envVarEndpoint)
+        {
+            var options = new HoneycombOptions
+            {
+                MetricsEndpoint = configEndpoint
+            };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", protocol},
+                {"HONEYCOMB_METRICS_ENDPOINT", envVarEndpoint},
+
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4318", options.GetMetricsEndpoint());
+            Assert.DoesNotContain("/v1/metrics", options.GetMetricsEndpoint());
+        }
+
+        [Theory]
+        [InlineData("http/protobuf", "http://collector:4318/my-special-path", null)]
+        [InlineData("http/json", "http://collector:4318/my-special-path", null)]
+        [InlineData("http/protobuf", null, "http://collector:4318/my-special-path")]
+        [InlineData("http/json", null, "http://collector:4318/my-special-path")]
+        [InlineData("http/protobuf", "http://collector:4318/my-special-path", "http://collector:4318/my-special-path")]
+        [InlineData("http/json", "http://collector:4318/my-special-path", "http://collector:4318/my-special-path")]
+        public void DoesNotAppendMetricsPathToGenericEndpointIfPathSpecified(string protocol, string configEndpoint, string envVarEndpoint)
+        {
+            var options = new HoneycombOptions
+            {
+                Endpoint = configEndpoint
+            };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", protocol},
+                {"HONEYCOMB_API_ENDPOINT", envVarEndpoint},
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4318/my-special-path", options.GetMetricsEndpoint());
+            Assert.DoesNotContain("/v1/metrics", options.GetMetricsEndpoint());
+        }
+
         [Fact]
         public void Legacy_key_length()
         {
