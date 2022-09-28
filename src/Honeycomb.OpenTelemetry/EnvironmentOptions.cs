@@ -19,6 +19,7 @@ namespace Honeycomb.OpenTelemetry
         private const string ServiceVersionKey = "SERVICE_VERSION";
         private const string EnableLocalVisualizationsKey = "HONEYCOMB_ENABLE_LOCAL_VISUALIZATIONS";
         private const string DebugKey = "DEBUG";
+        private const string OtelExporterOtlpProtocolKey = "OTEL_EXPORTER_OTLP_PROTOCOL";
         private const uint DefaultSampleRate = 1;
         private const string DefaultApiEndpoint = "https://api.honeycomb.io:443";
         private readonly IDictionary _environmentService;
@@ -30,93 +31,23 @@ namespace Honeycomb.OpenTelemetry
         }
 
         internal string ApiKey => GetEnvironmentVariable(ApiKeyKey);
-        internal string TracesApiKey => GetEnvironmentVariable(TracesApiKeyKey, ApiKey);
-        internal string MetricsApiKey => GetEnvironmentVariable(MetricsApiKeyKey, ApiKey);
+        internal string TracesApiKey => GetEnvironmentVariable(TracesApiKeyKey);
+        internal string MetricsApiKey => GetEnvironmentVariable(MetricsApiKeyKey);
         internal string Dataset => GetEnvironmentVariable(DatasetKey);
-        internal string TracesDataset => GetEnvironmentVariable(TracesDatasetKey, Dataset);
+        internal string TracesDataset => GetEnvironmentVariable(TracesDatasetKey);
         internal string MetricsDataset => GetEnvironmentVariable(MetricsDatasetKey);
-        internal string ApiEndpoint => GetEnvironmentVariable(ApiEndpointKey, DefaultApiEndpoint);
-        internal string TracesEndpoint => GetEnvironmentVariable(TracesEndpointKey, ApiEndpoint);
-        internal string MetricsEndpoint => GetEnvironmentVariable(MetricsEndpointKey, ApiEndpoint);
+        internal string ApiEndpoint => GetEnvironmentVariable(ApiEndpointKey);
+        internal string TracesEndpoint => GetEnvironmentVariable(TracesEndpointKey);
+        internal string MetricsEndpoint => GetEnvironmentVariable(MetricsEndpointKey);
         internal string ServiceName => GetEnvironmentVariable(ServiceNameKey);
         internal string ServiceVersion => GetEnvironmentVariable(ServiceVersionKey);
-        internal bool EnableLocalVisualizations => bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations) ? enableLocalVisualizations : false;
-        internal bool Debug => bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug) ? debug : false;
-        internal uint SampleRate => uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate) ? sampleRate : DefaultSampleRate;
-
-        internal void SetOptionsFromEnvironmentIfTheyExist(HoneycombOptions options)
-        {
-            if (!string.IsNullOrWhiteSpace(ApiKey))
-            {
-                options.ApiKey = ApiKey;
-            }
-
-            if (!string.IsNullOrWhiteSpace(TracesApiKey))
-            {
-                options.TracesApiKey = TracesApiKey;
-            }
-
-            if (!string.IsNullOrWhiteSpace(MetricsApiKey))
-            {
-                options.MetricsApiKey = MetricsApiKey;
-            }
-
-            if (!string.IsNullOrWhiteSpace(Dataset))
-            {
-                options.Dataset = Dataset;
-            }
-
-            if (!string.IsNullOrWhiteSpace(TracesDataset))
-            {
-                options.TracesDataset = TracesDataset;
-            }
-
-            if (!string.IsNullOrWhiteSpace(MetricsDataset))
-            {
-                options.MetricsDataset = MetricsDataset;
-            }
-
-            if (!string.IsNullOrWhiteSpace(ApiEndpoint))
-            {
-                options.Endpoint = ApiEndpoint;
-            }
-
-            if (!string.IsNullOrWhiteSpace(TracesEndpoint))
-            {
-                options.TracesEndpoint = TracesEndpoint;
-            }
-
-            if (!string.IsNullOrWhiteSpace(MetricsEndpoint))
-            {
-                options.MetricsEndpoint = MetricsEndpoint;
-            }
-
-            if (!string.IsNullOrWhiteSpace(ServiceName))
-            {
-                options.ServiceName = ServiceName;
-            }
-
-            if (!string.IsNullOrWhiteSpace(ServiceVersion))
-            {
-                options.ServiceVersion = ServiceVersion;
-            }
-
-            if (bool.TryParse(GetEnvironmentVariable(EnableLocalVisualizationsKey), out var enableLocalVisualizations))
-            {
-                options.EnableLocalVisualizations = enableLocalVisualizations;
-            }
-
-            if (bool.TryParse(GetEnvironmentVariable(DebugKey), out var debug))
-            {
-                options.Debug = debug;
-            }
-
-            if (uint.TryParse(GetEnvironmentVariable(SampleRateKey), out var sampleRate))
-            {
-                options.SampleRate = sampleRate;
-            }
-        }
-
+        internal string EnableLocalVisualizationsValue => GetEnvironmentVariable(EnableLocalVisualizationsKey);
+        internal bool EnableLocalVisualizations => bool.TryParse(EnableLocalVisualizationsValue, out var enableLocalVisualizations) ? enableLocalVisualizations : false;
+        internal string DebugValue => GetEnvironmentVariable(DebugKey);
+        internal bool Debug => bool.TryParse(DebugValue, out var debug) ? debug : false;
+        internal string SampleRateValue => GetEnvironmentVariable(SampleRateKey);
+        internal uint SampleRate => uint.TryParse(SampleRateValue, out var sampleRate) ? sampleRate : DefaultSampleRate;
+        internal string OtelExporterOtlpProtocol => GetEnvironmentVariable(OtelExporterOtlpProtocolKey);
         private string GetEnvironmentVariable(string key, string defaultValue = "")
         {
             var value = _environmentService[key];

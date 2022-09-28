@@ -13,18 +13,18 @@ namespace Honeycomb.OpenTelemetry
     public class HoneycombOptions
     {
         private const string OtlpVersion = "0.16.0";
+        private const string OtelExporterOtlpProtocolHttpProtobuf = "http/protobuf";
+        private const string OtelExporterOtlpProtocolHttpJson = "http/json";
+        private const string OtelExporterOtlpProtocolGrpc = "grpc";
+        private const string OtelExporterHttpTracesPath = "/v1/traces";
+
+        private bool isHttp = false;
 
         /// <summary>
         /// Default service name if service name is not provided.
         /// </summary>
         internal static readonly string SDefaultServiceName = $"unknown_service:{System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
-        private static readonly string SDefaultServiceVersion = "{unknown_service_version}";
-
-        private string _tracesApiKey;
-        private string _metricsApiKey;
-        private string _tracesDataset;
-        private string _tracesEndpoint;
-        private string _metricsEndpoint;
+        internal static readonly string SDefaultServiceVersion = "unknown_service_version";
 
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
@@ -48,22 +48,6 @@ namespace Honeycomb.OpenTelemetry
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// Returns whether API key used to send trace telemetry is a legacy key.
-        /// </summary>
-        /// <remarks>
-        /// Legacy keys have 32 characters.
-        /// </remarks>
-        internal bool IsTracesLegacyKey() => IsClassicKey(TracesApiKey);
-
-        /// <summary>
-        /// Returns whether API key used to send metrics telemetry is a legacy key.
-        /// </summary>
-        /// <remarks>
-        /// Legacy keys have 32 characters.
-        /// </remarks>
-        internal bool IsMetricsLegacyKey() => IsClassicKey(MetricsApiKey);
-
-        /// <summary>
         /// Returns whether the provided API key is a legacy key.
         /// </summary>
         /// <remarks>
@@ -79,20 +63,12 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// API key used to send trace telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
         /// </summary>
-        public string TracesApiKey
-        {
-            get { return _tracesApiKey ?? ApiKey; }
-            set { _tracesApiKey = value; }
-        }
+        public string TracesApiKey { get; set; }
 
         /// <summary>
         /// API key used to send metrics telemetry data to Honeycomb. Defaults to <see cref="ApiKey"/>.
         /// </summary>
-        public string MetricsApiKey
-        {
-            get { return _metricsApiKey ?? ApiKey; }
-            set { _metricsApiKey = value; }
-        }
+        public string MetricsApiKey { get; set; }
 
         /// <summary>
         /// Honeycomb dataset to store telemetry data.
@@ -103,11 +79,7 @@ namespace Honeycomb.OpenTelemetry
         /// <summary>
         /// Honeycomb dataset to store trace telemetry data. Defaults to <see cref="Dataset"/>.
         /// </summary>
-        public string TracesDataset
-        {
-            get { return _tracesDataset ?? Dataset; }
-            set { _tracesDataset = value; }
-        }
+        public string TracesDataset { get; set; }
 
         /// <summary>
         /// Honeycomb dataset to store metrics telemetry data. Defaults to "null".
@@ -121,24 +93,15 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         public string Endpoint { get; set; } = DefaultEndpoint;
 
+        /// <summary>
+        /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
+        /// </summary>
+        public string TracesEndpoint { get; set; }
 
         /// <summary>
         /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
         /// </summary>
-        public string TracesEndpoint
-        {
-            get { return _tracesEndpoint ?? Endpoint; }
-            set { _tracesEndpoint = value; }
-        }
-
-        /// <summary>
-        /// API endpoint to send telemetry data. Defaults to <see cref="Endpoint"/>.
-        /// </summary>
-        public string MetricsEndpoint
-        {
-            get { return _metricsEndpoint ?? Endpoint; }
-            set { _metricsEndpoint = value; }
-        }
+        public string MetricsEndpoint { get; set; }
 
         /// <summary>
         /// Sample rate for sending telemetry data. Defaults to <see cref="DefaultSampleRate"/>.
@@ -184,6 +147,126 @@ namespace Honeycomb.OpenTelemetry
         /// If set to true, enables the console span exporter for local debugging.
         /// </summary>
         public bool Debug { get; set; } = false;
+
+        /// <summary>
+        /// Applies environment variable option overrides.
+        /// </summary>
+        internal void ApplyEnvironmentOptions(EnvironmentOptions environmentOptions)
+        {
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ApiKey))
+            {
+                ApiKey = environmentOptions.ApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.TracesApiKey))
+            {
+                TracesApiKey = environmentOptions.TracesApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.MetricsApiKey))
+            {
+                MetricsApiKey = environmentOptions.MetricsApiKey;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ApiEndpoint))
+            {
+                Endpoint = environmentOptions.ApiEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.Dataset))
+            {
+                Dataset = environmentOptions.Dataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.TracesDataset))
+            {
+                TracesDataset = environmentOptions.TracesDataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.MetricsDataset))
+            {
+                MetricsDataset = environmentOptions.MetricsDataset;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.TracesEndpoint))
+            {
+                TracesEndpoint = environmentOptions.TracesEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.MetricsEndpoint))
+            {
+                MetricsEndpoint = environmentOptions.MetricsEndpoint;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ServiceName))
+            {
+                ServiceName = environmentOptions.ServiceName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.ServiceVersion))
+            {
+                ServiceVersion = environmentOptions.ServiceVersion;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.EnableLocalVisualizationsValue))
+            {
+                EnableLocalVisualizations = environmentOptions.EnableLocalVisualizations;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.DebugValue))
+            {
+                Debug = environmentOptions.Debug;
+            }
+
+            if (!string.IsNullOrWhiteSpace(environmentOptions.SampleRateValue))
+            {
+                SampleRate = environmentOptions.SampleRate;
+            }
+
+            if (environmentOptions.OtelExporterOtlpProtocol == OtelExporterOtlpProtocolHttpProtobuf || environmentOptions.OtelExporterOtlpProtocol == OtelExporterOtlpProtocolHttpJson)
+            {
+                isHttp = true;
+            }
+        }
+
+        /// <summary>
+        /// Computes the final traces endpoint.
+        /// </summary>
+        internal string GetTracesEndpoint()
+        {
+            var endpoint = new UriBuilder(Endpoint);
+            if (isHttp && (string.IsNullOrWhiteSpace(endpoint.Path) || endpoint.Path == "/"))
+            {
+                endpoint.Path = OtelExporterHttpTracesPath;
+            }
+            return TracesEndpoint ?? endpoint.ToString();
+        }
+
+        internal string GetTracesApiKey()
+        {
+            return TracesApiKey ?? ApiKey;
+        }
+
+        internal string GetTracesDataset()
+        {
+            return TracesDataset ?? Dataset;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="MetricsEndpoint" /> or falls back to the generic <see cref="Endpoint" />.
+        /// </summary>
+        internal string GetMetricsEndpoint()
+        {
+            return new UriBuilder(MetricsEndpoint ?? Endpoint).ToString();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="MetricsApiKey" /> or falls back to the generic <see cref="ApiKey" />.
+        /// </summary>
+        internal string GetMetricsApiKey()
+        {
+            return MetricsApiKey ?? ApiKey;
+        }
 
         internal string GetTraceHeaders() => GetTraceHeaders(TracesApiKey, TracesDataset);
 

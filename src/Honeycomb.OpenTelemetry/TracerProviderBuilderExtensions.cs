@@ -2,6 +2,7 @@ using Honeycomb.OpenTelemetry;
 using Microsoft.Extensions.Configuration;
 using OpenTelemetry.Resources;
 using System;
+using System.Text.Json;
 
 #if NET462
 using System.Collections.Generic;
@@ -46,11 +47,14 @@ namespace OpenTelemetry.Trace
         {
             if (options is null)
             {
-                throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
+                options = new HoneycombOptions { };
             }
 
-            var environmentOptions = new EnvironmentOptions(Environment.GetEnvironmentVariables());
-            environmentOptions.SetOptionsFromEnvironmentIfTheyExist(options);
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(Environment.GetEnvironmentVariables()));
+
+            var tracesEndpoint = options.GetTracesEndpoint();
+            var tracesApiKey = options.GetTracesApiKey();
+            var tracesDataset = options.GetTracesDataset();
 
             // if serviceName is null, warn and set to default
             if (string.IsNullOrWhiteSpace(options.ServiceName))
@@ -78,9 +82,9 @@ namespace OpenTelemetry.Trace
                 builder.AddBaggageSpanProcessor();
             }
 
-            if (!string.IsNullOrWhiteSpace(options.TracesApiKey))
+            if (!string.IsNullOrWhiteSpace(tracesApiKey))
             {
-                builder.AddHoneycombOtlpExporter(options.TracesApiKey, options.TracesDataset, options.TracesEndpoint);
+                builder.AddHoneycombOtlpExporter(tracesApiKey, tracesDataset, tracesEndpoint);
             }
             else
             {
@@ -95,10 +99,12 @@ namespace OpenTelemetry.Trace
             if (options.Debug)
             {
                 builder.AddConsoleExporter();
+                Console.WriteLine("DEBUG: HoneycombOptions");
+                Console.WriteLine(JsonSerializer.Serialize(options, new JsonSerializerOptions { WriteIndented = true }));
             }
 
             // heads up: even if dataset is set, it will be ignored
-            if (!string.IsNullOrWhiteSpace(options.TracesApiKey) & !options.IsTracesLegacyKey() & (!string.IsNullOrWhiteSpace(options.TracesDataset)))
+            if (!string.IsNullOrWhiteSpace(tracesApiKey) & !HoneycombOptions.IsClassicKey(tracesApiKey) & (!string.IsNullOrWhiteSpace(tracesDataset)))
             {
                 if (!string.IsNullOrWhiteSpace(options.ServiceName))
                 {
@@ -135,11 +141,6 @@ namespace OpenTelemetry.Trace
         /// </summary>
         public static TracerProviderBuilder AddHoneycombOtlpExporter(this TracerProviderBuilder builder, string apikey, string dataset = null, string endpoint = null)
         {
-            if (string.IsNullOrWhiteSpace(endpoint))
-            {
-                endpoint = HoneycombOptions.DefaultEndpoint;
-            }
-
             return builder.AddOtlpExporter(otlpOptions =>
             {
                 otlpOptions.Endpoint = new Uri(endpoint);

@@ -25,10 +25,20 @@ namespace OpenTelemetry.Metrics
         /// </summary>
         public static MeterProviderBuilder AddHoneycomb(this MeterProviderBuilder builder, HoneycombOptions options)
         {
+            if (options is null)
+            {
+                options = new HoneycombOptions { };
+            }
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(Environment.GetEnvironmentVariables()));
+
             // only enable metrics if a metrics dataset is set
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))
             {
-                if (string.IsNullOrWhiteSpace(options.MetricsApiKey))
+                var metricsApiKey = options.GetMetricsApiKey();
+                var metricsEndpoint = options.GetMetricsEndpoint();
+
+                if (string.IsNullOrWhiteSpace(metricsApiKey))
                 {
                     Console.WriteLine("WARN: missing metrics API key");
                 }
@@ -41,7 +51,7 @@ namespace OpenTelemetry.Metrics
                             .AddEnvironmentVariableDetector()
                             .AddService(serviceName: options.ServiceName, serviceVersion: options.ServiceVersion)
                     )
-                    .AddHoneycombOtlpExporter(options.MetricsApiKey, options.MetricsDataset, options.MetricsEndpoint);
+                    .AddHoneycombOtlpExporter(metricsApiKey, options.MetricsDataset, metricsEndpoint);
 
                 builder.AddMeter(options.MetricsDataset);
                 foreach (var meterName in options.MeterNames)
