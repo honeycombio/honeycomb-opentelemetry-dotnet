@@ -52,6 +52,10 @@ namespace OpenTelemetry.Trace
 
             options.ApplyEnvironmentOptions(new EnvironmentOptions(Environment.GetEnvironmentVariables()));
 
+            var _tracesEndpoint = options.GetTracesEndpoint();
+            var _tracesApiKey = options.GetTracesApiKey();
+            var _tracesDataset = options.GetTracesDataset();
+
             // if serviceName is null, warn and set to default
             if (string.IsNullOrWhiteSpace(options.ServiceName))
             {
@@ -78,9 +82,9 @@ namespace OpenTelemetry.Trace
                 builder.AddBaggageSpanProcessor();
             }
 
-            if (!string.IsNullOrWhiteSpace(options.GetTracesApiKey()))
+            if (!string.IsNullOrWhiteSpace(_tracesApiKey))
             {
-                builder.AddHoneycombOtlpExporter(options.GetTracesApiKey(), options.GetTracesDataset(), options.GetTracesEndpoint());
+                builder.AddHoneycombOtlpExporter(_tracesApiKey, _tracesDataset, _tracesEndpoint);
             }
             else
             {
@@ -100,7 +104,7 @@ namespace OpenTelemetry.Trace
             }
 
             // heads up: even if dataset is set, it will be ignored
-            if (!string.IsNullOrWhiteSpace(options.GetTracesApiKey()) & !HoneycombOptions.IsClassicKey(options.GetTracesApiKey()) & (!string.IsNullOrWhiteSpace(options.GetTracesDataset())))
+            if (!string.IsNullOrWhiteSpace(_tracesApiKey) & !HoneycombOptions.IsClassicKey(_tracesApiKey) & (!string.IsNullOrWhiteSpace(_tracesDataset)))
             {
                 if (!string.IsNullOrWhiteSpace(options.ServiceName))
                 {
