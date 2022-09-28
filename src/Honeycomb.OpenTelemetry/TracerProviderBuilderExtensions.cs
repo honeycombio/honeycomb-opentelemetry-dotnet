@@ -45,12 +45,12 @@ namespace OpenTelemetry.Trace
         /// </summary>
         public static TracerProviderBuilder AddHoneycomb(this TracerProviderBuilder builder, HoneycombOptions options)
         {
-            options.ApplyEnvironmentOptions(new EnvironmentOptions(Environment.GetEnvironmentVariables()));
-
             if (options is null)
             {
-                throw new ArgumentNullException(nameof(options), "No Honeycomb options have been set in appsettings.json, environment variables, or the command line.");
+                options = new HoneycombOptions { };
             }
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(Environment.GetEnvironmentVariables()));
 
             // if serviceName is null, warn and set to default
             if (string.IsNullOrWhiteSpace(options.ServiceName))
