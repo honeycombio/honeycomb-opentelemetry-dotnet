@@ -198,7 +198,7 @@ namespace Honeycomb.OpenTelemetry.Tests
                 MetricsEndpoint = "http://collector:4318",
                 MetricsApiKey = "my-api-key",
             };
-            Assert.Equal("http://collector:4318/", options.GetMetricsEndpoint());
+            Assert.Equal("http://collector:4318", options.GetMetricsEndpoint());
             Assert.Equal("my-api-key", options.GetMetricsApiKey());
         }
 

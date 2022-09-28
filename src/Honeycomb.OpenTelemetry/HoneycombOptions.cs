@@ -17,7 +17,7 @@ namespace Honeycomb.OpenTelemetry
         private const string OtelExporterOtlpProtocolHttpJson = "http/json";
         private const string OtelExporterOtlpProtocolGrpc = "grpc";
         private const string OtelExporterHttpTracesPath = "/v1/traces";
-
+        private const string OtelExporterHttpMetricsPath = "/v1/traces";
         private bool isHttp = false;
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace Honeycomb.OpenTelemetry
         }
 
         /// <summary>
-        /// Computes the final traces endpoint.
+        /// Gets the <see cref="TracesEndpoint" /> or falls back to the generic <see cref="Endpoint" />.
         /// </summary>
         internal string GetTracesEndpoint()
         {
@@ -257,7 +257,12 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         internal string GetMetricsEndpoint()
         {
-            return new UriBuilder(MetricsEndpoint ?? Endpoint).ToString();
+            var endpoint = new UriBuilder(Endpoint);
+            if (isHttp && (string.IsNullOrWhiteSpace(endpoint.Path) || endpoint.Path == "/"))
+            {
+                endpoint.Path = OtelExporterHttpMetricsPath;
+            }
+            return MetricsEndpoint ?? endpoint.ToString();
         }
 
         /// <summary>
