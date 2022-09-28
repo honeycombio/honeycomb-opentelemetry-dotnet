@@ -37,7 +37,6 @@ services:
     environment:
       <<: *env_base
       HONEYCOMB_API_ENDPOINT: http://collector:4318
-      HONEYCOMB_METRICS_ENDPOINT: http://collector:4318/v1/metrics
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
     ports:
       - "127.0.0.1:5001:5001"
