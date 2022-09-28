@@ -23,7 +23,7 @@ namespace Honeycomb.OpenTelemetry
         /// Default service name if service name is not provided.
         /// </summary>
         internal static readonly string SDefaultServiceName = $"unknown_service:{System.Diagnostics.Process.GetCurrentProcess().ProcessName}";
-        internal static readonly string SDefaultServiceVersion = "{unknown_service_version}";
+        internal static readonly string SDefaultServiceVersion = "unknown_service_version";
 
         /// <summary>
         /// Name of the Honeycomb section of IConfiguration
@@ -266,6 +266,7 @@ namespace Honeycomb.OpenTelemetry
         {
             return MetricsApiKey ?? ApiKey;
         }
+
         internal string GetTraceHeaders() => GetTraceHeaders(TracesApiKey, TracesDataset);
 
         internal static string GetTraceHeaders(string apikey, string dataset)

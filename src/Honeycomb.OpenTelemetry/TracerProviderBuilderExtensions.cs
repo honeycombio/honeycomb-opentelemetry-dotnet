@@ -59,8 +59,6 @@ namespace OpenTelemetry.Trace
                 Console.WriteLine($"WARN: {EnvironmentOptions.GetErrorMessage("service name", "OTEL_SERVICE_NAME")}. If left unset, this will show up in Honeycomb as unknown_service:<process_name>.");
             }
 
-
-
             builder
                 .AddSource(options.ServiceName)
                 .SetResourceBuilder(

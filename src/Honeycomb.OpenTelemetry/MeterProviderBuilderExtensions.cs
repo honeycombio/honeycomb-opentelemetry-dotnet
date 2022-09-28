@@ -9,8 +9,6 @@ namespace OpenTelemetry.Metrics
     /// </summary>
     public static class MeterProviderBuilderExtensions
     {
-
-
         /// <summary>
         /// Configures the <see cref="MeterProviderBuilder"/> to send metrics telemetry data to Honeycomb.
         /// </summary>
@@ -37,7 +35,6 @@ namespace OpenTelemetry.Metrics
             // only enable metrics if a metrics dataset is set
             if (!string.IsNullOrWhiteSpace(options.MetricsDataset))
             {
-
                 if (string.IsNullOrWhiteSpace(options.MetricsApiKey))
                 {
                     Console.WriteLine("WARN: missing metrics API key");
