@@ -5,7 +5,7 @@ x-env-base: &env_base
   HONEYCOMB_API_KEY: bogus_key
   HONEYCOMB_DATASET: bogus_dataset
   HONEYCOMB_METRICS_DATASET: bogus_dataset
-  OTEL_METRIC_EXPORT_INTERVAL: 1000
+  OTEL_METRIC_EXPORT_INTERVAL: 100
   OTEL_SERVICE_NAME: "aspnetcore-example"
   DEBUG: "true"
 
@@ -37,6 +37,7 @@ services:
     environment:
       <<: *env_base
       HONEYCOMB_API_ENDPOINT: http://collector:4318
+      HONEYCOMB_METRICS_ENDPOINT: http://collector:4318/v1/metrics
       OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
     ports:
       - "127.0.0.1:5001:5001"
