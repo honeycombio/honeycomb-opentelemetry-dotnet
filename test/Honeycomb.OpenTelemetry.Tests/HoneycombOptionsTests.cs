@@ -413,6 +413,7 @@ namespace Honeycomb.OpenTelemetry.Tests
             options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
             Assert.Equal("http://collector:4318/v1/traces", options.GetTracesEndpoint());
         }
+
         [Fact]
         public void DoesNotAppendTracesPathIfProtocolIsGrpc_EnvVars()
         {
@@ -457,6 +458,36 @@ namespace Honeycomb.OpenTelemetry.Tests
             options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
             Assert.Equal("http://collector:4318/", options.GetTracesEndpoint());
 
+        }
+
+        [Fact]
+        public void DoesNotAppendTracesPathToGenericEndpointIfPathSpecified_Config()
+        {
+            var options = new HoneycombOptions
+            {
+                Endpoint = "http://collector:4318/my-special-path"
+            };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", "http/protobuf"},
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4318/my-special-path", options.GetTracesEndpoint());
+        }
+
+        [Fact]
+        public void DoesNotAppendTracesPathToGenericEndpointIfPathSpecified_EnvVars()
+        {
+            var options = new HoneycombOptions { };
+            var values = new Dictionary<string, string>
+            {
+                {"OTEL_EXPORTER_OTLP_PROTOCOL", "http/protobuf"},
+                {"HONEYCOMB_API_ENDPOINT", "http://collector:4318/my-special-path"}
+            };
+
+            options.ApplyEnvironmentOptions(new EnvironmentOptions(values));
+            Assert.Equal("http://collector:4318/my-special-path", options.GetTracesEndpoint());
         }
 
         [Fact]

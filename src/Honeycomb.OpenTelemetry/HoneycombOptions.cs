@@ -235,7 +235,7 @@ namespace Honeycomb.OpenTelemetry
         internal string GetTracesEndpoint()
         {
             var endpoint = new UriBuilder(Endpoint);
-            if (isHttp)
+            if (isHttp && (string.IsNullOrWhiteSpace(endpoint.Path) || endpoint.Path == "/"))
             {
                 endpoint.Path = OtelExporterHttpTracesPath;
             }
