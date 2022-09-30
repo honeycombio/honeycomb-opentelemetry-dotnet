@@ -13,6 +13,12 @@
 - Add AspNetCore instrumentation extension to add baggage to new spans (#255) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 - Set options with environment variables if they're present (#261) | [@cartermp](https://github.com/cartermp)
 - Add Honeycomb.OpenTelemetry.Autoinstrumentations #270 | [@cartermp](https://github.com/cartermp)
+- Append /v1/metrics to endpoint path if the protocol is HTTP (#284) | [@pkanal](https://github.com/pkanal)
+- Append /v1/traces path to http endpoint (#279) | [@pkanal](https://github.com/pkanal)
+- Remove custom command line argument parsing (#282) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Add ConfigurationManager extensions methods (#280) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Move extensions into owning class namespace & rename add instrumentations ext method (#276)
+- Add HONEYCOMB prefix to local visualizations env var (#275) | [@cartermp](https://github.com/cartermp)
 
 ### Maintenance
 
@@ -26,6 +32,7 @@
 - Minor code formatting (#260) | [@cartermp](https://github.com/cartermp)
 - Idiomatic code formatting (#247) | [@cartermp](https://github.com/cartermp)
 - Add Tracer to DI in aspnet examples (#262) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Update aspnetcore example to send metrics (#281) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 
 ### Dependencies
 
