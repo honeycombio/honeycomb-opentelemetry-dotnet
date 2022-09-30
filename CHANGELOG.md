@@ -1,5 +1,46 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [1.0.0/0.24.0-beta] - 2022-09-23
+
+### !!! Breaking Changes !!!
+
+### Enhancements
+
+- Add support for `OTEL_SERVICE_NAME` environment variable (#245) | [@pkanal](https://github.com/pkanal)
+- Attempt to match Java distro resources (#249) | [@cartermp](https://github.com/cartermp)
+- Don't bundle instrumentation packages in distro (#250) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Support debug option (#254) | [@cartermp](https://github.com/cartermp)
+- Add AspNetCore instrumentation extension to add baggage to new spans (#255) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Set options with environment variables if they're present (#261) | [@cartermp](https://github.com/cartermp)
+- Add Honeycomb.OpenTelemetry.Autoinstrumentations #270 | [@cartermp](https://github.com/cartermp)
+- Append /v1/metrics to endpoint path if the protocol is HTTP (#284) | [@pkanal](https://github.com/pkanal)
+- Append /v1/traces path to http endpoint (#279) | [@pkanal](https://github.com/pkanal)
+- Remove custom command line argument parsing (#282) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Add ConfigurationManager extensions methods (#280) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Move extensions into owning class namespace & rename add instrumentations ext method (#276)
+- Add HONEYCOMB prefix to local visualizations env var (#275) | [@cartermp](https://github.com/cartermp)
+
+### Maintenance
+
+- Specify OTel version in README (#246) | [@pkanal](https://github.com/pkanal)
+- Add grpc smoke tests (#264) | [@pkanal](https://github.com/pkanal)
+- Add http/protobuf smoke tests (#263) | [@pkanal](https://github.com/pkanal)
+- Add make targets for smoke tests & set up CI smoke tests (#268) | [@pkanal](https://github.com/pkanal)
+- Dockerize example and prep for smoke tests, target .NET6 (#243) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Add Redis instrumentation example app (#242) | [@JamieDanielson](https://github.com/JamieDanielson)
+- Move aspnetcore samples to modern .NET 6-style apps (#271) | [@cartermp](https://github.com/cartermp)
+- Minor code formatting (#260) | [@cartermp](https://github.com/cartermp)
+- Idiomatic code formatting (#247) | [@cartermp](https://github.com/cartermp)
+- Add Tracer to DI in aspnet examples (#262) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Update aspnetcore example to send metrics (#281) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
+### Dependencies
+
+- Bump xunit from 2.4.1 to 2.4.2 (#259)
+- Bump System.Text.Json from 6.0.5 to 6.0.6 (#258)
+- Bump xunit.runner.visualstudio from 2.4.3 to 2.4.5 (#257)
+- Bump Microsoft.NET.Test.Sdk from 17.2.0 to 17.3.1 (#256)
+
 ## [0.23.0-beta] - 2022-08-03
 
 ### Enhancements
