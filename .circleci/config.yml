@@ -141,17 +141,17 @@ workflows:
           filters:
             tags:
               only: /.*/
-            branches:
-              ignore:
-                - /pull\/.*/
-                - /dependabot\/.*/
       - smoke_test:
           requires:
-            - package
+            - test
+          filters:
+            tags:
+              only: /.*/
       - publish_github:
           context: Honeycomb Secrets for Public Repos
           requires:
             - smoke_test
+            - package
           filters:
             tags:
               only: /^v.*/
@@ -161,6 +161,7 @@ workflows:
           context: Honeycomb Secrets for Public Repos
           requires:
             - smoke_test
+            - package
           filters:
             tags:
               only: /^v.*/
