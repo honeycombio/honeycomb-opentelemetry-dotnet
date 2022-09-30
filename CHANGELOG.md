@@ -1,6 +1,6 @@
 # honeycomb-opentelemetry-dotnet changelog
 
-## [1.0.0/0.24.0-beta] - 2022-09-23
+## [1.0.0/0.24.0-beta] - 2022-09-30
 
 ### !!! Breaking Changes !!!
 
@@ -33,6 +33,7 @@
 - Idiomatic code formatting (#247) | [@cartermp](https://github.com/cartermp)
 - Add Tracer to DI in aspnet examples (#262) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
 - Update aspnetcore example to send metrics (#281) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+- Update CircleCI config to publish tags correctly (#286) | [@pkanal](https://github.com/pkanal)
 
 ### Dependencies
 
