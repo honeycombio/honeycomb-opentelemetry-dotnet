@@ -27,7 +27,9 @@ let configureServices (services: IServiceCollection) (honeycombOptions: Honeycom
             |> ignore)
     |> ignore
 
-let configureApp (appBuilder: IApplicationBuilder) (tracer: Tracer) (meter: Meter) =
+let configureApp (appBuilder: IApplicationBuilder) (honeycombOptions: HoneycombOptions) =
+    let tracer = TracerProvider.Default.GetTracer(honeycombOptions.ServiceName)
+    let meter = new Meter(honeycombOptions.MetricsDataset)
     appBuilder
         .UseRouting()
         .UseGiraffe(Routing.endpoints tracer meter)
@@ -39,10 +41,7 @@ let honeycombOptions = builder.Configuration.GetHoneycombOptions();
 
 configureServices builder.Services honeycombOptions
 
-let tracer = TracerProvider.Default.GetTracer(honeycombOptions.ServiceName)
-let meter = new Meter(honeycombOptions.MetricsDataset)
-
 let app = builder.Build()
-configureApp app tracer meter
+configureApp app honeycombOptions
 
 app.Run()

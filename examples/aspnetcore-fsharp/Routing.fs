@@ -14,6 +14,11 @@ type WeatherForecast =
       TemperatureC: int
       Summary: string }
 
+let createForecast index (rng: Random) (weatherSummaries: string[]) =
+    { Date = DateTime.Now.AddDays(index)
+      TemperatureC = rng.Next(-20,55)
+      Summary = weatherSummaries[rng.Next(weatherSummaries.Length)] }
+
 let weatherSummaries =
     [|
         "Freezing"
@@ -36,9 +41,7 @@ let weatherForecastHandler (tracer: Tracer) (sheepCounter: Counter<int>) =
         let forecast =
             [|
                 for index in 0..4 ->
-                    { Date = DateTime.Now.AddDays(float index)
-                      TemperatureC = rng.Next(-20,55)
-                      Summary = weatherSummaries[rng.Next(weatherSummaries.Length)] }
+                    createForecast index rng weatherSummaries
             |]
 
         forecastSpan.SetAttribute("app.weatherForecast.days", forecast.Length) |> ignore
