@@ -14,7 +14,7 @@ type WeatherForecast =
       TemperatureC: int
       Summary: string }
 
-let createForecast index (rng: Random) (weatherSummaries: string[]) =
+let private createForecast index (rng: Random) (weatherSummaries: string[]) =
     { Date = DateTime.Now.AddDays(index)
       TemperatureC = rng.Next(-20,55)
       Summary = weatherSummaries[rng.Next(weatherSummaries.Length)] }
@@ -33,7 +33,7 @@ let weatherSummaries =
         "Scorching"
     |]
 
-let weatherForecastHandler (tracer: Tracer) (sheepCounter: Counter<int>) =
+let private weatherForecastHandler (tracer: Tracer) (sheepCounter: Counter<int>) =
     fun (next : HttpFunc) (ctx : HttpContext) ->
         use forecastSpan = tracer.StartActiveSpan("app.weatherForecast")
 
