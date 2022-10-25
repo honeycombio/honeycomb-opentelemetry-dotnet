@@ -108,6 +108,28 @@ jobs:
           name: "Publishing to nuget.org"
           command: dotnet.exe nuget push "build\*.nupkg" -k $env:NUGET_APIKEY -s https://api.nuget.org/v3/index.json
 
+# Apply this filter to jobs that should always run.
+filter_always: &filter_always
+  filters:
+    tags:
+      only: /.*/
+
+# Apply this filter to release-time jobs that should
+# only run when a version tag (v1.2.3) is pushed.
+filter_version_tag: &filter_version_tag
+  filters:
+    tags:
+      only: /^v.*/
+    branches:
+      ignore: /.*/
+
+# Apply this filter to jobs that require secrets, which
+# are unavailable to PRs from forks and Dependabot.
+filter_exclude_forks: &filter_exclude_forks
+  filters:
+    tags:
+      only: /^(?!(pull|dependabot)\/).*$/
+
 workflows:
   version: 2
   nightly:
@@ -127,39 +149,25 @@ workflows:
   build:
     jobs:
       - test:
-          filters:
-            tags:
-              only: /.*/
+          <<: *filter_always
+      - smoke_test:
+          requires:
+            - test
+          <<: *filter_always
       - package:
           context: Honeycomb Secrets for Public Repos
           requires:
             - test
-          filters:
-            tags:
-              only: /.*/
-      - smoke_test:
-          requires:
-            - test
-          filters:
-            tags:
-              only: /.*/
+          <<: *filter_exclude_forks
       - publish_github:
           context: Honeycomb Secrets for Public Repos
           requires:
             - smoke_test
             - package
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          <<: *filter_version_tag
       - publish_nuget:
           context: Honeycomb Secrets for Public Repos
           requires:
             - smoke_test
             - package
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          <<: *filter_version_tag
