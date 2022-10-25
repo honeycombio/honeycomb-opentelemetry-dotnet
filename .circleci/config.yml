@@ -150,15 +150,15 @@ workflows:
     jobs:
       - test:
           <<: *filter_always
+      - smoke_test:
+          requires:
+            - test
+          <<: *filter_always
       - package:
           context: Honeycomb Secrets for Public Repos
           requires:
             - test
           <<: *filter_exclude_forks
-      - smoke_test:
-          requires:
-            - test
-          <<: *filter_always
       - publish_github:
           context: Honeycomb Secrets for Public Repos
           requires:
