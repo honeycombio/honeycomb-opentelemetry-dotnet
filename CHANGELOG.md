@@ -1,5 +1,16 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [1.1.0/0.25.0-beta] - 2022-10-27
+
+### Fixes
+
+- De-bump Npgsql.OpenTelemetry to 6.0.7 to avoid collisions with LTS entityframework (#298) | @cartermp
+
+### Maintenance
+
+- Update OTel hosting & instrumentation packages (#306) | @MikeGoldsmith
+- Add F# example? ( ･ω･) (#296) | @cartermp
+
 ## [1.0.0/0.24.0-beta] - 2022-09-30
 
 ### !!! Breaking Changes !!!
