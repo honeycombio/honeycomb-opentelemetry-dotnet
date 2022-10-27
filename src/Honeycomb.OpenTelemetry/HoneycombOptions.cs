@@ -12,7 +12,7 @@ namespace Honeycomb.OpenTelemetry
     /// </summary>
     public class HoneycombOptions
     {
-        private const string OtlpVersion = "0.16.0";
+        private const string OtlpVersion = "0.18.0";
         private const string OtelExporterOtlpProtocolHttpProtobuf = "http/protobuf";
         private const string OtelExporterOtlpProtocolHttpJson = "http/json";
         private const string OtelExporterOtlpProtocolGrpc = "grpc";
