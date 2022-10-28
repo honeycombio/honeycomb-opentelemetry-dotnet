@@ -127,6 +127,8 @@ filter_version_tag: &filter_version_tag
 # are unavailable to PRs from forks and Dependabot.
 filter_exclude_forks: &filter_exclude_forks
   filters:
+    tags:
+      only: /.*/
     branches:
       ignore: /^(pull|dependabot)\/.*$/
 
