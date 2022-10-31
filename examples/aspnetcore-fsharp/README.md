@@ -16,6 +16,6 @@ To generate telemetry, navigate to `localhost:5001/weatherforecast`.
 
 As part of the configuration process, an instance of the Tracer is registed in the services Dependency Injection map that can be be injected into controllers and used to add additional context and create additional spans.
 
-See [Startup.cs](Startup.cs) for an example of how the `AddHoneycomb` method is called.
+See [Program.fs](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/blob/main/examples/aspnetcore-fsharp/Program.fs#L22) for an example of how the `AddHoneycomb` method is called.
 
-See [WeatherForecastController](Controllers/WeatherForecastController.cs) for an example app being instrumented.
+See [Routing.fs](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/blob/main/examples/aspnetcore-fsharp/Routing.fs#L38) for an example app being instrumented.
