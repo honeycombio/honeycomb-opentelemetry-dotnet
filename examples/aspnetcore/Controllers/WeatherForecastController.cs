@@ -36,6 +36,11 @@ namespace aspnetcore.Controllers
             _counter.Add(1);
 
             var rng = new Random();
+            var data = new Byte[1000];
+            rng.NextBytes(data);
+            var str = System.Text.Encoding.UTF8.GetString(data);
+            _logger.LogInformation($"Generating new weather data - {str}");
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
