@@ -29,14 +29,18 @@ namespace OpenTelemetry.Trace
         /// <param name="options"><see cref="AspNetCoreInstrumentationOptions"/> being configured.</param>
         public static void EnrichWithBaggage(this AspNetCoreInstrumentationOptions options)
         {
-            options.Enrich = (activity, eventName, _) =>
+            options.EnrichWithHttpRequest = (activity, request) =>
             {
-                if (eventName == "OnStartActivity")
+                foreach (var entry in Baggage.Current)
                 {
-                    foreach (var entry in Baggage.Current)
-                    {
-                        activity.SetTag(entry.Key, entry.Value);
-                    }
+                    activity.SetTag(entry.Key, entry.Value);
+                }
+            };
+            options.EnrichWithHttpResponse = (activity, response) =>
+            {
+                foreach (var entry in Baggage.Current)
+                {
+                    activity.SetTag(entry.Key, entry.Value);
                 }
             };
         }
