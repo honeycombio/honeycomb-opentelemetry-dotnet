@@ -5,7 +5,6 @@ x-env-base: &env_base
   HONEYCOMB_API_KEY: bogus_key
   HONEYCOMB_DATASET: bogus_dataset
   HONEYCOMB_METRICS_DATASET: bogus_dataset
-  OTEL_METRIC_EXPORT_INTERVAL: 100
   OTEL_SERVICE_NAME: "aspnetcore-example"
   DEBUG: "true"
 
