@@ -2,7 +2,6 @@
 
 ## [1.2.0/0.26.0-beta] - 2022-11-15
 
-
 ### Enhancements
 
 - Support IConfiguration with Honeycomb Options (#317) | [@pjwilliams2](https://github.com/pjwilliams2)
