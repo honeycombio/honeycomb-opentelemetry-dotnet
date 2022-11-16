@@ -1,5 +1,26 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [1.2.0/0.26.0-beta] - 2022-11-16
+
+### Enhancements
+
+- Support IConfiguration with Honeycomb Options (#317) | [@pjwilliams2](https://github.com/pjwilliams2)
+
+### Maintenance
+
+- Remove step from releasing (#312) | [@vreynolds](https://github.com/vreynolds)
+- Update README.md (#313) | [@isaacabraham](https://github.com/isaacabraham)
+- Fix metrics smoke tests (#320) | [@pkanal](https://github.com/pkanal)
+
+### Dependencies
+
+- Bump instrumentation pacakges to 1.0.0-rc9.9 (#318)
+- Update aspnetcore instrumentation to 1.0.0-rc9.9 (#319)
+- Bump OpenTelemetry.Instrumentation.MySqlData from 1.0.0-beta.3 to 1.0.0-beta.4 (#314)
+- Bump OpenTelemetry.Instrumentation.AspNet from 1.0.0-rc9.5 to 1.0.0-rc9.6 (#289)
+- Bump Microsoft.NET.Test.Sdk from 17.3.1 to 17.3.2 (#315)
+- Bump coverlet.collector from 3.1.2 to 3.2.0 (#316)
+
 ## [1.1.0/0.25.0-beta] - 2022-10-27
 
 ### Fixes
