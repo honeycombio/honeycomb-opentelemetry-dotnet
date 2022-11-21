@@ -20,7 +20,7 @@ namespace OpenTelemetry.Trace
             {
                 deferredBuilder.Configure((sp, b) =>
                 {
-                    var connection = (IConnectionMultiplexer)sp.GetService(typeof(IConnectionMultiplexer));
+                    var connection = sp.GetService(typeof(IConnectionMultiplexer)) as IConnectionMultiplexer;
                     if (connection != null)
                     {
                         b.AddRedisInstrumentation(connection);
