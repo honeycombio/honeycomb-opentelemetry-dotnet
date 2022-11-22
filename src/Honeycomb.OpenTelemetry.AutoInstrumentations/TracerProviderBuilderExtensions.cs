@@ -1,4 +1,5 @@
 ﻿using Npgsql;
+using StackExchange.Redis;
 
 namespace OpenTelemetry.Trace
 {
@@ -14,6 +15,19 @@ namespace OpenTelemetry.Trace
         /// <returns>The instance of <see cref="TracerProviderBuilder"/> to chain the calls.</returns>
         public static TracerProviderBuilder AddAutoInstrumentations(this TracerProviderBuilder builder)
         {
+            // Only add Redis instrumentation if we can find a Redis connection in DI
+            if (builder is IDeferredTracerProviderBuilder deferredBuilder)
+            {
+                deferredBuilder.Configure((sp, b) =>
+                {
+                    var connection = sp.GetService(typeof(IConnectionMultiplexer)) as IConnectionMultiplexer;
+                    if (connection != null)
+                    {
+                        b.AddRedisInstrumentation(connection);
+                    }
+                });
+            }
+
             return
                 builder
 #if NET6_0_OR_GREATER
@@ -29,7 +43,6 @@ namespace OpenTelemetry.Trace
                 .AddSqlClientInstrumentation()
                 .AddEntityFrameworkCoreInstrumentation()
                 .AddMySqlDataInstrumentation()
-                .AddRedisInstrumentation()
                 .AddWcfInstrumentation()
                 .AddNpgsql();
         }
