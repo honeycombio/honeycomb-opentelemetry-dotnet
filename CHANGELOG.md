@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [1.2.1/0.26.1-beta] - 2022-11-22
+
+### Fixes
+
+- Only add Redis instrumentation if connection found in DI (#323) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+
 ## [1.2.0/0.26.0-beta] - 2022-11-16
 
 ### Enhancements
