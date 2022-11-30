@@ -13,7 +13,7 @@ namespace OpenTelemetry.Trace
         /// </summary>
         /// <param name="builder"><see cref="TracerProviderBuilder"/> being configured.</param>
         /// <returns>The instance of <see cref="TracerProviderBuilder"/> to chain the calls.</returns>
-        public static TracerProviderBuilder AddAutoInstrumentations(this TracerProviderBuilder builder)
+        public static TracerProviderBuilder AddCommonInstrumentations(this TracerProviderBuilder builder)
         {
             // Only add Redis instrumentation if we can find a Redis connection in DI
             if (builder is IDeferredTracerProviderBuilder deferredBuilder)
