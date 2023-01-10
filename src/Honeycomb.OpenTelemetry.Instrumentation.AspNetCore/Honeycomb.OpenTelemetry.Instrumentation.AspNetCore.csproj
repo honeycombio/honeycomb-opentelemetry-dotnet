@@ -12,7 +12,7 @@
 
     <!-- NuGet packaging properties -->
     <VersionPrefix>0.26.1</VersionPrefix>
-    <VersionSuffix>beta</VersionSuffix>
+    <VersionSuffix>beta-dev</VersionSuffix>
     <PackageId>Honeycomb.OpenTelemetry.Instrumentation.AspNetCore</PackageId>
     <Authors>Honeycomb</Authors>
     <Description>OpenTelemetry AspNetCore instrumentation extensions</Description>

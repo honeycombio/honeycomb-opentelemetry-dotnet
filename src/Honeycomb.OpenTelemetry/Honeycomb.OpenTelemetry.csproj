@@ -12,6 +12,7 @@
 
     <!-- NuGet packaging properties -->
     <VersionPrefix>1.2.1</VersionPrefix>
+    <VersionSuffix>dev</VersionSuffix>
     <PackageId>Honeycomb.OpenTelemetry</PackageId>
     <Authors>Honeycomb</Authors>
     <Description>Honeycomb's OpenTelemetry SDK</Description>
