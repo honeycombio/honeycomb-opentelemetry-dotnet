@@ -50,11 +50,11 @@ jobs:
           shell: bash.exe
       - run:
           name: "Decrypt SNK file"
-          command: gpg.exe -d --pinentry-mode loopback --passphrase $GPG_PASSPHRASE -o Honeycomb.OpenTelemetry.snk Honeycomb.OpenTelemetry.snk.gpg
+          command: gpg.exe --decrypt --pinentry-mode loopback --passphrase $GPG_PASSPHRASE --output Honeycomb.OpenTelemetry.snk Honeycomb.OpenTelemetry.snk.gpg
           shell: bash.exe
       - run:
           name: "Build release package"
-          command: dotnet.exe pack -c release --output build --no-restore -p:signed=true
+          command: dotnet.exe pack --configuration release --output build --no-restore -p:signed=true
       - persist_to_workspace:
           root: \
           paths:
@@ -106,7 +106,7 @@ jobs:
           at: .\
       - run:
           name: "Publishing to nuget.org"
-          command: dotnet.exe nuget push "build\*.nupkg" -k $env:NUGET_APIKEY -s https://api.nuget.org/v3/index.json
+          command: dotnet.exe nuget push "build\*.nupkg" --api-key $env:NUGET_APIKEY --source https://api.nuget.org/v3/index.json
 
 # Apply this filter to jobs that should always run.
 filter_always: &filter_always
