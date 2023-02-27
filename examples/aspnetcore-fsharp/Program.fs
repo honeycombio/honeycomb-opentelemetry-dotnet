@@ -9,6 +9,8 @@ open Microsoft.Extensions.Configuration
 
 open Giraffe
 open Giraffe.EndpointRouting
+
+open OpenTelemetry
 open OpenTelemetry.Trace
 open OpenTelemetry.Metrics
 open Honeycomb.OpenTelemetry
@@ -17,12 +19,13 @@ let configureServices (services: IServiceCollection) (honeycombOptions: Honeycom
     services
         .AddRouting()
         .AddGiraffe()
-        .AddOpenTelemetryTracing(fun otelBuilder ->
+        .AddOpenTelemetry()
+        .WithTracing(fun otelBuilder ->
             otelBuilder
                 .AddHoneycomb(honeycombOptions)
                 .AddAspNetCoreInstrumentationWithBaggage()
             |> ignore)
-        .AddOpenTelemetryMetrics(fun otelBuilder ->
+        .WithMetrics(fun otelBuilder ->
             otelBuilder.AddHoneycomb(honeycombOptions)
             |> ignore)
     |> ignore
