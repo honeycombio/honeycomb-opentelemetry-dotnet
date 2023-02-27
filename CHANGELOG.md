@@ -1,5 +1,16 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [1.2.1/0.27.0-beta] - 2023-02-28
+
+### !!! Breaking Changes !!!
+
+### Maintenance
+
+- maint: Rename AutoInstrumentations package to CommonInstrumentations (#327) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+  - renamed the package to make it more clear that this is common instrumentation, not technically "automatic" instrumentation.
+  - `Honeycomb.OpenTelemetry.AutoInstrumentations` -> `Honeycomb.OpenTelemetry.CommonInstrumentations`
+  - `AddAutoInstrumentations` -> `AddCommonInstrumentations`
+
 ## [1.2.1/0.26.1-beta] - 2022-11-22
 
 ### Fixes
