@@ -15,9 +15,9 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(redis);
 
 var honeycombOptions = builder.Configuration.GetHoneycombOptions();
 
-builder.Services.AddOpenTelemetryTracing(otelBuilder =>
+builder.Services.AddOpenTelemetry().WithTracing(otelBuilder =>
     otelBuilder
-        .AddHoneycomb(builder.Configuration)
+        .AddHoneycomb(honeycombOptions)
         .AddAspNetCoreInstrumentationWithBaggage()
         .AddRedisInstrumentation(redis)
 );
