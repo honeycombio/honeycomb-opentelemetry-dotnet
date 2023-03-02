@@ -5,6 +5,7 @@
   - `git log --pretty='%C(green)%d%Creset- %s | [%an](https://github.com/)'`
 - Update VersionPrefix (and VersionSuffix if necessary) in the `*.csproj` files
   - If updating the OTel SDK, update the OTLP version in `HoneycombOptions.cs`
+  - If updating the OTel SDK, update the OTel version in `README.md`
 - Commit changes, push, and open a release preparation pull request for review.
 - Once the pull request is merged, fetch the updated `main` branch.
 - Apply a tag for the new version on the merged commit (e.g. `git tag -a v1.3.0 -m "v1.3.0"`)
