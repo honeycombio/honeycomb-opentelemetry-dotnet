@@ -1,6 +1,6 @@
 # honeycomb-opentelemetry-dotnet changelog
 
-## [1.2.1/0.27.0-beta] - 2023-02-28
+## [1.3.0/0.27.0-beta] - 2023-03-02
 
 ### !!! Breaking Changes !!!
 
@@ -10,6 +10,13 @@
   - renamed the package to make it more clear that this is common instrumentation, not technically "automatic" instrumentation.
   - `Honeycomb.OpenTelemetry.AutoInstrumentations` -> `Honeycomb.OpenTelemetry.CommonInstrumentations`
   - `AddAutoInstrumentations` -> `AddCommonInstrumentations`
+- maint: Update OpenTelemetry instrumentation packages (#334) | [@MikeGoldsmith](https://github.com/MikeGoldsmith)
+  - The new `OpenTelemetry` packages change how tracing and metrics are setup
+  - `AddOpenTelemetryTracing` -> `AddOpenTelemetry().WithTracing`
+  - `AddOpenTelemetryMetrics` -> `AddOpenTelemetry().WithMetrics`
+- maint(deps): bump OpenTelemetry.Instrumentation.StackExchangeRedis from 1.0.0-rc9.7 to 1.0.0-rc9.8 (#345)
+- maint(deps): bump Microsoft.NET.Test.Sdk from 17.3.2 to 17.4.1 (#336)
+- maint: new signed snkgpg, use long cmd lines for clarity (#341) | [@JamieDanielson](https://github.com/JamieDanielson)
 
 ## [1.2.1/0.26.1-beta] - 2022-11-22
 
