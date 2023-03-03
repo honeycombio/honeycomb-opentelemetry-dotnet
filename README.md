@@ -10,7 +10,7 @@ It makes getting started with OpenTelemetry and Honeycomb easier!
 
 Latest release built with:
 
-- [OpenTelemetry Version 1.3.0](https://github.com/open-telemetry/opentelemetry-dotnet/releases/tag/core-1.3.0)
+- [OpenTelemetry Version 1.4.0](https://github.com/open-telemetry/opentelemetry-dotnet/releases/tag/core-1.4.0)
 
 ## Getting Started
 
