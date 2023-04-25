@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [1.4.0/0.28.0-beta] - 2023-04-25
+
+### Fixes
+
+- fix: De-bump Npgsql.OpenTelemetry to work with LTS EntityFramework (#348) | [@JamieDanielson](https://github.com/JamieDanielson)
+
 ## [1.3.0/0.27.0-beta] - 2023-03-02
 
 ### !!! Breaking Changes !!!
