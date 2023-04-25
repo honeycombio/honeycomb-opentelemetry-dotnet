@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Npgsql.OpenTelemetry" Version="7.0.2" />
+    <PackageReference Include="Npgsql.OpenTelemetry" Version="6.0.7" />
     <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.0.0-beta.5" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.0.0-rc9.14" />
     <PackageReference Include="OpenTelemetry.Instrumentation.MySqlData" Version="1.0.0-beta.6" />
