@@ -19,4 +19,4 @@ updates:
     ignore:
       # We don't target .NET 7 yet and this breaks LTS EFCore
       - dependency-name: "Npgsql.OpenTelemetry"
-        versions: ["version-update:semver-major"]
+        update-types: ["version-update:semver-major"]
