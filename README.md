@@ -26,6 +26,13 @@ Honeycomb's OpenTelemetry .NET SDK gives you the ability to add manual instrumen
 - Deterministic sampling!
 - Multi-span attributes!
 
+### Overriding OpenTelemetry SDK Builder options
+
+The OpenTelemetry SDK uses a builder pattern to set options and currently does not provide a way to know if a particular option has already been set.
+This can lead to the same option being set multiple times with the last one wins behaviour.
+
+For example, the `AddHoneycomb(options)` function configures a Sampler so another call to `SetSampler(sampler)` will override the first sampler.
+
 ## License
 
 [Apache 2.0 License](./LICENSE).
