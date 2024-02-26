@@ -33,6 +33,14 @@ This can lead to the same option being set multiple times with the last one wins
 
 For example, the `AddHoneycomb(options)` function configures a Sampler so another call to `SetSampler(sampler)` will override the first sampler.
 
+
+### HTTP Semantic Conventions
+
+The semantic conventions for attribute names used in HTTP instrumentation libraries is being updated and could cause distruption for existing users who rely on the existing names.
+For this reason, we have locked HTTP instrumentation packages to [1.6.0-beta.1](https://github.com/open-telemetry/opentelemetry-dotnet/releases/tag/1.6.0-beta.3) which includes the `OTEL_SEMCONV_STABILITY_OPT_IN` environment variable that allows users to opt-in to the new behaviour when they are ready to.
+
+See this [Migration Guide](https://docs.honeycomb.io/getting-data-in/semconv/migration) for details on how to switch between the old and new attribute keys when using Honeycomb.
+
 ## License
 
 [Apache 2.0 License](./LICENSE).
