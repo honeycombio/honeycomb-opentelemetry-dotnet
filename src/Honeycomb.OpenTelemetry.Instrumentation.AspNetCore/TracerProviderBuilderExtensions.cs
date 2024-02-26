@@ -26,8 +26,8 @@ namespace OpenTelemetry.Trace
         /// <summary>
         /// Configures the AspNetCore instrumentation to adds current trace context baggage as attributes to created spans.
         /// </summary>
-        /// <param name="options"><see cref="AspNetCoreTraceInstrumentationOptions"/> being configured.</param>
-        public static void EnrichWithBaggage(this AspNetCoreTraceInstrumentationOptions options)
+        /// <param name="options"><see cref="AspNetCoreInstrumentationOptions"/> being configured.</param>
+        public static void EnrichWithBaggage(this AspNetCoreInstrumentationOptions options)
         {
             options.EnrichWithHttpRequest = (activity, request) =>
             {
