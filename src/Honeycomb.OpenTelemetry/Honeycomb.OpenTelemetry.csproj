@@ -11,7 +11,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <!-- NuGet packaging properties -->
-    <VersionPrefix>1.3.1</VersionPrefix>
+    <VersionPrefix>1.4.0</VersionPrefix>
     <PackageId>Honeycomb.OpenTelemetry</PackageId>
     <Authors>Honeycomb</Authors>
     <Description>Honeycomb's OpenTelemetry SDK</Description>

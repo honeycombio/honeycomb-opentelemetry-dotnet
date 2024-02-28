@@ -1,5 +1,21 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [1.4.0/0.28.0-beta] - 2024-02-27
+
+### Maintenance
+
+- docs: Update README with details on SDK builder overwriting issue (#351) | @MikeGoldsmith
+- maint: Bump OpenTelemetry dependencies (#365) | @MikeGoldsmith
+- maint: update codeowners to pipeline-team (#363) | @JamieDanielson
+- maint: update codeowners to pipeline (#362) | @JamieDanielson
+- maint: Bump Microsoft.Extensions.Configuration from 6.0.0 to 7.0.0 (#330) | @dependabot
+- maint(deps): bump System.Text.Json from 7.0.2 to 7.0.3 (#360) | @dependabot
+- maint(deps): bump coverlet.collector from 3.2.0 to 6.0.1 (#366) | @dependabot
+- maint(deps): bump Microsoft.NET.Test.Sdk from 17.5.0 to 17.6.3 (#359) | @dependabot
+- maint(deps): bump OpenTelemetry.Instrumentation.EntityFrameworkCore from 1.0.0-beta.5 to 1.0.0-beta.6 (#346) | @dependabot
+- maint(deps): bump Microsoft.NET.Test.Sdk from 17.4.1 to 17.5.0 (#344) | @dependabot
+- maint(deps): bump System.Text.Json from 7.0.0 to 7.0.2 (#343) | @dependabot
+
 ## [1.3.1/0.27.1-beta] - 2023-04-25
 
 ### Fixes
