@@ -523,17 +523,17 @@ namespace Honeycomb.OpenTelemetry.Tests
             Assert.DoesNotContain("/v1/metrics", options.GetMetricsEndpoint());
         }
 
-        [Fact]
-        public void Legacy_key_length()
+        [Theory]
+        [InlineData("", false)]
+        [InlineData("12345678901234567890123456789012", true)]
+        [InlineData("hcaic_1234567890123456789012345678901234567890123456789012345678", true)]
+        [InlineData("kgvSpPwegJshQkuowXReLD", false)]
+        [InlineData("hcaic_12345678901234567890123456", false)]
+        [InlineData("hcxik_01hqk4k20cjeh63wca8vva5stw70nft6m5n8wr8f5mjx3762s8269j50wc", false)]
+        public void IsClassicKey(string key, bool expected)
         {
-            var options = new HoneycombOptions { ApiKey = "1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a" };
-            Assert.True(HoneycombOptions.IsClassicKey(options.ApiKey));
-        }
-        [Fact]
-        public void Not_legacy_key_length()
-        {
-            var options = new HoneycombOptions { ApiKey = "specialenvkey" };
-            Assert.False(HoneycombOptions.IsClassicKey(options.ApiKey));
+            var options = new HoneycombOptions { ApiKey = key };
+            Assert.Equal(HoneycombOptions.IsClassicKey(key), expected);
         }
     }
 }

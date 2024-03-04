@@ -4,6 +4,7 @@ using OpenTelemetry.Trace;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.Text.RegularExpressions;
 
 namespace Honeycomb.OpenTelemetry
 {
@@ -18,6 +19,8 @@ namespace Honeycomb.OpenTelemetry
         private const string OtelExporterOtlpProtocolGrpc = "grpc";
         private const string OtelExporterHttpTracesPath = "/v1/traces";
         private const string OtelExporterHttpMetricsPath = "/v1/metrics";
+        private const string ClassicKeyRegex = "^[a-f0-9]*$";
+        private const string IngestClassicKeyRegex = "^hc[a-z]ic_[a-z0-9]*$";
         private bool isHttp = false;
 
         /// <summary>
@@ -53,8 +56,21 @@ namespace Honeycomb.OpenTelemetry
         /// <remarks>
         /// Legacy keys have 32 characters.
         /// </remarks>
-        internal static bool IsClassicKey(string apikey) => apikey?.Length == 32;
-
+        internal static bool IsClassicKey(string apikey) {
+            if (String.IsNullOrEmpty(apikey))
+            {
+              return false;
+            }
+            else if (apikey.Length == 32)
+            {
+              return Regex.Match(apikey, ClassicKeyRegex).Success;
+            }
+            else if (apikey.Length == 64)
+            {
+              return Regex.Match(apikey, IngestClassicKeyRegex).Success;
+            }
+            return false;
+        }
         /// <summary>
         /// Write links to honeycomb traces as they come in
         /// </summary>
