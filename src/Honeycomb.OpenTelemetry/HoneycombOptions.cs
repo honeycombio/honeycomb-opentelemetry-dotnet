@@ -51,10 +51,10 @@ namespace Honeycomb.OpenTelemetry
         public string ApiKey { get; set; }
 
         /// <summary>
-        /// Returns whether the provided API key is a legacy key.
+        /// Returns whether the provided API key is a classic key.
         /// </summary>
         /// <remarks>
-        /// Legacy keys have 32 characters.
+        /// Classic configuration keys have 32 characters and classic ingest keys have 64 characters.
         /// </remarks>
         internal static bool IsClassicKey(string apikey) {
             if (String.IsNullOrEmpty(apikey))
