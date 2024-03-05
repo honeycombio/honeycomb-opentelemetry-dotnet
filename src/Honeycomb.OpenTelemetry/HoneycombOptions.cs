@@ -72,6 +72,7 @@ namespace Honeycomb.OpenTelemetry
             }
             return false;
         }
+
         /// <summary>
         /// Write links to honeycomb traces as they come in
         /// </summary>
