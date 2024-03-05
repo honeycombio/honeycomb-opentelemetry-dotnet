@@ -56,18 +56,19 @@ namespace Honeycomb.OpenTelemetry
         /// <remarks>
         /// Classic configuration keys have 32 characters and classic ingest keys have 64 characters.
         /// </remarks>
-        internal static bool IsClassicKey(string apikey) {
+        internal static bool IsClassicKey(string apikey)
+        {
             if (String.IsNullOrEmpty(apikey))
             {
-              return false;
+                return false;
             }
             else if (apikey.Length == 32)
             {
-              return Regex.Match(apikey, ClassicKeyRegex).Success;
+                return Regex.Match(apikey, ClassicKeyRegex).Success;
             }
             else if (apikey.Length == 64)
             {
-              return Regex.Match(apikey, IngestClassicKeyRegex).Success;
+                return Regex.Match(apikey, IngestClassicKeyRegex).Success;
             }
             return false;
         }
