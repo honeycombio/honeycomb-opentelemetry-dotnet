@@ -1,5 +1,11 @@
 # honeycomb-opentelemetry-dotnet changelog
 
+## [1.5.0/0.29.0-beta] - 2024-03-05
+
+ ### Enhancements
+
+ - feat: support classic ingest keys (#371) | @brookesargent
+
 ## [1.4.0/0.28.0-beta] - 2024-02-27
 
 ### Maintenance
