@@ -1,6 +1,6 @@
 # honeycomb-opentelemetry-dotnet changelog
 
-## [1.5.0/0.29.0-beta] - 2024-03-05
+## [1.5.0/0.29.0-beta] - 2024-03-06
 
  ### Enhancements
 
