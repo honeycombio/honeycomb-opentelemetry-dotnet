@@ -458,3 +458,6 @@ smoke-tests/collector/data.json
 smoke-tests/collector/data-results/*.json
 smoke-tests/report.xml
 smoke-tests/report.html
+
+# asdf local tools versions file
+.tool-versions
