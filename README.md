@@ -10,7 +10,13 @@ It makes getting started with OpenTelemetry and Honeycomb easier!
 
 Latest release built with:
 
-- [OpenTelemetry Version 1.4.0](https://github.com/open-telemetry/opentelemetry-dotnet/releases/tag/core-1.4.0)
+- [OpenTelemetry Version 1.6.0](https://github.com/open-telemetry/opentelemetry-dotnet/releases/tag/core-1.6.0)
+
+***NOTE***
+
+OpenTelemetry .NET SDK versions after 1.6.0 use updated HTTP semantic conventions that result in different telemetry attribute keys and can contribute to unexpected query results in Honeycomb. For this reason, we have decided the Honeycomb OpenTelemetry distro will not take further updates yet.
+
+Please see our [Migration guide for HTTP semantic conventions](https://docs.honeycomb.io/troubleshoot/product-lifecycle/recommended-migrations/#migrate-to-stabilized-opentelemetry-semantic-conventions) for more details.
 
 ## Getting Started
 
