@@ -25,9 +25,20 @@ namespace Honeycomb.OpenTelemetry
         /// </summary>
         /// <param name="options">Settings for Link generation</param>
         public ConsoleTraceLinkExporter(HoneycombOptions options)
+            : this(options.ApiKey, options.ServiceName)
         {
-            _apiKey = options.ApiKey;
-            _serviceName = options.ServiceName;
+            // use the constructor that takes the api key and service name directly
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ConsoleTraceLinkExporter" /> class
+        /// </summary>
+        /// <param name="apiKey">The Honeycomb API key</param>
+        /// <param name="serviceName">The name of the service</param>
+        public ConsoleTraceLinkExporter(string apiKey, string serviceName)
+        {
+            _apiKey = apiKey;
+            _serviceName = serviceName;
             try
             {
                 InitTraceLinkParameters();
