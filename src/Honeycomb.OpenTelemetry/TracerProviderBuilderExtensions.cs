@@ -93,7 +93,7 @@ namespace OpenTelemetry.Trace
 
             if (options.EnableLocalVisualizations)
             {
-                builder.AddProcessor(new SimpleActivityExportProcessor(new ConsoleTraceLinkExporter(options)));
+                builder.AddLocalVisualizations(options.ServiceName, tracesApiKey);
             }
 
             if (options.Debug)
@@ -146,6 +146,15 @@ namespace OpenTelemetry.Trace
                 otlpOptions.Endpoint = new Uri(endpoint);
                 otlpOptions.Headers = HoneycombOptions.GetTraceHeaders(apikey, dataset);
             });
+        }
+
+        /// <summary>
+        /// Configures the <see cref="TracerProviderBuilder"/> with a span processor that prints Honeycomb links for completed traces.
+        /// Not for production use.
+        /// </summary>
+        public static TracerProviderBuilder AddLocalVisualizations(this TracerProviderBuilder builder, string serviceName, string apiKey)
+        {
+            return builder.AddProcessor(new SimpleActivityExportProcessor(new ConsoleTraceLinkExporter(apiKey, serviceName)));
         }
     }
 }
