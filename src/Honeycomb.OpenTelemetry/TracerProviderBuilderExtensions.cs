@@ -15,8 +15,6 @@ namespace OpenTelemetry.Trace
     /// </summary>
     public static class TracerProviderBuilderExtensions
     {
-        private const string defaultEndpoint = "https://api.honeycomb.io:443";
- 
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> to send telemetry data to Honeycomb.
         /// </summary>
@@ -141,7 +139,7 @@ namespace OpenTelemetry.Trace
         /// <summary>
         /// Configures the <see cref="TracerProviderBuilder"/> with an OTLP exporter that sends trace telemetry to Honeycomb.
         /// </summary>
-        public static TracerProviderBuilder AddHoneycombOtlpExporter(this TracerProviderBuilder builder, string apikey, string dataset = null, string endpoint = defaultEndpoint)
+        public static TracerProviderBuilder AddHoneycombOtlpExporter(this TracerProviderBuilder builder, string apikey, string dataset = null, string endpoint = HoneycombOptions.DefaultEndpoint)
         {
             return builder.AddOtlpExporter(otlpOptions =>
             {
