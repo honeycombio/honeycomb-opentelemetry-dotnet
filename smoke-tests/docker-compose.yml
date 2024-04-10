@@ -16,6 +16,14 @@ x-app-base: &app_base
   depends_on:
     - collector
 
+x-distroless-base: &distroless_base
+  build:
+    context: ../
+    dockerfile: ./examples/aspnetcore-distroless/Dockerfile
+  image: honeycomb/aspnetcore-distroless
+  depends_on:
+    - collector
+
 services:
   collector:
     image: otel/opentelemetry-collector:0.52.0
@@ -30,7 +38,7 @@ services:
       <<: *env_base
     ports:
       - "127.0.0.1:5001:5001"
-  
+
   app-sdk-http:
     <<: *app_base
     environment:
@@ -40,8 +48,25 @@ services:
     ports:
       - "127.0.0.1:5001:5001"
 
+  app-sdk-http-distroless:
+    <<: *distroless_base
+    environment:
+      <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+    ports:
+      - "127.0.0.1:5001:5001"
+
   app-sdk-grpc:
     <<: *app_base
+    environment:
+      <<: *env_base
+      OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    ports:
+      - "127.0.0.1:5001:5001"
+
+  app-sdk-grpc-distroless:
+    <<: *distroless_base
     environment:
       <<: *env_base
       OTEL_EXPORTER_OTLP_PROTOCOL: grpc

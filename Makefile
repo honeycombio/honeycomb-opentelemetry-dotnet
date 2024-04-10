@@ -33,13 +33,25 @@ smoke-sdk-grpc: smoke-tests/collector/data.json
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-grpc.bats --report-formatter junit --output ./
 
+smoke-sdk-grpc-distroless: smoke-tests/collector/data.json
+	@echo ""
+	@echo "+++ Running gRPC distroless smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-grpc-distroless.bats --report-formatter junit --output ./
+
 smoke-sdk-http: smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Running HTTP smoke tests."
 	@echo ""
 	cd smoke-tests && bats ./smoke-sdk-http.bats --report-formatter junit --output ./
 
-smoke-sdk: smoke-sdk-grpc smoke-sdk-http
+smoke-sdk-http-distroless: smoke-tests/collector/data.json
+	@echo ""
+	@echo "+++ Running HTTP distroless smoke tests."
+	@echo ""
+	cd smoke-tests && bats ./smoke-sdk-http-distroless.bats --report-formatter junit --output ./
+
+smoke-sdk: smoke-sdk-grpc smoke-sdk-http smoke-sdk-grpc-distroless smoke-sdk-http-distroless
 
 smoke: smoke-sdk
 
