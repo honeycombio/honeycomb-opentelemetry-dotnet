@@ -12,7 +12,7 @@ setup_file() {
 	wait_for_ready_app ${CONTAINER_NAME}
 	curl --silent "http://localhost:5001/weatherforecast"
 	wait_for_traces
-    wait_for_metrics 15
+	wait_for_metrics 15
 }
 
 teardown_file() {
@@ -35,6 +35,6 @@ teardown_file() {
 }
 
 @test "Manual instrumentation produces metrics" {
-    result=$(metric_names_for ${METRICS_DATASET})
-    assert_equal "$result" '"sheep"'
+	result=$(metric_names_for ${METRICS_DATASET})
+	assert_equal "$result" '"sheep"'
 }
