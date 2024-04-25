@@ -121,11 +121,11 @@ namespace OpenTelemetry.Trace
         }
 
         /// <summary>
-        /// Configures the <see cref="TracerProviderBuilder"/> to add the <see cref="BaggageSpanProcessor"/> span processor.
+        /// Configures the <see cref="TracerProviderBuilder"/> to add the <see cref="BaggageActivityProcessor"/> span processor.
         /// </summary>
         public static TracerProviderBuilder AddBaggageSpanProcessor(this TracerProviderBuilder builder)
         {
-            return builder.AddProcessor(new BaggageSpanProcessor());
+            return builder.AddProcessor(new BaggageActivityProcessor());
         }
 
         /// <summary>
