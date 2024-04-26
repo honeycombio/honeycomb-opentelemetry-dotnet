@@ -5,6 +5,8 @@
 [![Dependencies](https://img.shields.io/librariesio/release/nuget/Honeycomb.Opentelemetry.svg)](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/blob/main/src/Honeycomb.OpenTelemetry/Honeycomb.OpenTelemetry.csproj)
 [![Nuget](https://img.shields.io/nuget/v/Honeycomb.OpenTelemetry.svg)](https://www.nuget.org/packages/Honeycomb.OpenTelemetry)
 
+STATUS: this project is being Sunset. See #378.
+
 This is Honeycomb's distribution of OpenTelemetry for .NET.
 It makes getting started with OpenTelemetry and Honeycomb easier!
 
