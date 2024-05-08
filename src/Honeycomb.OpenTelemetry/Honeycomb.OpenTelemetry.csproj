@@ -23,6 +23,7 @@
     <PackageIcon>honeycomb.png</PackageIcon>
     <RepositoryUrl>https://github.com/honeycombio/honeycomb-opentelemetry-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <NoWarn>NU1605</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="opentelemetry.extensions" Version="1.0.0-beta.5" />
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
     <PackageReference Include="System.Text.Json" Version="7.0.3" />

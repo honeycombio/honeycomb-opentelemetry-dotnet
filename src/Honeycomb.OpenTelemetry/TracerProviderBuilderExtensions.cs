@@ -79,7 +79,7 @@ namespace OpenTelemetry.Trace
 
             if (options.AddBaggageSpanProcessor)
             {
-                builder.AddBaggageSpanProcessor();
+                builder.AddBaggageActivityProcessor();
             }
 
             if (!string.IsNullOrWhiteSpace(tracesApiKey))
@@ -118,14 +118,6 @@ namespace OpenTelemetry.Trace
             }
 
             return builder;
-        }
-
-        /// <summary>
-        /// Configures the <see cref="TracerProviderBuilder"/> to add the <see cref="BaggageSpanProcessor"/> span processor.
-        /// </summary>
-        public static TracerProviderBuilder AddBaggageSpanProcessor(this TracerProviderBuilder builder)
-        {
-            return builder.AddProcessor(new BaggageSpanProcessor());
         }
 
         /// <summary>
