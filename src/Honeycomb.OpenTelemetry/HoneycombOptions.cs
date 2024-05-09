@@ -152,7 +152,7 @@ namespace Honeycomb.OpenTelemetry
         public ResourceBuilder ResourceBuilder { get; set; } = ResourceBuilder.CreateDefault();
 
         /// <summary>
-        /// Determines whether the <see cref="BaggageSpanProcessor"/> is added when configuring a <see cref="TracerProviderBuilder"/>.
+        /// Determines whether the <see cref="BaggageActivityProcessor"/> is added when configuring a <see cref="TracerProviderBuilder"/>.
         /// </summary>
         public bool AddBaggageSpanProcessor { get; set; } = true;
 
