@@ -23,7 +23,7 @@
     <PackageIcon>honeycomb.png</PackageIcon>
     <RepositoryUrl>https://github.com/honeycombio/honeycomb-opentelemetry-dotnet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <NoWarn>NU1605</NoWarn>
+    <NoWarn>NU1605,NU5104</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
