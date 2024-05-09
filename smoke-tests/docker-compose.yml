@@ -1,7 +1,6 @@
 version: '3.0'
 
 x-env-base: &env_base
-  HONEYCOMB_API_ENDPOINT: http://collector:4317
   HONEYCOMB_API_KEY: bogus_key
   HONEYCOMB_DATASET: bogus_dataset
   HONEYCOMB_METRICS_DATASET: bogus_dataset
@@ -24,13 +23,6 @@ services:
       - "./collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml"
       - "./collector:/var/lib"
 
-  app-aspnetcore:
-    <<: *app_base
-    environment:
-      <<: *env_base
-    ports:
-      - "127.0.0.1:5001:5001"
-  
   app-sdk-http:
     <<: *app_base
     environment:
@@ -44,6 +36,7 @@ services:
     <<: *app_base
     environment:
       <<: *env_base
+      HONEYCOMB_API_ENDPOINT: http://collector:4317
       OTEL_EXPORTER_OTLP_PROTOCOL: grpc
     ports:
       - "127.0.0.1:5001:5001"
