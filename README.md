@@ -8,7 +8,6 @@
 **STATUS**: This project is being Sunset. See [this issue](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet/issues/378) for more details.
 
 This is Honeycomb's distribution of OpenTelemetry for .NET.
-It makes getting started with OpenTelemetry and Honeycomb easier!
 
 Latest release built with:
 
